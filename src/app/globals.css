@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Headings */
+  h1, h2, h3 {
+    @apply font-kiona font-semibold;
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  /* Paragraphs */
+  p {
+    @apply font-ttNorms font-extralight leading-relaxed tracking-[0.2em];
+  }
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Add these at the end of your globals.css */
+.rich-text-editor .ql-container {
+  min-height: 200px;
+  border-bottom-left-radius: 0.125rem;
+  border-bottom-right-radius: 0.125rem;
+}
+
+.rich-text-editor .ql-toolbar {
+  border-top-left-radius: 0.125rem;
+  border-top-right-radius: 0.125rem;
+  background-color: #f8f8f8;
+}
+
+.rich-text-editor .ql-editor {
+  min-height: 200px;
+}
+
+/* Add these styles for the TipTap content */
+.tiptap-content {
+  color: #4A3419; /* brand-brown-dark */
+
+  & img {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+  }
+
+  & p {
+    margin: 1rem 0;
+    color: inherit; /* This will inherit the dark brown unless overridden */
+  }
+
+  & h1, & h2, & h3, & h4, & h5, & h6 {
+    margin: 2rem 0 1rem;
+    font-weight: bold;
+    color: inherit;
+  }
+
+  /* Preserve user-specified colors */
+  & [style*="color:"] {
+    color: var(--tw-prose-body);
+  }
+
+  & [style*="text-align: center"] {
+    text-align: center;
+  }
+
+  & [style*="text-align: right"] {
+    text-align: right;
+  }
+
+  & [style*="text-align: justify"] {
+    text-align: justify;
+  }
+}
+
+/* Add these styles for the TipTap editor */
+.ProseMirror {
+  outline: none !important;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Style for active link */
+.ProseMirror a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Style for images */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
+
+/* Style for lists */
+.ProseMirror ul,
+.ProseMirror ol {
+  padding-left: 1.5rem;
+}
+
+.ProseMirror ul li {
+  list-style-type: disc;
+}
+
+.ProseMirror ol li {
+  list-style-type: decimal;
+}
