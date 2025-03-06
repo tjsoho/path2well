@@ -11,6 +11,10 @@ interface Page {
   name: string;
 }
 
+interface SectionContent {
+  [key: string]: string;
+}
+
 // Constants
 const PAGES: Page[] = [
   { id: "home", name: "Home Page" },
@@ -90,6 +94,33 @@ export function PageEditor() {
   const [selectedSection, setSelectedSection] = useState<string | null>(null);
   const [pagesOpen, setPagesOpen] = useState(false);
   const [sectionsOpen, setSectionsOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [sectionContent, setSectionContent] = useState<SectionContent>({});
+
+  // Handle text change
+  const handleTextChange = (key: string, value: string) => {
+    setSectionContent((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
+
+  // Extract content from section
+  const extractContent = (element: HTMLElement): SectionContent => {
+    const content: SectionContent = {};
+
+    // Get headings and paragraphs
+    const heading = element.querySelector("h1, h2");
+    const subheading = element.querySelector("h3, h4, p");
+
+    console.log("Found elements:", { heading, subheading }); // Debug log
+
+    if (heading) content["heading"] = heading.textContent || "";
+    if (subheading) content["subheading"] = subheading.textContent || "";
+
+    console.log("Extracted content:", content); // Debug log
+    return content;
+  };
 
   // Render section
   const renderSection = () => {
@@ -97,6 +128,19 @@ export function PageEditor() {
     const Component = sections[selectedSection as keyof typeof sections];
     if (!Component) return null;
     return <Component />;
+  };
+
+  // Handle edit click
+  const handleEditClick = () => {
+    const sectionElement = document.querySelector("[data-section-content]");
+    console.log("Section element:", sectionElement); // Debug log
+
+    if (sectionElement) {
+      const content = extractContent(sectionElement as HTMLElement);
+      console.log("Setting content:", content); // Debug log
+      setSectionContent(content);
+      setIsEditing(true);
+    }
   };
 
   return (
@@ -229,6 +273,7 @@ export function PageEditor() {
               </span>
             </div>
             <button
+              onClick={handleEditClick}
               className="flex items-center gap-2 px-4 py-2 
                         bg-brand-black/80 text-brand-white hover:bg-brand-teal/10 
                         border border-brand-teal/30 hover:border-brand-teal
@@ -258,7 +303,102 @@ export function PageEditor() {
       {/* Main Content */}
       <div className="w-full">
         {selectedSection ? (
-          renderSection()
+          <div>
+            {/* Edit Section */}
+            <div
+              className={`
+                w-full bg-brand-black/95 border-b border-brand-teal/30 backdrop-blur-sm
+                transform transition-all duration-300 ease-in-out origin-top
+                ${
+                  isEditing
+                    ? "h-auto opacity-100"
+                    : "h-0 opacity-0 overflow-hidden"
+                }
+              `}
+            >
+              {/* Edit Controls */}
+              <div className="max-w-7xl mx-auto">
+                <div className="border-b border-brand-teal/20 p-4 flex justify-end gap-4">
+                  <button
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg
+                              bg-brand-black/60 text-brand-white hover:bg-brand-teal/10 
+                              border border-brand-teal/30 hover:border-brand-teal
+                              transition-all duration-300"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-4 h-4"
+                    >
+                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    <span className="font-chocolates">Preview</span>
+                  </button>
+                  <button
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg
+                              bg-brand-black/60 text-brand-white hover:bg-brand-teal/10 
+                              border border-brand-teal/30 hover:border-brand-teal
+                              transition-all duration-300"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="w-4 h-4"
+                    >
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg>
+                    <span className="font-chocolates">Close</span>
+                  </button>
+                </div>
+
+                {/* Content Fields */}
+                <div className="p-6 space-y-6">
+                  {Object.entries(sectionContent).map(([key, value]) => (
+                    <div key={key} className="space-y-2">
+                      <label className="block text-brand-teal font-chocolates">
+                        {key === "heading" ? "Heading" : "Sub Heading"}
+                      </label>
+                      <textarea
+                        value={value}
+                        onChange={(e) => handleTextChange(key, e.target.value)}
+                        className="w-full min-h-[100px] p-4 rounded-lg
+                                 bg-white text-brand-black
+                                 border border-brand-teal/30 focus:border-brand-teal
+                                 outline-none transition-all duration-300
+                                 font-chocolates resize-y"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Section Content */}
+            <div
+              data-section-content
+              className={`transition-opacity duration-300 ${
+                isEditing ? "opacity-50" : "opacity-100"
+              }`}
+            >
+              {renderSection()}
+            </div>
+          </div>
         ) : (
           <div className="max-w-7xl mx-auto px-4 py-20">
             <p className="text-brand-white/70 text-center text-lg font-chocolates">
