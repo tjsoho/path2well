@@ -1,4 +1,6 @@
 {
   "/api/sections/update/route": "app/api/sections/update/route.js",
-  "/(admin)/editor/page": "app/(admin)/editor/page.js"
+  "/(admin)/editor/page": "app/(admin)/editor/page.js",
+  "/page": "app/page.js",
+  "/(pages)/home/page": "app/(pages)/home/page.js"
 }

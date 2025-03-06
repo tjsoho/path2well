@@ -10,11 +10,10 @@ export async function POST(request: Request) {
       .upsert({
         page_id: pageId,
         section_id: sectionId,
-        content: {
-          text: content.text,
-          images: content.images
-        },
+        content: content,
         updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'page_id,section_id'
       });
 
     if (error) throw error;
