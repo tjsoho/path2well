@@ -5,7 +5,7 @@
 @layer base {
   /* Headings */
   h1, h2, h3 {
-    @apply font-kiona font-semibold;
+    @apply font-ethnocentric;
   }
   
   h1 {
@@ -22,7 +22,19 @@
 
   /* Paragraphs */
   p {
-    @apply font-ttNorms font-extralight leading-relaxed tracking-[0.2em];
+    @apply font-chocolates leading-relaxed tracking-[0.2em];
+  }
+
+  h4,
+  h5,
+  h6 {
+    @apply font-chocolates;
+  }
+}
+
+@layer components {
+  .script {
+    @apply font-beauty;
   }
 }
 
@@ -41,7 +53,6 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Add these at the end of your globals.css */

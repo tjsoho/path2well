@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { kiona, ttNorms } from "./fonts";
+import { ethnocentric, ttChocolates, beauty } from "./fonts";
 import { Header } from "@/components/ui/Header";
 import "./globals.css";
 import { Footer } from "@/components/ui/Footer";
-import { Toaster } from 'react-hot-toast';
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,26 +27,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`
           ${geistSans.variable} 
           ${geistMono.variable} 
-          ${kiona.variable} 
-          ${ttNorms.variable} 
+          ${ethnocentric.variable}
+          ${ttChocolates.variable}
+          ${beauty.variable}
+          font-chocolates
           antialiased
         `}
+        suppressHydrationWarning
       >
         <Header />
         {children}
         <Footer />
-        <Toaster 
+        <Toaster
           position="top-center"
           toastOptions={{
             duration: 3000,
             style: {
-              background: '#333',
-              color: '#fff',
+              background: "#333",
+              color: "#fff",
             },
           }}
         />

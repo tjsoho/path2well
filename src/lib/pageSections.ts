@@ -1,6 +1,14 @@
+interface PageContent {
+  page_id: string;
+  section_id: string;
+  content: string;
+  updated_at: string;
+}
+
 interface Section {
   id: string;
   name: string;
+  content?: string;  // Optional since it might need to be fetched separately
 }
 
 const HOME_SECTIONS: Section[] = [

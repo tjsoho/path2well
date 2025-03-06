@@ -53,7 +53,7 @@ export function Header() {
           <div className="w-32 hidden md:block" />
 
           {/* Logo - left on mobile, center on md+ */}
-          <Link href="/" className="relative w-48 md:w-64 h-16">
+          <Link href="/" className="relative w-full md:w-64 h-32">
             <Image
               src="/images/logo.png"
               alt="Walker Lane"

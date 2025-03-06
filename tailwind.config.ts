@@ -12,19 +12,22 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         brand: {
-          blue: "#8797AE",
-          black: "#191515",
-          cream: "#e1ded4",
-          brown: {
-            light: "#c9b9a6",
-            DEFAULT: "#a58d75",
-            dark: "#694837",
-          }
+          teal: "#018D8D",     // TRUE TEAL
+          white: "#FFFFFF",     // WHITE
+          black: "#0D1719",     // BLACK
+          purple: "#8C51C7",    // PURPLE
+          pink: "#FF77BE",      // PINK
+          azure: "#007FFF",     // AZURE
+          carmine: "#960119",   // CARMINE
         },
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+      },
       fontFamily: {
-        kiona: ['var(--font-kiona)'],
-        ttNorms: ['var(--font-tt-norms)'],
+        ethnocentric: ['var(--font-ethnocentric)'],
+        chocolates: ['var(--font-tt-chocolates)'],
+        beauty: ['var(--font-beauty)'],
         sans: ['var(--font-geist-sans)'],
         mono: ['var(--font-geist-mono)'],
       },
