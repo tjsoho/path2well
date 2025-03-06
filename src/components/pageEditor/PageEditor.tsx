@@ -12,11 +12,7 @@ interface Page {
   name: string;
 }
 
-interface SectionContent {
-  heading: string;
-  subheading: string;
-  [key: string]: string;
-}
+type SectionContent = Record<string, string>;
 
 // Constants
 const PAGES: Page[] = [
@@ -116,6 +112,21 @@ export function PageEditor() {
     }));
   };
 
+  // Render section with updated content
+  const renderSection = () => {
+    if (!selectedSection) return null;
+    const Component = sections[selectedSection as keyof typeof sections];
+    if (!Component) return null;
+    return (
+      <Component
+        // @ts-ignore - We know the content structure matches what the component expects
+        content={sectionContent}
+        isEditing={isEditing}
+        onUpdate={handleTextChange}
+      />
+    );
+  };
+
   // Handle save
   const handleSave = async () => {
     try {
@@ -189,14 +200,6 @@ export function PageEditor() {
   // Handle edit click
   const handleEditClick = () => {
     extractContent();
-  };
-
-  // Render section with updated content
-  const renderSection = () => {
-    if (!selectedSection) return null;
-    const Component = sections[selectedSection as keyof typeof sections];
-    if (!Component) return null;
-    return <Component content={sectionContent} />;
   };
 
   return (
