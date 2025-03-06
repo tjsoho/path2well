@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 import { Modal } from "@/components/ui/Modal";
 import React from "react";
 import { RiCheckLine } from "react-icons/ri";
+import { EditableText } from "@/components/pageEditor/EditableText";
 
 interface PlusIconProps {
   onClick: () => void;
@@ -85,9 +86,9 @@ const modalContent = {
       <>
         <p className="text-lg mb-6">
           With our guidance, you&apos;ll gain the confidence to navigate any
-          financial challenge. We&apos;ll work alongside you, crafting a tailored
-          plan aligned with your values and goals to secure your future and
-          achieve your financial aspirations.
+          financial challenge. We&apos;ll work alongside you, crafting a
+          tailored plan aligned with your values and goals to secure your future
+          and achieve your financial aspirations.
         </p>
         <ul className="space-y-4">
           <ListItem index={0}>Expert guidance and education</ListItem>
@@ -106,8 +107,8 @@ const modalContent = {
           Picture yourself living life exactly as you envision it. We help you
           design a financial roadmap to turn these dreams into realities.
           Whether it&apos;s early retirement, pursuing passions, or simply
-          enjoying more financial security, we&apos;ll work with you to build
-          a future where financial freedom is your reality.
+          enjoying more financial security, we&apos;ll work with you to build a
+          future where financial freedom is your reality.
         </p>
         <ul className="space-y-4">
           <ListItem index={0}>Personalized wealth strategies</ListItem>
@@ -119,13 +120,35 @@ const modalContent = {
   },
 };
 
-export function SupportSection() {
+export const defaultContent = {
+  "clarity-heading": "Clarity",
+  "confidence-heading": "Confidence",
+  "freedom-heading": "Freedom",
+};
+
+interface SupportSectionProps {
+  isEditing?: boolean;
+  content?: typeof defaultContent;
+  onUpdate?: (id: string, value: string) => void;
+}
+
+export function SupportSection({
+  isEditing = false,
+  content = defaultContent,
+  onUpdate,
+}: SupportSectionProps) {
   const [activeModal, setActiveModal] = useState<
     keyof typeof modalContent | null
   >(null);
   const clarityButtonRef = useRef<HTMLDivElement>(null);
   const confidenceButtonRef = useRef<HTMLDivElement>(null);
   const freedomButtonRef = useRef<HTMLDivElement>(null);
+
+  // Ensure content has all required fields
+  const safeContent = {
+    ...defaultContent,
+    ...content,
+  };
 
   const getActiveButtonRef = () => {
     switch (activeModal) {
@@ -176,9 +199,13 @@ export function SupportSection() {
           {/* Clarity */}
           <motion.div variants={textVariants} className="text-center">
             <div className="flex flex-col items-center">
-              <h3 className="text-4xl md:text-5xl lg:text-6xl font-kiona text-brand-cream tracking-wider mb-8">
-                Clarity
-              </h3>
+              <EditableText
+                id="clarity-heading"
+                type="heading"
+                content={safeContent["clarity-heading"]}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+              />
               <PlusIcon
                 onClick={() => setActiveModal("clarity")}
                 ref={clarityButtonRef}
@@ -189,9 +216,13 @@ export function SupportSection() {
           {/* Confidence */}
           <motion.div variants={textVariants} className="text-center">
             <div className="flex flex-col items-center">
-              <h3 className="text-4xl md:text-5xl lg:text-6xl font-kiona text-brand-cream tracking-wider mb-8">
-                Confidence
-              </h3>
+              <EditableText
+                id="confidence-heading"
+                type="heading"
+                content={safeContent["confidence-heading"]}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+              />
               <PlusIcon
                 onClick={() => setActiveModal("confidence")}
                 ref={confidenceButtonRef}
@@ -202,9 +233,13 @@ export function SupportSection() {
           {/* Freedom */}
           <motion.div variants={textVariants} className="text-center">
             <div className="flex flex-col items-center">
-              <h3 className="text-4xl md:text-5xl lg:text-6xl font-kiona text-brand-cream tracking-wider mb-8">
-                Freedom
-              </h3>
+              <EditableText
+                id="freedom-heading"
+                type="heading"
+                content={safeContent["freedom-heading"]}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+              />
               <PlusIcon
                 onClick={() => setActiveModal("freedom")}
                 ref={freedomButtonRef}

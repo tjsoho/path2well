@@ -1423,6 +1423,10 @@ video {
 .bg-brand-black\/95 {
   background-color: rgb(13 23 25 / 0.95);
 }
+.bg-brand-teal {
+  --tw-bg-opacity: 1;
+  background-color: rgb(1 141 141 / var(--tw-bg-opacity, 1));
+}
 .bg-brand-teal\/20 {
   background-color: rgb(1 141 141 / 0.2);
 }
@@ -1470,10 +1474,6 @@ video {
 .bg-yellow-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity, 1));
-}
-.bg-brand-teal {
-  --tw-bg-opacity: 1;
-  background-color: rgb(1 141 141 / var(--tw-bg-opacity, 1));
 }
 .bg-\[url\(\'\/images\/wall\.jpeg\'\)\] {
   background-image: url('/images/wall.jpeg');
@@ -1779,20 +1779,20 @@ video {
 .opacity-100 {
   opacity: 1;
 }
+.opacity-25 {
+  opacity: 0.25;
+}
 .opacity-30 {
   opacity: 0.3;
 }
 .opacity-50 {
   opacity: 0.5;
 }
-.opacity-90 {
-  opacity: 0.9;
-}
-.opacity-25 {
-  opacity: 0.25;
-}
 .opacity-75 {
   opacity: 0.75;
+}
+.opacity-90 {
+  opacity: 0.9;
 }
 .shadow-\[0_0_15px_rgba\(1\2c 141\2c 141\2c 0\.3\)\] {
   --tw-shadow: 0 0 15px rgba(1,141,141,0.3);
@@ -2013,6 +2013,10 @@ body {
   background-color: rgb(1 141 141 / 0.1);
 }
 
+.hover\:bg-brand-teal\/90:hover {
+  background-color: rgb(1 141 141 / 0.9);
+}
+
 .hover\:bg-gray-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
@@ -2026,10 +2030,6 @@ body {
 .hover\:bg-gray-800:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
-}
-
-.hover\:bg-brand-teal\/90:hover {
-  background-color: rgb(1 141 141 / 0.9);
 }
 
 .hover\:text-red-500:hover {
@@ -2293,11 +2293,6 @@ body {
 
   .lg\:text-5xl {
     font-size: 3rem;
-    line-height: 1;
-  }
-
-  .lg\:text-6xl {
-    font-size: 3.75rem;
     line-height: 1;
   }
 

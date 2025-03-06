@@ -7,8 +7,8 @@ import { Tooltip } from "@/components/ui/Tooltip";
 import { EditableText } from "@/components/pageEditor/EditableText";
 
 export const defaultContent = {
-  "hero-heading": "Welcome To Walker Lane",
-  "hero-subtext": "YOUR FINANCIAL ADVISORS",
+  heading: "Welcome To Walker Lane",
+  subheading: "YOUR FINANCIAL ADVISORS",
 };
 
 interface HeroSectionProps {
@@ -136,16 +136,16 @@ export function HeroSection({
       >
         <div className="max-w-7xl mx-auto text-center px-4 pt-20 text-brand-cream">
           <EditableText
-            id="hero-heading"
+            id="heading"
             type="heading"
-            content={safeContent["hero-heading"]}
+            content={safeContent.heading}
             isEditing={isEditing}
             onUpdate={onUpdate}
           />
           <EditableText
-            id="hero-subtext"
+            id="subheading"
             type="subtext"
-            content={safeContent["hero-subtext"]}
+            content={safeContent.subheading}
             isEditing={isEditing}
             onUpdate={onUpdate}
           />

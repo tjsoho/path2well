@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { getPageSections } from "@/lib/pageSections";
 import dynamic from "next/dynamic";
+import { toast } from "react-hot-toast";
 
 // Types
 interface Page {
@@ -12,6 +13,8 @@ interface Page {
 }
 
 interface SectionContent {
+  heading: string;
+  subheading: string;
   [key: string]: string;
 }
 
@@ -95,13 +98,17 @@ export function PageEditor() {
   const [pagesOpen, setPagesOpen] = useState(false);
   const [sectionsOpen, setSectionsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [sectionContent, setSectionContent] = useState<SectionContent>({});
+  const [sectionContent, setSectionContent] = useState<SectionContent>({
+    heading: "",
+    subheading: "",
+  });
   const [isSaving, setIsSaving] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
 
   // Handle text change
   const handleTextChange = (key: string, value: string) => {
+    console.log("Updating content:", key, value);
     setIsDirty(true);
     setSectionContent((prev) => ({
       ...prev,
@@ -113,6 +120,8 @@ export function PageEditor() {
   const handleSave = async () => {
     try {
       setIsSaving(true);
+      console.log("Saving content:", sectionContent);
+
       const response = await fetch("/api/sections/update", {
         method: "POST",
         headers: {
@@ -153,20 +162,33 @@ export function PageEditor() {
   };
 
   // Extract content from section
-  const extractContent = (element: HTMLElement): SectionContent => {
-    const content: SectionContent = {};
+  const extractContent = async () => {
+    if (!selectedSection || !selectedPage) return;
 
-    // Get headings and paragraphs
-    const heading = element.querySelector("h1, h2");
-    const subheading = element.querySelector("h3, h4, p");
+    try {
+      const response = await fetch(
+        `/api/sections/content?pageId=${selectedPage}&sectionId=${selectedSection}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch content");
+      }
 
-    console.log("Found elements:", { heading, subheading }); // Debug log
+      const data = await response.json();
+      const content = data.content || { heading: "", subheading: "" };
 
-    if (heading) content["heading"] = heading.textContent || "";
-    if (subheading) content["subheading"] = subheading.textContent || "";
+      console.log("Fetched content:", content);
+      setSectionContent(content as SectionContent);
+      setIsEditing(true);
+    } catch (error) {
+      console.error("Error fetching section content:", error);
+      setSectionContent({ heading: "", subheading: "" });
+      setIsEditing(true);
+    }
+  };
 
-    console.log("Extracted content:", content); // Debug log
-    return content;
+  // Handle edit click
+  const handleEditClick = () => {
+    extractContent();
   };
 
   // Render section with updated content
@@ -175,19 +197,6 @@ export function PageEditor() {
     const Component = sections[selectedSection as keyof typeof sections];
     if (!Component) return null;
     return <Component content={sectionContent} />;
-  };
-
-  // Handle edit click
-  const handleEditClick = () => {
-    const sectionElement = document.querySelector("[data-section-content]");
-    console.log("Section element:", sectionElement); // Debug log
-
-    if (sectionElement) {
-      const content = extractContent(sectionElement as HTMLElement);
-      console.log("Setting content:", content); // Debug log
-      setSectionContent(content);
-      setIsEditing(true);
-    }
   };
 
   return (
