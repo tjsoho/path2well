@@ -763,10 +763,6 @@ video {
 .inset-0 {
   inset: 0px;
 }
-.inset-x-0 {
-  left: 0px;
-  right: 0px;
-}
 .-bottom-10 {
   bottom: -2.5rem;
 }
@@ -838,18 +834,6 @@ video {
 }
 .top-full {
   top: 100%;
-}
-.bottom-0 {
-  bottom: 0px;
-}
-.right-6 {
-  right: 1.5rem;
-}
-.top-\[calc\(100\%\+1rem\)\] {
-  top: calc(100% + 1rem);
-}
-.top-\[-1rem\] {
-  top: -1rem;
 }
 .z-0 {
   z-index: 0;
@@ -1034,11 +1018,11 @@ video {
 .h-\[60vh\] {
   height: 60vh;
 }
-.h-full {
-  height: 100%;
-}
 .h-auto {
   height: auto;
+}
+.h-full {
+  height: 100%;
 }
 .min-h-\[100px\] {
   min-height: 100px;
@@ -1193,14 +1177,6 @@ video {
   --tw-translate-x: 50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
-.-translate-y-4 {
-  --tw-translate-y: -1rem;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-.translate-y-0 {
-  --tw-translate-y: 0px;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
 .-rotate-12 {
   --tw-rotate: -12deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -1339,11 +1315,6 @@ video {
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 }
-.space-y-8 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(2rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(2rem * var(--tw-space-y-reverse));
-}
 .self-center {
   align-self: center;
 }
@@ -1452,10 +1423,6 @@ video {
 .bg-brand-black\/95 {
   background-color: rgb(13 23 25 / 0.95);
 }
-.bg-brand-teal {
-  --tw-bg-opacity: 1;
-  background-color: rgb(1 141 141 / var(--tw-bg-opacity, 1));
-}
 .bg-brand-teal\/20 {
   background-color: rgb(1 141 141 / 0.2);
 }
@@ -1504,8 +1471,9 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity, 1));
 }
-.bg-brand-black\/90 {
-  background-color: rgb(13 23 25 / 0.9);
+.bg-brand-teal {
+  --tw-bg-opacity: 1;
+  background-color: rgb(1 141 141 / var(--tw-bg-opacity, 1));
 }
 .bg-\[url\(\'\/images\/wall\.jpeg\'\)\] {
   background-image: url('/images/wall.jpeg');
@@ -1716,9 +1684,6 @@ video {
 .uppercase {
   text-transform: uppercase;
 }
-.capitalize {
-  text-transform: capitalize;
-}
 .italic {
   font-style: italic;
 }
@@ -1811,6 +1776,9 @@ video {
 .opacity-10 {
   opacity: 0.1;
 }
+.opacity-100 {
+  opacity: 1;
+}
 .opacity-30 {
   opacity: 0.3;
 }
@@ -1820,8 +1788,11 @@ video {
 .opacity-90 {
   opacity: 0.9;
 }
-.opacity-100 {
-  opacity: 1;
+.opacity-25 {
+  opacity: 0.25;
+}
+.opacity-75 {
+  opacity: 0.75;
 }
 .shadow-\[0_0_15px_rgba\(1\2c 141\2c 141\2c 0\.3\)\] {
   --tw-shadow: 0 0 15px rgba(1,141,141,0.3);
@@ -2042,10 +2013,6 @@ body {
   background-color: rgb(1 141 141 / 0.1);
 }
 
-.hover\:bg-brand-teal\/90:hover {
-  background-color: rgb(1 141 141 / 0.9);
-}
-
 .hover\:bg-gray-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
@@ -2059,6 +2026,10 @@ body {
 .hover\:bg-gray-800:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity, 1));
+}
+
+.hover\:bg-brand-teal\/90:hover {
+  background-color: rgb(1 141 141 / 0.9);
 }
 
 .hover\:text-red-500:hover {
@@ -2096,10 +2067,6 @@ body {
   --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
   --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
   box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-}
-
-.disabled\:cursor-not-allowed:disabled {
-  cursor: not-allowed;
 }
 
 .disabled\:opacity-50:disabled {

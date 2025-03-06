@@ -96,13 +96,60 @@ export function PageEditor() {
   const [sectionsOpen, setSectionsOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [sectionContent, setSectionContent] = useState<SectionContent>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
 
   // Handle text change
   const handleTextChange = (key: string, value: string) => {
+    setIsDirty(true);
     setSectionContent((prev) => ({
       ...prev,
       [key]: value,
     }));
+  };
+
+  // Handle save
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      const response = await fetch("/api/sections/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pageId: selectedPage,
+          sectionId: selectedSection,
+          content: sectionContent,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to save");
+
+      setIsDirty(false);
+      toast.success("Changes saved successfully");
+    } catch (error) {
+      console.error("Save error:", error);
+      toast.error("Failed to save changes");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Handle close
+  const handleClose = () => {
+    if (isDirty) {
+      if (
+        confirm("You have unsaved changes. Are you sure you want to close?")
+      ) {
+        setIsEditing(false);
+        setPreviewMode(false);
+      }
+    } else {
+      setIsEditing(false);
+      setPreviewMode(false);
+    }
   };
 
   // Extract content from section
@@ -122,12 +169,12 @@ export function PageEditor() {
     return content;
   };
 
-  // Render section
+  // Render section with updated content
   const renderSection = () => {
     if (!selectedSection) return null;
     const Component = sections[selectedSection as keyof typeof sections];
     if (!Component) return null;
-    return <Component />;
+    return <Component content={sectionContent} />;
   };
 
   // Handle edit click
@@ -318,57 +365,124 @@ export function PageEditor() {
             >
               {/* Edit Controls */}
               <div className="max-w-7xl mx-auto">
-                <div className="border-b border-brand-teal/20 p-4 flex justify-end gap-4">
-                  <button
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg
+                <div className="border-b border-brand-teal/20 p-4 flex justify-between gap-4">
+                  <div className="flex items-center gap-2">
+                    {isDirty && (
+                      <span className="text-brand-teal/70 font-chocolates text-sm">
+                        You have unsaved changes
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => setPreviewMode(!previewMode)}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg
                               bg-brand-black/60 text-brand-white hover:bg-brand-teal/10 
                               border border-brand-teal/30 hover:border-brand-teal
                               transition-all duration-300"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-4 h-4"
                     >
-                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                      <circle cx="12" cy="12" r="3" />
-                    </svg>
-                    <span className="font-chocolates">Preview</span>
-                  </button>
-                  <button
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-4 h-4"
+                      >
+                        <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                      <span className="font-chocolates">
+                        {previewMode ? "Edit" : "Preview"}
+                      </span>
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      disabled={!isDirty || isSaving}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg
+                              transition-all duration-300
+                              ${
+                                !isDirty
+                                  ? "bg-brand-black/40 text-brand-white/50 border-transparent cursor-not-allowed"
+                                  : "bg-brand-teal text-brand-white hover:bg-brand-teal/90 border-brand-teal"
+                              }`}
+                    >
+                      {isSaving ? (
+                        <svg
+                          className="animate-spin h-4 w-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          />
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="w-4 h-4"
+                        >
+                          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                          <polyline points="17 21 17 13 7 13 7 21" />
+                          <polyline points="7 3 7 8 15 8" />
+                        </svg>
+                      )}
+                      <span className="font-chocolates">
+                        {isSaving ? "Saving..." : "Save"}
+                      </span>
+                    </button>
+                    <button
+                      onClick={handleClose}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg
                               bg-brand-black/60 text-brand-white hover:bg-brand-teal/10 
                               border border-brand-teal/30 hover:border-brand-teal
                               transition-all duration-300"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-4 h-4"
                     >
-                      <path d="M18 6 6 18" />
-                      <path d="m6 6 12 12" />
-                    </svg>
-                    <span className="font-chocolates">Close</span>
-                  </button>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="w-4 h-4"
+                      >
+                        <path d="M18 6 6 18" />
+                        <path d="m6 6 12 12" />
+                      </svg>
+                      <span className="font-chocolates">Close</span>
+                    </button>
+                  </div>
                 </div>
 
                 {/* Content Fields */}
-                <div className="p-6 space-y-6">
+                <div className={`p-6 space-y-6 ${previewMode ? "hidden" : ""}`}>
                   {Object.entries(sectionContent).map(([key, value]) => (
                     <div key={key} className="space-y-2">
                       <label className="block text-brand-teal font-chocolates">
@@ -386,6 +500,25 @@ export function PageEditor() {
                     </div>
                   ))}
                 </div>
+
+                {/* Preview */}
+                {previewMode && (
+                  <div className="p-6">
+                    <div className="bg-white rounded-lg p-6">
+                      {Object.entries(sectionContent).map(([key, value]) => (
+                        <div key={key} className="mb-4">
+                          {key === "heading" ? (
+                            <h2 className="text-2xl font-bold text-brand-black mb-2">
+                              {value}
+                            </h2>
+                          ) : (
+                            <p className="text-brand-black">{value}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
