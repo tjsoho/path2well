@@ -7,28 +7,23 @@ import { Calendar } from "lucide-react";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { GlowButton } from "@/components/ui/GlowButton";
 
-export const defaultContent = {
-  heading: "Welcome To Walker Lane",
-  subheading: "YOUR FINANCIAL ADVISORS",
-};
-
 interface HeroSectionProps {
   isEditing?: boolean;
-  content?: typeof defaultContent;
+  content: Record<string, string>;
   onUpdate?: (id: string, value: string) => void;
 }
 
 export function HeroSection({
   isEditing = false,
-  content = defaultContent,
+  content = {},
   onUpdate,
 }: HeroSectionProps) {
   console.log("HeroSection rendering with:", { isEditing, content });
 
   // Ensure content has all required fields
   const safeContent = {
-    ...defaultContent,
-    ...content,
+    heading: content.heading || "PATH2WELL YOUR PERSONALISED HEALTHY JOURNEY",
+    subheading: content.subheading || "Unlock your optimal wellness with genetic testing bespoke IV therapy & expert guidance.",
   };
 
   // Star component to avoid repetition
@@ -64,7 +59,7 @@ export function HeroSection({
   );
 
   return (
-    <section className="relative min-h-screen w-full ">
+    <section className="relative min-h-screen w-full">
       {/* Star Animation Containers */}
       <div className="absolute inset-4 z-10">
         {/* First star - moving right and down */}
@@ -139,7 +134,7 @@ export function HeroSection({
                 content={safeContent.heading}
                 isEditing={isEditing}
                 onUpdate={onUpdate}
-                className="text-xl md:text-5xl font-bold text-white tracking-wider uppercase"
+                className="text-2xl md:text-5xl font-bold text-white tracking-wider uppercase"
               />
               <EditableText
                 id="subheading"

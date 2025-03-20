@@ -4,93 +4,129 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { EditableText } from "@/components/pageEditor/EditableText";
 
-export const defaultContent = {
-  "promise-heading": "Think of us as your financial friends",
-  "promise-text":
-    "Ready to simplify the complexities of money management so you can focus on what truly matters: your dreams.",
-};
-
 interface PromiseSectionProps {
   isEditing?: boolean;
-  content?: typeof defaultContent;
+  content: Record<string, string>;
   onUpdate?: (id: string, value: string) => void;
 }
 
 export function PromiseSection({
   isEditing = false,
-  content = defaultContent,
+  content = {
+    // "promise-heading":
+    //   "At <teal>Path2Well</teal>, we empower you to take <teal>control of your health</teal> through personalized, science-backed solutions.",
+    // "promise-text":
+    //   "We combine cutting-edge genetic testing with bespoke IV therapy to create a wellness plan uniquely <teal>tailored to your needs</teal>.",
+  },
   onUpdate,
 }: PromiseSectionProps) {
-  const textVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.4, 0, 0.2, 1],
-      },
-    },
+  // Ensure content has all required fields
+  const safeContent = {
+    "promise-heading":
+      content["promise-heading"] ||
+      "At Path2Well, we empower you to take control of your health through personalized, science-backed solutions.",
+    "promise-text":
+      content["promise-text"] ||
+      "We combine cutting-edge genetic testing with bespoke IV therapy to create a wellness plan uniquely tailored to your needs.",
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
+  const renderColoredText = (text: string) => {
+    if (!text) return null;
+    return text.split(/(<teal>.*?<\/teal>)/).map((part, index) => {
+      if (part.startsWith("<teal>") && part.endsWith("</teal>")) {
+        const content = part.replace(/<\/?teal>/g, "");
+        return (
+          <span key={index} className="text-brand-teal">
+            {content}
+          </span>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
   };
 
   return (
-    <section className="relative min-h-[60vh] flex items-center">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/wallet.jpeg"
-          alt="Luxury Wallet"
-          fill
-          className="object-cover"
-          priority
-        />
-        <div className="absolute inset-0 bg-black/55" />
+    <section className="relative -mt-[15vh] min-h-[60vh]">
+      {/* Split Background */}
+      <div className="absolute inset-0">
+        <div className="h-[130px] bg-[#001618]" />
+        <div className="h-[calc(100%-130px)] bg-white" />
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto px-4 py-20">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <motion.div variants={textVariants}>
-            <EditableText
-              id="promise-heading"
-              type="heading"
-              content={content["promise-heading"]}
-              isEditing={isEditing}
-              onUpdate={onUpdate}
-            />
-          </motion.div>
-
+      {/* Overlapping Images */}
+      <div className="relative container mx-auto px-4">
+        <div className="grid grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {/* First Image */}
           <motion.div
-            variants={textVariants}
-            className="w-[40px] h-[1px] bg-brand-cream mx-auto mb-12"
-          />
-
-          <motion.div variants={textVariants}>
-            <EditableText
-              id="promise-text"
-              type="paragraph"
-              content={content["promise-text"]}
-              isEditing={isEditing}
-              onUpdate={onUpdate}
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="relative h-[260px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white"
+          >
+            <Image
+              src="/images/runners.png"
+              alt="Group Exercise"
+              fill
+              className="object-cover"
+              priority
             />
           </motion.div>
+
+          {/* Second Image */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="relative h-[260px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white"
+          >
+            <Image
+              src="/images/bikes.png"
+              alt="Nurse with Patient"
+              fill
+              className="object-cover"
+              priority
+            />
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Content Section */}
+      <div className="container mx-auto px-4 mt-16 text-center pb-16">
+        {/* Icon with Lines */}
+        <div className="flex items-center justify-center gap-4 mb-8">
+          <div className="w-24 h-[1px] bg-gradient-to-l from-brand-teal to-white" />
+          <div className="relative w-12 h-12">
+            <Image
+              src="/images/icon1.png"
+              alt="Science Icon"
+              fill
+              className="object-contain"
+            />
+          </div>
+          <div className="w-24 h-[1px] bg-gradient-to-r from-brand-teal to-white" />
+        </div>
+
+        {/* Text Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="max-w-3xl mx-auto space-y-6"
+        >
+
+
+          <EditableText
+            id="promise-text"
+            type="paragraph"
+            content={safeContent["promise-text"]}
+            isEditing={isEditing}
+            onUpdate={onUpdate}
+            className="text-lg md:text-xl text-black"
+            renderContent={renderColoredText}
+          />
         </motion.div>
       </div>
     </section>

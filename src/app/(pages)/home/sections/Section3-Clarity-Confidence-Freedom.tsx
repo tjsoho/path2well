@@ -120,21 +120,19 @@ const modalContent = {
   },
 };
 
-export const defaultContent = {
-  "clarity-heading": "Clarity",
-  "confidence-heading": "Confidence",
-  "freedom-heading": "Freedom",
-};
-
 interface SupportSectionProps {
   isEditing?: boolean;
-  content?: typeof defaultContent;
+  content: Record<string, string>;
   onUpdate?: (id: string, value: string) => void;
 }
 
 export function SupportSection({
   isEditing = false,
-  content = defaultContent,
+  content = {
+    "clarity-heading": "Clarity",
+    "confidence-heading": "Confidence",
+    "freedom-heading": "Freedom",
+  },
   onUpdate,
 }: SupportSectionProps) {
   const [activeModal, setActiveModal] = useState<
@@ -146,7 +144,11 @@ export function SupportSection({
 
   // Ensure content has all required fields
   const safeContent = {
-    ...defaultContent,
+    ...{
+      "clarity-heading": "Clarity",
+      "confidence-heading": "Confidence",
+      "freedom-heading": "Freedom",
+    },
     ...content,
   };
 

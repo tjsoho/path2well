@@ -36,8 +36,8 @@ export async function GET(request: Request) {
           break;
         case 'Section2-Promise':
           defaultContent = {
-            heading: "Think of us as your financial friends",
-            subheading: "Ready to simplify the complexities of money management so you can focus on what truly matters: your dreams."
+            "promise-heading": "At <teal>Path2Well</teal>, we empower you to take <teal>control of your health</teal> through personalized, science-backed solutions.",
+            "promise-text": "We combine cutting-edge genetic testing with bespoke IV therapy to create a wellness plan uniquely <teal>tailored to your needs</teal>."
           };
           break;
         case 'Section3-Clarity-Confidence-Freedom':
