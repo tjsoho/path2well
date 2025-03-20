@@ -2,7 +2,10 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+
+import { Calendar } from "lucide-react";
 import { EditableText } from "@/components/pageEditor/EditableText";
+import { GlowButton } from "@/components/ui/GlowButton";
 
 export const defaultContent = {
   heading: "Welcome To Walker Lane",
@@ -61,7 +64,7 @@ export function HeroSection({
   );
 
   return (
-    <section className="relative min-h-screen w-full bg-white p-4">
+    <section className="relative min-h-screen w-full ">
       {/* Star Animation Containers */}
       <div className="absolute inset-4 z-10">
         {/* First star - moving right and down */}
@@ -98,7 +101,7 @@ export function HeroSection({
       </div>
 
       {/* Main Container with white border gap */}
-      <div className="relative w-full h-[calc(100vh-32px)] rounded-2xl overflow-hidden bg-[#001618]">
+      <div className="relative w-full h-[calc(100vh-0px)] rounded-2xl overflow-hidden bg-[#001618]">
         {/* Background Image Container */}
         <motion.div
           className="absolute inset-0"
@@ -146,6 +149,20 @@ export function HeroSection({
                 onUpdate={onUpdate}
                 className="text-xl md:text-2xl text-[#4ECDC4] tracking-widest uppercase"
               />
+
+              {/* Book Consultation Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="pt-8"
+              >
+                <GlowButton
+                  href="/consultation"
+                  text="Book Consultation"
+                  icon={Calendar}
+                />
+              </motion.div>
             </div>
           </div>
         </motion.div>
