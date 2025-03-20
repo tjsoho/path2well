@@ -136,7 +136,7 @@ export function HeroSection({
                 content={safeContent.heading}
                 isEditing={isEditing}
                 onUpdate={onUpdate}
-                className="text-5xl md:text-7xl font-bold text-white tracking-wider uppercase"
+                className="text-xl md:text-5xl font-bold text-white tracking-wider uppercase"
               />
               <EditableText
                 id="subheading"

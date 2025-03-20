@@ -19,15 +19,24 @@ export function EditableText({
 }: EditableTextProps) {
   console.log("EditableText rendering:", { id, type, content, isEditing });
 
+  // Function to render text with line breaks
+  const renderTextWithBreaks = (text: string) => {
+    return text.split("\n").map((line, i) => (
+      <span key={i} className="block">
+        {line || "\u00A0"}
+      </span>
+    ));
+  };
+
   if (!isEditing) {
     // Regular display mode - using original text colors
     switch (type) {
       case "heading":
         return (
           <h1
-            className={`text-5xl md:text-7xl mb-4 font-kiona text-brand-brown-light ${className}`}
+            className={`text-xl md:text-5xl mb-4 font-kiona text-brand-brown-light ${className}`}
           >
-            {content || "No content"}
+            {renderTextWithBreaks(content || "No content")}
           </h1>
         );
       case "paragraph":
@@ -35,13 +44,13 @@ export function EditableText({
           <p
             className={`text-xl md:text-2xl mb-12 max-w-3xl mx-auto leading-none ${className}`}
           >
-            {content || "No content"}
+            {renderTextWithBreaks(content || "No content")}
           </p>
         );
       case "subtext":
         return (
           <p className={`text-2xl mb-8 max-w-2xl mx-auto ${className}`}>
-            {content || "No content"}
+            {renderTextWithBreaks(content || "No content")}
           </p>
         );
       default:
@@ -63,6 +72,7 @@ export function EditableText({
         onChange={(e) => onUpdate?.(id, e.target.value)}
         className={`w-full px-3 py-2 border border-brand-brown-dark/20 rounded-md text-brand-brown-dark ${className}`}
         rows={type === "paragraph" ? 4 : 2}
+        style={{ whiteSpace: "pre-wrap" }}
       />
     </div>
   );
