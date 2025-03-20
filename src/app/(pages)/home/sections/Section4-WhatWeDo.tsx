@@ -3,7 +3,11 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-export function WhatWeDo() {
+interface WhatWeDoProps {
+  content?: Record<string, string>;
+}
+
+export function WhatWeDo({ content }: WhatWeDoProps) {
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {

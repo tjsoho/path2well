@@ -7,7 +7,6 @@ import { Modal } from "@/components/ui/Modal";
 import { PlusIcon } from "@/components/ui/PlusIcon";
 import { AnimatedListItem } from "@/components/ui/AnimatedListItem";
 
-
 interface MarketCardProps {
   image: string;
   title: string;
@@ -135,7 +134,11 @@ const marketData = [
   },
 ];
 
-export function TargetMarket() {
+interface TargetMarketProps {
+  content?: Record<string, string>;
+}
+
+export function TargetMarket({ content }: TargetMarketProps) {
   const [activeModal, setActiveModal] = useState<number | null>(null);
   const buttonRefs = [
     useRef<HTMLDivElement>(null),

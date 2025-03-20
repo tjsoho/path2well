@@ -9,7 +9,21 @@ import { AboutMe } from "./sections/Section8-AboutUs";
 import { DownloadSection } from "./sections/Section9-Download";
 import { supabase } from "@/lib/supabase";
 
-async function getSectionContent(sectionId: string) {
+// Add type for section content
+type SectionContent = Record<string, string>;
+
+// Define specific content types for each section
+type HeroContent = { heading: string; subheading: string };
+type PromiseContent = { "promise-heading": string; "promise-text": string };
+type SupportContent = {
+  "clarity-heading": string;
+  "confidence-heading": string;
+  "freedom-heading": string;
+};
+
+async function getSectionContent(
+  sectionId: string
+): Promise<SectionContent | undefined> {
   const { data, error } = await supabase
     .from("page_content")
     .select("content")
@@ -19,10 +33,10 @@ async function getSectionContent(sectionId: string) {
 
   if (error) {
     console.error(`Error fetching content for ${sectionId}:`, error);
-    return null;
+    return undefined;
   }
 
-  return data?.content || null;
+  return data?.content || undefined;
 }
 
 export default async function HomePage() {
@@ -41,15 +55,15 @@ export default async function HomePage() {
 
   return (
     <main>
-      <HeroSection content={heroContent} />
-      <PromiseSection content={promiseContent} />
-      <SupportSection content={supportContent} />
-      <WhatWeDo content={whatWeDoContent} />
-      <TargetMarket content={targetMarketContent} />
-      <TestimonialsSection content={testimonialsContent} />
-      <QuoteSection content={quoteContent} />
-      <AboutMe content={aboutContent} />
-      <DownloadSection content={downloadContent} />
+      <HeroSection content={heroContent as HeroContent} />
+      <PromiseSection content={promiseContent as PromiseContent} />
+      <SupportSection content={supportContent as SupportContent} />
+      <WhatWeDo content={whatWeDoContent as SectionContent} />
+      <TargetMarket content={targetMarketContent as SectionContent} />
+      <TestimonialsSection content={testimonialsContent as SectionContent} />
+      <QuoteSection content={quoteContent as SectionContent} />
+      <AboutMe content={aboutContent as SectionContent} />
+      <DownloadSection content={downloadContent as SectionContent} />
     </main>
   );
 }

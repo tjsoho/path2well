@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
     if (error) throw error;
 
-    // If no content exists yet, return default content based on section
+    // If no content exists yet, create it with default content
     if (!data) {
       let defaultContent = {};
       
@@ -50,90 +50,58 @@ export async function GET(request: Request) {
         case 'Section4-WhatWeDo':
           defaultContent = {
             heading: "What We Do",
-            subheading: "Our comprehensive approach to financial planning",
-            service1: {
-              heading: "Investment Management",
-              text: "Strategic portfolio management"
-            },
-            service2: {
-              heading: "Retirement Planning",
-              text: "Secure your future"
-            },
-            service3: {
-              heading: "Tax Planning",
-              text: "Optimize your tax strategy"
-            }
+            subheading: "We help you navigate your financial journey"
           };
           break;
         case 'Section5-WhoWeHelp':
           defaultContent = {
             heading: "Who We Help",
-            subheading: "Our clients include:",
-            client1: {
-              heading: "Individuals",
-              text: "Personal financial planning"
-            },
-            client2: {
-              heading: "Families",
-              text: "Generational wealth planning"
-            },
-            client3: {
-              heading: "Business Owners",
-              text: "Business succession planning"
-            }
+            subheading: "We serve clients at every stage of their financial journey"
           };
           break;
         case 'Section6-Testimonials':
           defaultContent = {
             heading: "What Our Clients Say",
-            testimonial1: {
-              text: "Walker Lane has transformed our financial future.",
-              author: "John & Sarah D."
-            },
-            testimonial2: {
-              text: "Professional, knowledgeable, and caring team.",
-              author: "Michael R."
-            },
-            testimonial3: {
-              text: "They helped us achieve our retirement goals.",
-              author: "Patricia M."
-            }
+            subheading: "Real stories from real people"
           };
           break;
         case 'Section7-Quote':
           defaultContent = {
-            quote: "The best time to plant a tree was 20 years ago. The second best time is now.",
-            author: "Chinese Proverb"
+            quote: "The best investment you can make is in yourself.",
+            author: "Warren Buffett"
           };
           break;
         case 'Section8-AboutUs':
           defaultContent = {
             heading: "About Us",
-            subheading: "Meet our team of dedicated professionals",
-            bio: "With over 20 years of experience in financial planning..."
+            subheading: "Your trusted financial partner"
           };
           break;
         case 'Section9-Download':
           defaultContent = {
-            heading: "Get Started Today",
-            subheading: "Download our free financial planning guide",
-            buttonText: "Download Guide"
+            heading: "Download Our Guide",
+            subheading: "Get started on your financial journey today"
           };
           break;
-        default:
-          defaultContent = { heading: "", subheading: "" };
       }
 
-      return NextResponse.json({
-        content: defaultContent,
-        updated_at: new Date().toISOString()
-      });
+      // Insert the default content into the database
+      const { data: newData, error: insertError } = await supabase
+        .from('page_content')
+        .insert({
+          page_id: pageId,
+          section_id: sectionId,
+          content: defaultContent,
+          updated_at: new Date().toISOString()
+        })
+        .select('content')
+        .single();
+
+      if (insertError) throw insertError;
+      return NextResponse.json({ content: newData.content });
     }
 
-    return NextResponse.json({
-      content: data.content,
-      updated_at: data.updated_at
-    });
+    return NextResponse.json({ content: data.content });
   } catch (error) {
     console.error('Error fetching section content:', error);
     return NextResponse.json(

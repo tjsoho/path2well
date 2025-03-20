@@ -4,7 +4,11 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 
-export function AboutMe() {
+interface AboutMeProps {
+  content?: Record<string, string>;
+}
+
+export function AboutMe({ content }: AboutMeProps) {
   return (
     <section className="relative bg-brand-cream py-20 md:py-0 md:h-screen">
       <div className="h-full">

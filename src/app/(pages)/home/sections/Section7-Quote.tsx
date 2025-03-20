@@ -6,7 +6,11 @@ import { Modal } from "@/components/ui/Modal";
 import { PlusIcon } from "@/components/ui/PlusIcon";
 import { AnimatedListItem } from "@/components/ui/AnimatedListItem";
 
-export function QuoteSection() {
+interface QuoteSectionProps {
+  content?: Record<string, string>;
+}
+
+export function QuoteSection({ content }: QuoteSectionProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
 

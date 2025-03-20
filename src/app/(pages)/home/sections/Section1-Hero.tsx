@@ -2,8 +2,6 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
-import { Tooltip } from "@/components/ui/Tooltip";
 import { EditableText } from "@/components/pageEditor/EditableText";
 
 export const defaultContent = {
@@ -24,133 +22,134 @@ export function HeroSection({
 }: HeroSectionProps) {
   console.log("HeroSection rendering with:", { isEditing, content });
 
-  const [userType, setUserType] = useState<"clients" | "advisors">("clients");
-  const [hoveredButton, setHoveredButton] = useState<
-    "clients" | "advisors" | null
-  >(null);
-
-  // Simplified button variants for clearer animation
-  const buttonVariants = {
-    initial: { scale: 1 },
-    hover: {
-      scale: 1.02,
-      transition: { duration: 0.2, ease: "easeInOut" },
-    },
-    tap: {
-      scale: 0.98,
-      transition: { duration: 0.1, ease: "easeInOut" },
-    },
-  };
-
   // Ensure content has all required fields
   const safeContent = {
     ...defaultContent,
     ...content,
   };
 
-  return (
-    <section className="relative min-h-screen w-full overflow-hidden">
-      {/* Background Image Container */}
-      <motion.div
-        className="absolute inset-0"
-        initial={{ scale: 1.2 }}
-        animate={{ scale: 1 }}
-        transition={{
-          duration: 20,
-          ease: "easeOut",
-        }}
-      >
-        <Image
-          src="/images/boatHero.jpeg"
-          alt="Luxury Boat"
-          fill
-          priority
-          className="object-cover md:object-center object-[70%_center]"
+  // Star component to avoid repetition
+  const Star = ({ className = "" }) => (
+    <div className={`relative ${className}`}>
+      <div className="absolute w-4 h-4">
+        {/* Create 10 points with random lengths */}
+        {[...Array(10)].map((_, i) => {
+          const angle = i * 36 * (Math.PI / 180); // 360/10 = 36 degrees
+          const length = Math.random() < 0.3 ? "12px" : "8px"; // 30% chance of longer point
+          return (
+            <div
+              key={i}
+              className="absolute w-0.5 bg-[#4ECDC4]"
+              style={{
+                height: length,
+                left: "50%",
+                top: "50%",
+                transformOrigin: "0 0",
+                transform: `rotate(${angle}rad) translateY(-50%)`,
+                boxShadow: "0 0 10px #4ECDC4, 0 0 20px #4ECDC4",
+              }}
+            />
+          );
+        })}
+        {/* Center dot */}
+        <div
+          className="absolute w-2 h-2 bg-[#4ECDC4] rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                    shadow-[0_0_15px_#4ECDC4,0_0_30px_#4ECDC4,0_0_45px_#4ECDC4]"
         />
-      </motion.div>
+      </div>
+    </div>
+  );
 
-      {/* Overlay - Made darker */}
-      <div className="absolute inset-0 bg-black/65 " />
+  return (
+    <section className="relative min-h-screen w-full bg-white p-4">
+      {/* Star Animation Containers */}
+      <div className="absolute inset-4 z-10">
+        {/* First star - moving right and down */}
+        <motion.div
+          className="absolute w-4 h-4"
+          animate={{
+            x: ["0%", "100%", "100%", "0%", "0%"],
+            y: ["0%", "0%", "100%", "100%", "0%"],
+          }}
+          transition={{
+            duration: 10,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+        >
+          <Star />
+        </motion.div>
 
-      {/* User Type Selector - Desktop Only */}
-      {!isEditing && (
-        <div className="absolute top-4 left-8 z-50 hidden md:flex gap-4">
-          <div className="relative">
-            <motion.button
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
-              onClick={() => setUserType("clients")}
-              onMouseEnter={() => setHoveredButton("clients")}
-              onMouseLeave={() => setHoveredButton(null)}
-              className={`px-6 py-2 text-sm border rounded-md ${
-                userType === "clients"
-                  ? "bg-brand-brown-light text-brand-black border-brand-brown-light"
-                  : "bg-transparent text-brand-brown-light border-brand-brown-light"
-              }`}
-            >
-              CLIENTS
-            </motion.button>
-            <Tooltip
-              text="For Individual Investors"
-              isVisible={hoveredButton === "clients"}
-              userType="clients"
-              isActive={userType === "clients"}
-            />
-          </div>
+        {/* Second star - moving left and up */}
+        <motion.div
+          className="absolute w-4 h-4 right-0 bottom-0"
+          animate={{
+            x: ["0%", "-100%", "-100%", "0%", "0%"],
+            y: ["0%", "0%", "-100%", "-100%", "0%"],
+          }}
+          transition={{
+            duration: 20,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+        >
+          <Star />
+        </motion.div>
+      </div>
 
-          <div className="relative">
-            <motion.button
-              variants={buttonVariants}
-              initial="initial"
-              whileHover="hover"
-              whileTap="tap"
-              onClick={() => setUserType("advisors")}
-              onMouseEnter={() => setHoveredButton("advisors")}
-              onMouseLeave={() => setHoveredButton(null)}
-              className={`px-6 py-2 text-sm border rounded-md ${
-                userType === "advisors"
-                  ? "bg-brand-brown-light text-brand-black border-brand-brown-light"
-                  : "bg-transparent text-brand-brown-light border-brand-brown-light"
-              }`}
-            >
-              ADVISORS
-            </motion.button>
-            <Tooltip
-              text="For Financial Advisors"
-              isVisible={hoveredButton === "advisors"}
-              userType="advisors"
-              isActive={userType === "advisors"}
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Content */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 flex items-center justify-center min-h-screen"
-      >
-        <div className="max-w-7xl mx-auto text-center px-4 pt-20 text-brand-cream">
-          <EditableText
-            id="heading"
-            type="heading"
-            content={safeContent.heading}
-            isEditing={isEditing}
-            onUpdate={onUpdate}
+      {/* Main Container with white border gap */}
+      <div className="relative w-full h-[calc(100vh-32px)] rounded-2xl overflow-hidden bg-[#001618]">
+        {/* Background Image Container */}
+        <motion.div
+          className="absolute inset-0"
+          initial={{ scale: 1.2 }}
+          animate={{ scale: 1 }}
+          transition={{
+            duration: 20,
+            ease: "easeOut",
+          }}
+        >
+          <Image
+            src="/images/HeroBG.png"
+            alt="Path2Well Hero"
+            fill
+            priority
+            className="object-cover"
           />
-          <EditableText
-            id="subheading"
-            type="subtext"
-            content={safeContent.subheading}
-            isEditing={isEditing}
-            onUpdate={onUpdate}
-          />
-        </div>
-      </motion.div>
+        </motion.div>
+
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#001618]/50 to-[#001618]" />
+
+        {/* Content */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="relative z-10 flex items-center justify-center h-full"
+        >
+          <div className="max-w-4xl mx-auto text-center px-4">
+            <div className="space-y-6">
+              <EditableText
+                id="heading"
+                type="heading"
+                content={safeContent.heading}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+                className="text-5xl md:text-7xl font-bold text-white tracking-wider uppercase"
+              />
+              <EditableText
+                id="subheading"
+                type="subtext"
+                content={safeContent.subheading}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+                className="text-xl md:text-2xl text-[#4ECDC4] tracking-widest uppercase"
+              />
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </section>
   );
 }

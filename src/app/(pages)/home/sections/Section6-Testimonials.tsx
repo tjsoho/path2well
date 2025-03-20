@@ -31,7 +31,11 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-export function TestimonialsSection() {
+interface TestimonialsSectionProps {
+  content?: Record<string, string>;
+}
+
+export function TestimonialsSection({ content }: TestimonialsSectionProps) {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {

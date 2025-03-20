@@ -4,7 +4,11 @@ import { motion } from "framer-motion";
 import { useState, useRef } from "react";
 import { Modal } from "@/components/ui/Modal";
 
-export function DownloadSection() {
+interface DownloadSectionProps {
+  content?: Record<string, string>;
+}
+
+export function DownloadSection({ content }: DownloadSectionProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "" });
   const buttonRef = useRef<HTMLDivElement>(null);
