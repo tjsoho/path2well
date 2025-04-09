@@ -3,11 +3,10 @@ import { PromiseSection } from "./sections/Section2-Promise";
 import { SupportSection } from "./sections/Section3-Clarity-Confidence-Freedom";
 import { WhatWeDo } from "./sections/Section4-about";
 import { Testimonials } from "./sections/Section5-WhoWeHelp";
-import { TestimonialsSection } from "./sections/Section6-Testimonials";
-import { QuoteSection } from "./sections/Section7-Quote";
-import { AboutMe } from "./sections/Section8-AboutUs";
-import { DownloadSection } from "./sections/Section9-Download";
+
 import { supabase } from "@/lib/supabase";
+import { DownloadSection } from "./sections/Section6-Download";
+import { ServicesSection } from "./sections/Section7-Services";
 
 // Add type for section content
 type SectionContent = Record<string, string>;
@@ -24,6 +23,11 @@ type SupportContent = {
   "freedom-text": string;
 };
 type WhatWeDoContent = { "about-text": string };
+type DownloadContent = {
+  heading: string;
+  subheading: string;
+  benefits: Array<{ title: string; description: string; }>;
+};
 
 async function getSectionContent(
   sectionId: string
@@ -52,10 +56,7 @@ export default async function HomePage() {
   );
   const whatWeDoContent = await getSectionContent("Section4-WhatWeDo");
   const targetMarketContent = await getSectionContent("Section5-WhoWeHelp");
-  const testimonialsContent = await getSectionContent("Section6-Testimonials");
-  const quoteContent = await getSectionContent("Section7-Quote");
-  const aboutContent = await getSectionContent("Section8-AboutUs");
-  const downloadContent = await getSectionContent("Section9-Download");
+  const downloadContent = await getSectionContent("Section6-Download");
 
   return (
     <main>
@@ -64,10 +65,8 @@ export default async function HomePage() {
       <SupportSection content={supportContent as SupportContent} />
       <WhatWeDo content={whatWeDoContent as WhatWeDoContent} />
       <Testimonials content={targetMarketContent as SectionContent} />
-      <TestimonialsSection content={testimonialsContent as SectionContent} />
-      <QuoteSection content={quoteContent as SectionContent} />
-      <AboutMe content={aboutContent as SectionContent} />
-      <DownloadSection content={downloadContent as SectionContent} />
+      <DownloadSection content={downloadContent as unknown as DownloadContent} />
+      <ServicesSection />
     </main>
   );
 }

@@ -1,0 +1,75 @@
+"use client";
+
+import { EditableText } from "@/components/pageEditor/EditableText";
+import { Search } from "lucide-react";
+import Image from "next/image";
+import { Button } from "@/components/ui/Button";
+
+interface ServicesProps {
+    isEditing?: boolean;
+    content?: {
+        heading?: string;
+        subheading?: string;
+    };
+    onUpdate?: (id: string, value: string) => void;
+}
+
+export function ServicesSection({
+    isEditing = false,
+    content = {},
+    onUpdate,
+}: ServicesProps) {
+    const safeContent = {
+        heading: content.heading || "Begin your journey to optimal health today.",
+        subheading: content.subheading || "Path2Well offers a future-forward approach to wellness,\nblending cutting-edge science with personalised care.",
+    };
+
+    return (
+        <section className="bg-white py-12">
+            <div className="max-w-7xl mx-auto px-4">
+                <div className="relative bg-brand-teal rounded-xl overflow-hidden">
+                    {/* Tech pattern overlay */}
+                    <div className="absolute inset-0">
+                        <Image
+                            src="/images/tech4.png"
+                            alt="Tech pattern"
+                            fill
+                            className="object-cover opacity-20"
+                        />
+                    </div>
+
+                    {/* Content */}
+                    <div className="relative p-12 md:p-16">
+                        <div className="max-w-2xl">
+                            <EditableText
+                                id="heading"
+                                type="heading"
+                                content={safeContent.heading}
+                                isEditing={isEditing}
+                                onUpdate={onUpdate}
+                                className="text-3xl md:text-4xl text-white font-light mb-6 whitespace-pre-line"
+                            />
+
+                            <EditableText
+                                id="subheading"
+                                type="paragraph"
+                                content={safeContent.subheading}
+                                isEditing={isEditing}
+                                onUpdate={onUpdate}
+                                className="text-white/80 text-lg mb-8"
+                            />
+
+                            <Button
+                                icon={Search}
+                                iconPosition="left"
+                                className="mt-4"
+                            >
+                                Explore our services
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+} 

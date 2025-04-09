@@ -1,38 +1,38 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ButtonHTMLAttributes } from "react";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline";
-  size?: "sm" | "md" | "lg";
+import { cn } from "@/lib/utils";
+import { LucideIcon } from "lucide-react";
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary';
+  icon?: LucideIcon;
+  iconPosition?: 'left' | 'right';
 }
 
 export function Button({
   children,
-  variant = "primary",
-  size = "md",
-  className = "",
-  
+  className,
+  variant = 'primary',
+  icon: Icon,
+  iconPosition = 'left',
+  ...props
 }: ButtonProps) {
-  const baseStyles = "rounded-full font-medium transition-colors";
+  const baseStyles = "inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-200 ease-in-out bg-white text-brand-teal border border-brand-teal hover:bg-brand-teal/5";
+
   const variants = {
-    primary: "bg-gray-900 text-white hover:bg-gray-800",
-    secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
-    outline: "border border-gray-300 hover:bg-gray-100",
-  };
-  const sizes = {
-    sm: "px-4 py-2 text-sm",
-    md: "px-6 py-3 text-base",
-    lg: "px-8 py-4 text-lg",
+    primary: "bg-white hover:bg-brand-teal/5 text-brand-teal border border-brand-teal shadow-lg hover:shadow-xl shadow-[0_0_5px_#4ECDC4,0_0_10px_#4ECDC4,0_0_40px_#4ECDC4] hover:shadow-[0_0_5px_#4ECDC4,0_0_40px_#4ECDC4,0_0_40px_#4ECDC4]",
+    secondary: "bg-white text-brand-teal border border-brand-teal hover:bg-brand-teal/5"
   };
 
   return (
-    <motion.button
-      whileTap={{ scale: 0.98 }}
-      className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
+    <button
+      className={cn(baseStyles, variants[variant], className)}
+      {...props}
     >
+      {Icon && iconPosition === 'left' && <Icon size={20} />}
       {children}
-    </motion.button>
+      {Icon && iconPosition === 'right' && <Icon size={20} />}
+    </button>
   );
 }
