@@ -2,7 +2,7 @@ import { HeroSection } from "./sections/Section1-Hero";
 import { PromiseSection } from "./sections/Section2-Promise";
 import { SupportSection } from "./sections/Section3-Clarity-Confidence-Freedom";
 import { WhatWeDo } from "./sections/Section4-about";
-import { TargetMarket } from "./sections/Section5-WhoWeHelp";
+import { Testimonials } from "./sections/Section5-WhoWeHelp";
 import { TestimonialsSection } from "./sections/Section6-Testimonials";
 import { QuoteSection } from "./sections/Section7-Quote";
 import { AboutMe } from "./sections/Section8-AboutUs";
@@ -17,9 +17,13 @@ type HeroContent = { heading: string; subheading: string };
 type PromiseContent = { "promise-heading": string; "promise-text": string };
 type SupportContent = {
   "clarity-heading": string;
+  "clarity-text": string;
   "confidence-heading": string;
+  "confidence-text": string;
   "freedom-heading": string;
+  "freedom-text": string;
 };
+type WhatWeDoContent = { "about-text": string };
 
 async function getSectionContent(
   sectionId: string
@@ -58,8 +62,8 @@ export default async function HomePage() {
       <HeroSection content={heroContent as HeroContent} />
       <PromiseSection content={promiseContent as PromiseContent} />
       <SupportSection content={supportContent as SupportContent} />
-      <WhatWeDo content={whatWeDoContent as SectionContent} />
-      <TargetMarket content={targetMarketContent as SectionContent} />
+      <WhatWeDo content={whatWeDoContent as WhatWeDoContent} />
+      <Testimonials content={targetMarketContent as SectionContent} />
       <TestimonialsSection content={testimonialsContent as SectionContent} />
       <QuoteSection content={quoteContent as SectionContent} />
       <AboutMe content={aboutContent as SectionContent} />
