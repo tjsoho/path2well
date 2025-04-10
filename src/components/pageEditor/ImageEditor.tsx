@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Upload, X } from "lucide-react";
+import { Upload } from "lucide-react";
 
 interface ImageEditorProps {
   images: Record<string, string>;

@@ -15,7 +15,7 @@ export function PageSectionEditor({
   sectionId,
 }: PageSectionEditorProps) {
   const [content, setContent] = useState<Record<string, string> | null>(null);
-  const [Component, setComponent] = useState<any>(null);
+  const [Component, setComponent] = useState<React.ComponentType<{ content: Record<string, string>; isEditing?: boolean; onUpdate?: (id: string, value: string) => void }> | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -44,7 +44,7 @@ export function PageSectionEditor({
       }
 
       // Get content
-      let { data, error } = await supabase
+      const { data, error } = await supabase
         .from("page_content")
         .select("content")
         .eq("page_id", pageId)
@@ -68,7 +68,7 @@ export function PageSectionEditor({
         if (insertError) throw insertError;
         console.log("4b. Created new content:", newData);
         setContent(newData.content);
-      } else {
+      } else if (data) {
         console.log("4c. Using existing content:", data.content);
         setContent(data.content);
       }
