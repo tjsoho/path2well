@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { Edit2, X } from "lucide-react";
 import toast from "react-hot-toast";
@@ -19,11 +19,7 @@ export function PageSectionEditor({
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
 
-  useEffect(() => {
-    loadSection();
-  }, [pageId, sectionId]);
-
-  async function loadSection() {
+  const loadSection = useCallback(async () => {
     setLoading(true);
     try {
       console.log("1. Starting to load section...");
@@ -77,7 +73,11 @@ export function PageSectionEditor({
     } finally {
       setLoading(false);
     }
-  }
+  }, [pageId, sectionId]);
+
+  useEffect(() => {
+    loadSection();
+  }, [loadSection]);
 
   async function handleUpdate(id: string, value: string) {
     const newContent = {

@@ -1,9 +1,4 @@
-interface PageContent {
-  page_id: string;
-  section_id: string;
-  content: string;
-  updated_at: string;
-}
+
 
 interface Section {
   id: string;
