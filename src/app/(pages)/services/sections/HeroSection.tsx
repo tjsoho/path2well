@@ -67,7 +67,7 @@ export function HeroSection({ content = defaultContent }: HeroSectionProps) {
         <div className="absolute inset-0 bg-black/30" />
         <div className="absolute bottom-0 left-0 flex items-end">
           {/* Purple Block */}
-          <div className="relative bg-[#8450c7] p-8 rounded-tr-3xl w-[70vw] lg:w-[40vw] -mt-[3px] overflow-hidden">
+          <div className="relative bg-[#844dc6] p-8 rounded-tr-3xl w-[70vw] lg:w-[40vw] -mt-[3px] overflow-hidden">
             {/* Background Tech Pattern */}
             
             <div className="text-left text-white relative z-10">
@@ -109,7 +109,7 @@ export function HeroSection({ content = defaultContent }: HeroSectionProps) {
           src="/images/tech3.png"
           alt="Technology Pattern"
           layout="fill"
-          className="object-cover opacity-20 mix-blend-overlay brightness-75"
+          className="object-cover opacity-30 mix-blend-overlay brightness-75"
         />
 
         <div className="container mx-auto px-4 py-16 relative z-10">

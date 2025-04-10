@@ -58,7 +58,7 @@ export function NavMenu() {
                     : "text-white/90 hover:text-[#4ECDC4]"
                 } transition-colors tracking-wide text-sm`}
               >
-                Our services
+                Services
               </Link>
               <Link
                 href="/blog"
