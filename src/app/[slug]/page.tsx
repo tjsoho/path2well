@@ -23,13 +23,12 @@ async function getBlogPost(slug: string) {
   return data;
 }
 
-interface BlogPostPageProps {
+export default async function BlogPost({
+  params,
+}: {
   params: { slug: string };
-  searchParams: Record<string, string | string[] | undefined>;
-}
-
-export default async function BlogPost(props: BlogPostPageProps) {
-  const post = await getBlogPost(props.params.slug);
+}) {
+  const post = await getBlogPost(params.slug);
 
   if (!post) {
     notFound();
