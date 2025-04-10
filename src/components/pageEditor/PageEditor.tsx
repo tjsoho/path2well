@@ -60,29 +60,15 @@ const sections = {
   ),
   "Section6-Testimonials": dynamic(
     () =>
-      import("@/app/(pages)/home/sections/Section6-Testimonials").then(
-        (mod) => mod.TestimonialsSection
+      import("@/app/(pages)/home/sections/Section6-Download").then(
+        (mod) => mod.DownloadSection
       ),
     { ssr: false }
   ),
   "Section7-Quote": dynamic(
     () =>
-      import("@/app/(pages)/home/sections/Section7-Quote").then(
-        (mod) => mod.QuoteSection
-      ),
-    { ssr: false }
-  ),
-  "Section8-AboutUs": dynamic(
-    () =>
-      import("@/app/(pages)/home/sections/Section8-AboutUs").then(
-        (mod) => mod.AboutMe
-      ),
-    { ssr: false }
-  ),
-  "Section9-Download": dynamic(
-    () =>
-      import("@/app/(pages)/home/sections/Section9-Download").then(
-        (mod) => mod.DownloadSection
+      import("@/app/(pages)/home/sections/Section7-Services").then(
+        (mod) => mod.ServicesSection
       ),
     { ssr: false }
   ),

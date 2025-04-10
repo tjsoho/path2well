@@ -59,28 +59,16 @@ export async function GET(request: Request) {
             subheading: "We serve clients at every stage of their financial journey"
           };
           break;
-        case 'Section6-Testimonials':
-          defaultContent = {
-            heading: "What Our Clients Say",
-            subheading: "Real stories from real people"
-          };
-          break;
-        case 'Section7-Quote':
-          defaultContent = {
-            quote: "The best investment you can make is in yourself.",
-            author: "Warren Buffett"
-          };
-          break;
-        case 'Section8-AboutUs':
-          defaultContent = {
-            heading: "About Us",
-            subheading: "Your trusted financial partner"
-          };
-          break;
-        case 'Section9-Download':
+        case 'Section6-Download':
           defaultContent = {
             heading: "Download Our Guide",
-            subheading: "Get started on your financial journey today"
+            subheading: "Get started on your wellness journey today"
+          };
+          break;
+        case 'Section7-Services':
+          defaultContent = {
+            heading: "Our Services",
+            subheading: "Comprehensive wellness solutions tailored to your needs"
           };
           break;
       }

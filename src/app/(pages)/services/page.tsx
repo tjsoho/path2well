@@ -9,7 +9,7 @@ export default function ServicesPage() {
     <main>
       <HeroSection />
       <ServiceDetailsSection />
-      <BeginSection />  
+      <BeginSection />
     </main>
   );
 } 

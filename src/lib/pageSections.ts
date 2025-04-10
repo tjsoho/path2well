@@ -16,11 +16,9 @@ const HOME_SECTIONS: Section[] = [
   { id: "Section2-Promise", name: "Promise Section" },
   { id: "Section3-Clarity-Confidence-Freedom", name: "Support Section" },
   { id: "Section4-WhatWeDo", name: "What We Do" },
-  { id: "Section5-WhoWeHelp", name: "Target Market" },
-  { id: "Section6-Testimonials", name: "Testimonials" },
-  { id: "Section7-Quote", name: "Quote Section" },
-  { id: "Section8-AboutUs", name: "About Me" },
-  { id: "Section9-Download", name: "Download Section" }
+  { id: "Section5-WhoWeHelp", name: "Who We Help" },
+  { id: "Section6-Download", name: "Download" },
+  { id: "Section7-Services", name: "Services" },
 ];
 
 const PAGES = {
