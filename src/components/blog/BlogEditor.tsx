@@ -210,34 +210,32 @@ export function BlogEditor() {
   };
 
   return (
-    <div className="min-h-screen bg-brand-cream py-12">
+    <div className="min-h-screen bg-[#001618] py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
         <div className="flex justify-between items-center mb-8">
           <div className="flex gap-4">
             <button
               onClick={() => setView("editor")}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                view === "editor"
-                  ? "bg-brand-brown-dark text-brand-cream"
-                  : "bg-brand-brown-dark/5 text-brand-brown-dark hover:bg-brand-brown-dark/10"
-              }`}
+              className={`px-4 py-2 rounded-full transition-colors ${view === "editor"
+                ? "bg-[#4ECDC4] text-[#001618]"
+                : "bg-[#4ECDC4]/10 text-[#4ECDC4] hover:bg-[#4ECDC4]/20"
+                }`}
             >
               Editor
             </button>
             <button
               onClick={() => setView("posts")}
-              className={`px-4 py-2 rounded-md transition-colors ${
-                view === "posts"
-                  ? "bg-brand-brown-dark text-brand-cream"
-                  : "bg-brand-brown-dark/5 text-brand-brown-dark hover:bg-brand-brown-dark/10"
-              }`}
+              className={`px-4 py-2 rounded-full transition-colors ${view === "posts"
+                ? "bg-[#4ECDC4] text-[#001618]"
+                : "bg-[#4ECDC4]/10 text-[#4ECDC4] hover:bg-[#4ECDC4]/20"
+                }`}
             >
               All Posts
             </button>
           </div>
           <Link
             href="/admin"
-            className="px-4 py-2 bg-brand-brown-dark/5 text-brand-brown-dark rounded-md hover:bg-brand-brown-dark/10 transition-colors"
+            className="px-4 py-2 bg-[#4ECDC4]/10 text-[#4ECDC4] rounded-full hover:bg-[#4ECDC4]/20 transition-colors"
           >
             Back to Admin
           </Link>
@@ -247,10 +245,10 @@ export function BlogEditor() {
           <div className="flex gap-8">
             {/* Main Content */}
             <div className="flex-1">
-              <div className="bg-white rounded-md shadow-md p-6 mb-6">
+              <div className="bg-[#001618] border-2 border-[#4ECDC4]/20 rounded-md shadow-lg shadow-brand-teal/30 p-6 mb-6">
                 {/* Title */}
                 <div className="mb-6">
-                  <label className="block text-brand-brown-dark text-sm mb-2">
+                  <label className="block text-[#4ECDC4] text-sm mb-2">
                     Title
                   </label>
                   <input
@@ -259,14 +257,14 @@ export function BlogEditor() {
                     onChange={(e) =>
                       setPost((prev) => ({ ...prev, title: e.target.value }))
                     }
-                    className="w-full text-brand-brown-dark px-4 py-2 border border-brand-brown-dark/20 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-brown-dark"
+                    className="w-full text-white px-4 py-2 border border-[#4ECDC4]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4ECDC4] bg-[#001618] placeholder-white/50"
                     placeholder="Enter post title"
                   />
                 </div>
 
                 {/* Subtitle */}
                 <div className="mb-6">
-                  <label className="block text-brand-brown-dark text-sm mb-2">
+                  <label className="block text-[#4ECDC4] text-sm mb-2">
                     Subtitle
                   </label>
                   <input
@@ -275,14 +273,14 @@ export function BlogEditor() {
                     onChange={(e) =>
                       setPost((prev) => ({ ...prev, subtitle: e.target.value }))
                     }
-                    className="w-full text-brand-brown-dark px-4 py-2 border border-brand-brown-dark/20 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-brown-dark"
+                    className="w-full text-white px-4 py-2 border border-[#4ECDC4]/20 rounded-md focus:outline-none focus:ring-2 focus:ring-[#4ECDC4] bg-[#001618] placeholder-white/50"
                     placeholder="Enter post subtitle"
                   />
                 </div>
 
                 {/* Content */}
                 <div className="mb-6">
-                  <label className="block text-brand-brown-dark text-sm mb-2">
+                  <label className="block text-[#4ECDC4] text-sm mb-2">
                     Content
                   </label>
                   <TipTapEditor
@@ -298,13 +296,13 @@ export function BlogEditor() {
               <div className="flex justify-end gap-4">
                 <button
                   onClick={() => handleSave("draft")}
-                  className="px-4 py-2 border border-brand-brown-dark text-brand-brown-dark rounded-md hover:bg-brand-brown-dark/5"
+                  className="px-4 py-2 border border-[#4ECDC4] text-[#4ECDC4] rounded-full hover:bg-[#4ECDC4]/10"
                 >
                   Save Draft
                 </button>
                 <button
                   onClick={() => handleSave("published")}
-                  className="px-4 py-2 bg-brand-brown-dark text-brand-cream rounded-md hover:bg-brand-brown-dark/90"
+                  className="px-4 py-2 bg-[#4ECDC4] text-[#001618] rounded-full hover:bg-[#4ECDC4]/90"
                 >
                   Publish
                 </button>
@@ -314,8 +312,8 @@ export function BlogEditor() {
             {/* Sidebar */}
             <div className="w-80">
               {/* Featured Image */}
-              <div className="bg-white rounded-md shadow-md p-6 mb-6">
-                <h3 className="text-lg font-kiona text-brand-brown-dark mb-4">
+              <div className="bg-[#001618] border-2 border-[#4ECDC4]/20 rounded-md shadow-lg shadow-brand-teal/30 p-6 mb-6">
+                <h3 className="text-lg font-kiona text-[#4ECDC4] mb-4">
                   Featured Image
                 </h3>
                 <div className="mb-4">
@@ -333,28 +331,26 @@ export function BlogEditor() {
                         onClick={() =>
                           setPost((prev) => ({ ...prev, image_url: "" }))
                         }
-                        className="absolute top-2 right-2 p-1 bg-white rounded-full shadow-md hover:bg-gray-100"
+                        className="absolute top-2 right-2 p-1 bg-[#001618] rounded-full shadow-md hover:bg-[#4ECDC4]/10"
                       >
-                        <X className="w-4 h-4 text-brand-brown-dark" />
+                        <X className="w-4 h-4 text-[#4ECDC4]" />
                       </button>
-                      <p className="text-sm text-brand-brown-dark/60 truncate">
+                      <p className="text-sm text-white/60 truncate">
                         {post.image_url.split("/").pop()}
                       </p>
                     </div>
                   ) : (
                     <div
                       onClick={triggerImageUpload}
-                      className={`h-48 border-2 border-dashed border-brand-brown-dark/20 rounded-md flex items-center justify-center cursor-pointer hover:border-brand-brown-dark/40 transition-colors ${
-                        imageLoading ? "opacity-50 pointer-events-none" : ""
-                      }`}
+                      className={`h-48 border-2 border-dashed border-[#4ECDC4]/20 rounded-md flex items-center justify-center cursor-pointer hover:border-[#4ECDC4]/40 transition-colors ${imageLoading ? "opacity-50 pointer-events-none" : ""
+                        }`}
                     >
                       <div className="text-center">
                         <Upload
-                          className={`w-8 h-8 text-brand-brown-dark/40 mx-auto mb-2 ${
-                            imageLoading ? "animate-pulse" : ""
-                          }`}
+                          className={`w-8 h-8 text-[#4ECDC4]/40 mx-auto mb-2 ${imageLoading ? "animate-pulse" : ""
+                            }`}
                         />
-                        <span className="text-sm text-brand-brown-dark/60">
+                        <span className="text-sm text-white/60">
                           {imageLoading
                             ? "Uploading..."
                             : "Click to upload image"}
@@ -366,14 +362,14 @@ export function BlogEditor() {
               </div>
 
               {/* Tags */}
-              <div className="bg-white rounded-md shadow-md p-6">
+              <div className="bg-[#001618] border-2 border-[#4ECDC4]/20 rounded-md shadow-lg shadow-brand-teal/30 p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <h3 className="text-lg font-kiona text-brand-brown-dark">
+                  <h3 className="text-lg font-kiona text-[#4ECDC4]">
                     Blog Tags
                   </h3>
                   <div className="group relative">
-                    <Info className="w-4 h-4 text-brand-brown-dark/40 cursor-help" />
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-white rounded-md shadow-lg text-xs text-brand-brown-dark opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Info className="w-4 h-4 text-[#4ECDC4]/40 cursor-help" />
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 bg-[#001618] border border-[#4ECDC4]/20 rounded-md shadow-lg text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity">
                       Add tags to your blog that are one or two word
                       descriptions so when people search for topics they will
                       find this blog.
@@ -384,12 +380,12 @@ export function BlogEditor() {
                   {post.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-3 py-1 bg-brand-brown-dark/5 text-brand-brown-dark rounded-full text-sm flex items-center gap-1"
+                      className="px-3 py-1 bg-[#4ECDC4]/10 text-[#4ECDC4] rounded-full text-sm flex items-center gap-1"
                     >
                       {tag}
                       <button
                         onClick={() => removeTag(tag)}
-                        className="hover:text-red-500"
+                        className="hover:text-white"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -402,11 +398,11 @@ export function BlogEditor() {
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={handleAddTag}
-                    className="flex-1 px-3 py-2 border border-brand-brown-dark/20 text-brand-brown-dark rounded-md focus:outline-none focus:ring-2 focus:ring-brand-brown-dark text-sm"
+                    className="flex-1 px-3 py-2 border border-[#4ECDC4]/20 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-[#4ECDC4] bg-[#001618] placeholder-white/50 text-sm"
                     placeholder="Add a tag"
                   />
                 </div>
-                <p className="text-xs text-brand-brown-dark/60 mt-2">
+                <p className="text-xs text-white/60 mt-2">
                   Press Enter to add a tag
                 </p>
               </div>

@@ -110,35 +110,35 @@ const MenuBar = ({ editor, postId }: { editor: any; postId?: string }) => {
   if (!editor) return null;
 
   return (
-    <div className="border-b border-brand-brown-dark/20 p-4 flex flex-wrap gap-2">
-      <div className="flex items-center gap-1 pr-2 border-r border-brand-brown-dark/20">
+    <div className="border-b border-[#4ECDC4]/20 p-4 flex flex-wrap gap-2 bg-[#001618]">
+      <div className="flex items-center gap-1 pr-2 border-r border-[#4ECDC4]/20">
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("bold") ? "bg-brand-brown-dark/10" : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive("bold") ? "bg-[#4ECDC4]/20" : ""
             }`}
           title="Bold"
         >
-          <Bold className="w-4 h-4 text-gray-700" />
+          <Bold className="w-4 h-4 text-[#4ECDC4]" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("italic") ? "bg-brand-brown-dark/10" : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive("italic") ? "bg-[#4ECDC4]/20" : ""
             }`}
           title="Italic"
         >
-          <Italic className="w-4 h-4 text-gray-700" />
+          <Italic className="w-4 h-4 text-[#4ECDC4]" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("underline") ? "bg-brand-brown-dark/10" : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive("underline") ? "bg-[#4ECDC4]/20" : ""
             }`}
           title="Underline"
         >
-          <UnderlineIcon className="w-4 h-4 text-gray-700" />
+          <UnderlineIcon className="w-4 h-4 text-[#4ECDC4]" />
         </button>
       </div>
 
-      <div className="flex items-center gap-1 px-2 border-r border-brand-brown-dark/20">
+      <div className="flex items-center gap-1 px-2 border-r border-[#4ECDC4]/20">
         <select
           onChange={(event) => {
             const tag = event.target.value;
@@ -152,7 +152,7 @@ const MenuBar = ({ editor, postId }: { editor: any; postId?: string }) => {
                 .run();
             }
           }}
-          className="p-2 rounded hover:bg-gray-100 text-gray-700 focus:outline-none"
+          className="p-2 rounded hover:bg-[#4ECDC4]/10 text-white bg-[#001618] border border-[#4ECDC4]/20 focus:outline-none focus:border-[#4ECDC4]/50"
         >
           <option value="paragraph">Paragraph</option>
           <option value="1">Heading 1</option>
@@ -161,87 +161,87 @@ const MenuBar = ({ editor, postId }: { editor: any; postId?: string }) => {
         </select>
       </div>
 
-      <div className="flex items-center gap-1 px-2 border-r border-brand-brown-dark/20">
+      <div className="flex items-center gap-1 px-2 border-r border-[#4ECDC4]/20">
         <button
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: "left" })
-              ? "bg-brand-brown-dark/10"
-              : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive({ textAlign: "left" })
+            ? "bg-[#4ECDC4]/20"
+            : ""
             }`}
           title="Align Left"
         >
-          <AlignLeft className="w-4 h-4 text-gray-700" />
+          <AlignLeft className="w-4 h-4 text-[#4ECDC4]" />
         </button>
         <button
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: "center" })
-              ? "bg-brand-brown-dark/10"
-              : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive({ textAlign: "center" })
+            ? "bg-[#4ECDC4]/20"
+            : ""
             }`}
           title="Align Center"
         >
-          <AlignCenter className="w-4 h-4 text-gray-700" />
+          <AlignCenter className="w-4 h-4 text-[#4ECDC4]" />
         </button>
         <button
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: "right" })
-              ? "bg-brand-brown-dark/10"
-              : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive({ textAlign: "right" })
+            ? "bg-[#4ECDC4]/20"
+            : ""
             }`}
           title="Align Right"
         >
-          <AlignRight className="w-4 h-4 text-gray-700" />
+          <AlignRight className="w-4 h-4 text-[#4ECDC4]" />
         </button>
         <button
           onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: "justify" })
-              ? "bg-brand-brown-dark/10"
-              : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive({ textAlign: "justify" })
+            ? "bg-[#4ECDC4]/20"
+            : ""
             }`}
           title="Justify"
         >
-          <AlignJustify className="w-4 h-4 text-gray-700" />
+          <AlignJustify className="w-4 h-4 text-[#4ECDC4]" />
         </button>
       </div>
 
-      <div className="flex items-center gap-1 px-2 border-r border-brand-brown-dark/20">
+      <div className="flex items-center gap-1 px-2 border-r border-[#4ECDC4]/20">
         <button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("bulletList") ? "bg-brand-brown-dark/10" : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive("bulletList") ? "bg-[#4ECDC4]/20" : ""
             }`}
           title="Bullet List"
         >
-          <List className="w-4 h-4 text-gray-700" />
+          <List className="w-4 h-4 text-[#4ECDC4]" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("orderedList") ? "bg-brand-brown-dark/10" : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive("orderedList") ? "bg-[#4ECDC4]/20" : ""
             }`}
           title="Numbered List"
         >
-          <ListOrdered className="w-4 h-4 text-gray-700" />
+          <ListOrdered className="w-4 h-4 text-[#4ECDC4]" />
         </button>
       </div>
 
-      <div className="flex items-center gap-1 px-2 border-r border-brand-brown-dark/20">
+      <div className="flex items-center gap-1 px-2 border-r border-[#4ECDC4]/20">
         <button
           onClick={addImage}
-          className="p-2 rounded hover:bg-gray-100"
+          className="p-2 rounded hover:bg-[#4ECDC4]/10"
           title="Add Image"
         >
-          <ImageIcon className="w-4 h-4 text-gray-700" />
+          <ImageIcon className="w-4 h-4 text-[#4ECDC4]" />
         </button>
         <button
           onClick={addLink}
-          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("link") ? "bg-brand-brown-dark/10" : ""
+          className={`p-2 rounded hover:bg-[#4ECDC4]/10 ${editor.isActive("link") ? "bg-[#4ECDC4]/20" : ""
             }`}
           title="Add Link"
         >
-          <LinkIcon className="w-4 h-4 text-gray-700" />
+          <LinkIcon className="w-4 h-4 text-[#4ECDC4]" />
         </button>
         <div className="relative" title="Text Color">
-          <button className="p-2 rounded hover:bg-gray-100 flex items-center gap-1">
-            <Droplet className="w-4 h-4 text-gray-700" />
+          <button className="p-2 rounded hover:bg-[#4ECDC4]/10 flex items-center gap-1">
+            <Droplet className="w-4 h-4 text-[#4ECDC4]" />
             <input
               type="color"
               onInput={(event: React.FormEvent<HTMLInputElement>) => {
@@ -293,11 +293,11 @@ export function TipTapEditor({ content, onChange, postId }: TipTapEditorProps) {
   }
 
   return (
-    <div className="border border-brand-brown-dark/20 rounded-md overflow-hidden">
+    <div className="border border-[#4ECDC4]/20 rounded-md overflow-hidden bg-[#001618]">
       <MenuBar editor={editor} postId={postId} />
       <EditorContent
         editor={editor}
-        className="prose max-w-none p-4 min-h-[200px] focus:outline-none text-gray-700"
+        className="prose max-w-none p-4 min-h-[200px] focus:outline-none text-white prose-invert prose-headings:text-white prose-p:text-white/80 prose-a:text-[#4ECDC4] prose-strong:text-white prose-code:text-[#4ECDC4] prose-pre:bg-[#001618]/40 prose-pre:border prose-pre:border-[#4ECDC4]/20"
       />
     </div>
   );

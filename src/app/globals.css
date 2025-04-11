@@ -74,7 +74,7 @@ body {
 
 /* Add these styles for the TipTap content */
 .tiptap-content {
-  color: #4A3419; /* brand-brown-dark */
+  color: #ffffff; /* Changed to white */
 
   & img {
     max-width: 100%;
@@ -84,18 +84,18 @@ body {
 
   & p {
     margin: 1rem 0;
-    color: inherit; /* This will inherit the dark brown unless overridden */
+    color: rgba(255, 255, 255, 0.8); /* Changed to white with 80% opacity */
   }
 
   & h1, & h2, & h3, & h4, & h5, & h6 {
     margin: 2rem 0 1rem;
     font-weight: bold;
-    color: inherit;
+    color: #ffffff; /* Changed to white */
   }
 
   /* Preserve user-specified colors */
   & [style*="color:"] {
-    color: var(--tw-prose-body);
+    color: inherit;
   }
 
   & [style*="text-align: center"] {

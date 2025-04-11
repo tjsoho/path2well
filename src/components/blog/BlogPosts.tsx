@@ -118,7 +118,7 @@ export function BlogPosts({ onEdit }: { onEdit: (post: BlogPost) => void }) {
       {posts.map((post) => (
         <div
           key={post.id}
-          className="bg-white rounded-md shadow-md overflow-hidden"
+          className="bg-brand-teal/40 rounded-md shadow-md overflow-hidden"
         >
           {post.image_url && (
             <div className="relative h-48">
@@ -132,7 +132,7 @@ export function BlogPosts({ onEdit }: { onEdit: (post: BlogPost) => void }) {
             </div>
           )}
           <div className="p-4">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2 ">
               <span
                 className={`px-2 py-1 rounded-md text-xs ${
                   post.status === "published"
@@ -142,17 +142,17 @@ export function BlogPosts({ onEdit }: { onEdit: (post: BlogPost) => void }) {
               >
                 {post.status}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-300">
                 {post.views || 0} views
               </span>
             </div>
             <h3 className="text-xl font-bold mb-2">{post.title}</h3>
-            <p className="text-gray-600 mb-4">{post.subtitle}</p>
+            <p className="text-gray-400 mb-4">{post.subtitle}</p>
             <div className="flex flex-wrap gap-2 mb-4">
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-1 bg-brand-brown-dark/10 text-brand-brown-dark rounded-md text-sm"
+                  className="px-2 py-1 bg-brand-teal text-white rounded-full text-sm"
                 >
                   {tag}
                 </span>
@@ -167,7 +167,7 @@ export function BlogPosts({ onEdit }: { onEdit: (post: BlogPost) => void }) {
               </Link>
               <button
                 onClick={() => onEdit(post)}
-                className="px-3 py-1 text-blue-600 hover:underline"
+                className="px-3 py-1 text-green-400 hover:underline"
               >
                 Edit
               </button>
