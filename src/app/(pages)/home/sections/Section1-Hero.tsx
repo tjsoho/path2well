@@ -153,7 +153,7 @@ export function HeroSection({
                 className="pt-8"
               >
                 <GlowButton
-                  href="/consultation"
+                  href="/contact"
                   text="Book Consultation"
                   icon={Calendar}
                 />

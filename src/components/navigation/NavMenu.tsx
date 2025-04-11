@@ -32,41 +32,37 @@ export function NavMenu() {
             <div className="hidden md:flex items-center justify-center space-x-8 flex-1 mx-8 font-chocolates uppercase">
               <Link
                 href="/"
-                className={`${
-                  isActive("/")
-                    ? "text-[#4ECDC4]"
-                    : "text-white/90 hover:text-[#4ECDC4]"
-                } transition-colors tracking-wide text-sm`}
+                className={`${isActive("/")
+                  ? "text-[#4ECDC4]"
+                  : "text-white/90 hover:text-[#4ECDC4]"
+                  } transition-colors tracking-wide text-sm`}
               >
                 Home
               </Link>
               <Link
                 href="/about"
-                className={`${
-                  isActive("/about")
-                    ? "text-[#4ECDC4]"
-                    : "text-white/90 hover:text-[#4ECDC4]"
-                } transition-colors tracking-wide text-sm`}
+                className={`${isActive("/about")
+                  ? "text-[#4ECDC4]"
+                  : "text-white/90 hover:text-[#4ECDC4]"
+                  } transition-colors tracking-wide text-sm`}
               >
                 About us
               </Link>
               <Link
                 href="/services"
-                className={`${
-                  isActive("/services")
-                    ? "text-[#4ECDC4]"
-                    : "text-white/90 hover:text-[#4ECDC4]"
-                } transition-colors tracking-wide text-sm`}
+                className={`${isActive("/services")
+                  ? "text-[#4ECDC4]"
+                  : "text-white/90 hover:text-[#4ECDC4]"
+                  } transition-colors tracking-wide text-sm`}
               >
                 Services
               </Link>
               <Link
                 href="/blog"
-                className={`${
-                  isActive("/blog")
-                    ? "text-[#4ECDC4]"
-                    : "text-white/90 hover:text-[#4ECDC4]"
-                } transition-colors tracking-wide text-sm`}
+                className={`${isActive("/blog")
+                  ? "text-[#4ECDC4]"
+                  : "text-white/90 hover:text-[#4ECDC4]"
+                  } transition-colors tracking-wide text-sm`}
               >
                 Blog
               </Link>
@@ -75,7 +71,7 @@ export function NavMenu() {
             {/* Book Consultation Button */}
             <div className="hidden md:block shrink-0">
               <Link
-                href="/consultation"
+                href="/contact"
                 className="bg-[#4ECDC4] text-[#001618] px-4 py-2 rounded-full text-sm font-medium 
                          hover:bg-[#4ECDC4]/90 transition-colors tracking-wide inline-flex items-center space-x-2"
               >
@@ -129,7 +125,7 @@ export function NavMenu() {
               Blog
             </Link>
             <Link
-              href="/consultation"
+              href="/contact"
               className="block px-3 py-2 text-[#4ECDC4] hover:text-[#4ECDC4]/80 transition-colors text-sm"
             >
               Book consultation

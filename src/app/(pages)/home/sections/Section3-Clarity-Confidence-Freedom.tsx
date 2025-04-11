@@ -78,7 +78,7 @@ export function SupportSection({
                     className="text-gray-400"
                   />
                   <Link
-                    href="/consultation"
+                    href="/contact"
                     className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors"
                   >
                     Book consultation
@@ -151,7 +151,7 @@ export function SupportSection({
                     className="text-gray-400"
                   />
                   <Link
-                    href="/consultation"
+                    href="/contact"
                     className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors"
                   >
                     Book consultation
@@ -192,7 +192,7 @@ export function SupportSection({
                     className="text-gray-400"
                   />
                   <Link
-                    href="/consultation"
+                    href="/contact"
                     className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors"
                   >
                     Book consultation
