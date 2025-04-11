@@ -39,7 +39,7 @@ export function Footer() {
       {/* Tech pattern background */}
       <div className="absolute inset-0">
         <Image
-          src="/images/footerbg.png"
+          src="/images/footerBG.png"
           alt="Tech pattern"
           fill
           className="object-cover opacity-70"
