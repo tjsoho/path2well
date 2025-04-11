@@ -114,27 +114,24 @@ const MenuBar = ({ editor, postId }: { editor: any; postId?: string }) => {
       <div className="flex items-center gap-1 pr-2 border-r border-brand-brown-dark/20">
         <button
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive("bold") ? "bg-brand-brown-dark/10" : ""
-          }`}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("bold") ? "bg-brand-brown-dark/10" : ""
+            }`}
           title="Bold"
         >
           <Bold className="w-4 h-4 text-gray-700" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive("italic") ? "bg-brand-brown-dark/10" : ""
-          }`}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("italic") ? "bg-brand-brown-dark/10" : ""
+            }`}
           title="Italic"
         >
           <Italic className="w-4 h-4 text-gray-700" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive("underline") ? "bg-brand-brown-dark/10" : ""
-          }`}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("underline") ? "bg-brand-brown-dark/10" : ""
+            }`}
           title="Underline"
         >
           <UnderlineIcon className="w-4 h-4 text-gray-700" />
@@ -167,44 +164,40 @@ const MenuBar = ({ editor, postId }: { editor: any; postId?: string }) => {
       <div className="flex items-center gap-1 px-2 border-r border-brand-brown-dark/20">
         <button
           onClick={() => editor.chain().focus().setTextAlign("left").run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive({ textAlign: "left" })
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: "left" })
               ? "bg-brand-brown-dark/10"
               : ""
-          }`}
+            }`}
           title="Align Left"
         >
           <AlignLeft className="w-4 h-4 text-gray-700" />
         </button>
         <button
           onClick={() => editor.chain().focus().setTextAlign("center").run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive({ textAlign: "center" })
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: "center" })
               ? "bg-brand-brown-dark/10"
               : ""
-          }`}
+            }`}
           title="Align Center"
         >
           <AlignCenter className="w-4 h-4 text-gray-700" />
         </button>
         <button
           onClick={() => editor.chain().focus().setTextAlign("right").run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive({ textAlign: "right" })
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: "right" })
               ? "bg-brand-brown-dark/10"
               : ""
-          }`}
+            }`}
           title="Align Right"
         >
           <AlignRight className="w-4 h-4 text-gray-700" />
         </button>
         <button
           onClick={() => editor.chain().focus().setTextAlign("justify").run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive({ textAlign: "justify" })
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive({ textAlign: "justify" })
               ? "bg-brand-brown-dark/10"
               : ""
-          }`}
+            }`}
           title="Justify"
         >
           <AlignJustify className="w-4 h-4 text-gray-700" />
@@ -214,18 +207,16 @@ const MenuBar = ({ editor, postId }: { editor: any; postId?: string }) => {
       <div className="flex items-center gap-1 px-2 border-r border-brand-brown-dark/20">
         <button
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive("bulletList") ? "bg-brand-brown-dark/10" : ""
-          }`}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("bulletList") ? "bg-brand-brown-dark/10" : ""
+            }`}
           title="Bullet List"
         >
           <List className="w-4 h-4 text-gray-700" />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive("orderedList") ? "bg-brand-brown-dark/10" : ""
-          }`}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("orderedList") ? "bg-brand-brown-dark/10" : ""
+            }`}
           title="Numbered List"
         >
           <ListOrdered className="w-4 h-4 text-gray-700" />
@@ -242,9 +233,8 @@ const MenuBar = ({ editor, postId }: { editor: any; postId?: string }) => {
         </button>
         <button
           onClick={addLink}
-          className={`p-2 rounded hover:bg-gray-100 ${
-            editor.isActive("link") ? "bg-brand-brown-dark/10" : ""
-          }`}
+          className={`p-2 rounded hover:bg-gray-100 ${editor.isActive("link") ? "bg-brand-brown-dark/10" : ""
+            }`}
           title="Add Link"
         >
           <LinkIcon className="w-4 h-4 text-gray-700" />
@@ -254,8 +244,8 @@ const MenuBar = ({ editor, postId }: { editor: any; postId?: string }) => {
             <Droplet className="w-4 h-4 text-gray-700" />
             <input
               type="color"
-              onInput={(event) => {
-                editor.chain().focus().setColor(event.target.value).run();
+              onInput={(event: React.FormEvent<HTMLInputElement>) => {
+                editor.chain().focus().setColor((event.target as HTMLInputElement).value).run();
               }}
               className="w-0 h-0 opacity-0 absolute inset-0 cursor-pointer"
               title="Text Color"

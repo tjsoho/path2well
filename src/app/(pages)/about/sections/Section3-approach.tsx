@@ -50,7 +50,7 @@ export function ApproachSection({
                                 <div className="w-12 h-[1px] bg-brand-teal"></div>
                                 <EditableText
                                     id="label"
-                                    type="label"
+                                    type="subtext"
                                     content={content.label}
                                     isEditing={isEditing}
                                     onUpdate={onUpdate}

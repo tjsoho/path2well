@@ -12,8 +12,72 @@ interface Page {
   name: string;
 }
 
-type SectionContent = Record<string, string>;
-type SectionContents = Record<string, SectionContent>;
+type Testimonial = {
+  name: string;
+  image: string;
+  quote: string;
+  title: string;
+};
+
+type Benefit = {
+  title: string;
+  description: string;
+};
+
+type HeroContent = {
+  heading: string;
+  subheading: string;
+};
+
+type PromiseContent = {
+  heading: string;
+  subheading: string;
+};
+
+type SupportContent = {
+  "clarity-heading": string;
+  "clarity-text": string;
+  "confidence-heading": string;
+  "confidence-text": string;
+  "freedom-heading": string;
+  "freedom-text": string;
+};
+
+type WhatWeDoContent = {
+  "about-text": string;
+};
+
+type TestimonialsContent = {
+  heading: string;
+  subheading: string;
+  testimonials: Testimonial[];
+};
+
+type DownloadContent = {
+  heading: string;
+  subheading: string;
+  benefits: Benefit[];
+};
+
+type ServicesContent = {
+  heading: string;
+  subheading: string;
+};
+
+// type SectionContent =
+//   | { type: "hero"; content: HeroContent }
+//   | { type: "promise"; content: PromiseContent }
+//   | { type: "support"; content: SupportContent }
+//   | { type: "whatWeDo"; content: WhatWeDoContent }
+//   | { type: "testimonials"; content: TestimonialsContent }
+//   | { type: "download"; content: DownloadContent }
+//   | { type: "services"; content: ServicesContent };
+
+type SectionContents = {
+  [key: string]: {
+    [key: string]: string | Testimonial[] | Benefit[];
+  };
+};
 
 // Constants
 const PAGES: Page[] = [
@@ -21,57 +85,32 @@ const PAGES: Page[] = [
   // Add other pages as needed
 ];
 
+// Define a mapping of section IDs to their content types
+type SectionTypeMap = {
+  "Section1-Hero": HeroContent;
+  "Section2-Promise": PromiseContent;
+  "Section3-Clarity-Confidence-Freedom": SupportContent;
+  "Section2-What-We-Do": WhatWeDoContent;
+  "Section4-Testimonials": TestimonialsContent;
+  "Section5-Download": DownloadContent;
+  "Section6-Services": ServicesContent;
+};
+
 // Dynamic Section Imports
-const sections = {
-  "Section1-Hero": dynamic(
-    () =>
-      import("@/app/(pages)/home/sections/Section1-Hero").then(
-        (mod) => mod.HeroSection
-      ),
-    { ssr: false }
-  ),
-  "Section2-Promise": dynamic(
-    () =>
-      import("@/app/(pages)/home/sections/Section2-Promise").then(
-        (mod) => mod.PromiseSection
-      ),
-    { ssr: false }
-  ),
-  "Section3-Clarity-Confidence-Freedom": dynamic(
-    () =>
-      import(
-        "@/app/(pages)/home/sections/Section3-Clarity-Confidence-Freedom"
-      ).then((mod) => mod.SupportSection),
-    { ssr: false }
-  ),
-  "Section4-WhatWeDo": dynamic(
-    () =>
-      import("@/app/(pages)/home/sections/Section4-about").then(
-        (mod) => mod.WhatWeDo
-      ),
-    { ssr: false }
-  ),
-  "Section5-WhoWeHelp": dynamic(
-    () =>
-      import("@/app/(pages)/home/sections/Section5-WhoWeHelp").then(
-        (mod) => mod.TargetMarket
-      ),
-    { ssr: false }
-  ),
-  "Section6-Testimonials": dynamic(
-    () =>
-      import("@/app/(pages)/home/sections/Section6-Download").then(
-        (mod) => mod.DownloadSection
-      ),
-    { ssr: false }
-  ),
-  "Section7-Quote": dynamic(
-    () =>
-      import("@/app/(pages)/home/sections/Section7-Services").then(
-        (mod) => mod.ServicesSection
-      ),
-    { ssr: false }
-  ),
+const sections: {
+  [K in keyof SectionTypeMap]: React.ComponentType<{
+    content: SectionTypeMap[K];
+    isEditing?: boolean;
+    onUpdate?: (key: string, value: string) => void;
+  }>;
+} = {
+  "Section1-Hero": dynamic(() => import("@/app/(pages)/home/sections/Section1-Hero").then(mod => mod.HeroSection)),
+  "Section2-Promise": dynamic(() => import("@/app/(pages)/home/sections/Section2-Promise").then(mod => mod.PromiseSection)),
+  "Section3-Clarity-Confidence-Freedom": dynamic(() => import("@/app/(pages)/home/sections/Section3-Clarity-Confidence-Freedom").then(mod => mod.SupportSection)),
+  "Section2-What-We-Do": dynamic(() => import("@/app/(pages)/home/sections/Section4-about").then(mod => mod.WhatWeDo)),
+  "Section4-Testimonials": dynamic(() => import("@/app/(pages)/home/sections/Section5-WhoWeHelp").then(mod => mod.Testimonials)),
+  "Section5-Download": dynamic(() => import("@/app/(pages)/home/sections/Section6-Download").then(mod => mod.DownloadSection)),
+  "Section6-Services": dynamic(() => import("@/app/(pages)/home/sections/Section7-Services").then(mod => mod.ServicesSection)),
 } as const;
 
 export function PageEditor() {
@@ -181,10 +220,92 @@ export function PageEditor() {
 
           const sectionContent = sectionContents[section.id] || {};
 
+          // Special handling for different section types
+          if (section.id === "Section3-Clarity-Confidence-Freedom") {
+            const defaultContent: SupportContent = {
+              "clarity-heading": "Genetic Testing & Interpretation",
+              "clarity-text": "Unlock the secrets of your DNA. Our comprehensive genetic testing reveals vital insights into your unique predispositions, helping you identify and address potential health concerns before they arise.",
+              "confidence-heading": "Bespoke IV Therapy",
+              "confidence-text": "Experience targeted, revitalising IV therapy, formulated precisely to address your individual health goals. Our range of infusions targets everything from boosting immunity and energy levels to promoting deep cellular hydration.",
+              "freedom-heading": "Complimentary Consultation",
+              "freedom-text": "Book your no-obligation consultation today and speak with a wellness expert. Discuss your health concerns, goals and discover your perfect personalised wellness plan.",
+              ...sectionContent
+            };
+
+            // Use type assertion to fix the type error
+            const SupportComponent = Component as React.ComponentType<{
+              content: SupportContent;
+              isEditing?: boolean;
+              onUpdate?: (key: string, value: string) => void;
+            }>;
+
+            return (
+              <div key={section.id} className="relative">
+                <SupportComponent
+                  content={defaultContent}
+                  isEditing={true}
+                  onUpdate={(key: string, value: string) =>
+                    handleTextChange(section.id, key, value)
+                  }
+                />
+              </div>
+            );
+          }
+
+          // Handle other section types based on their ID
+          let content;
+          switch (section.id) {
+            case "Section1-Hero":
+              content = {
+                heading: sectionContent.heading || "",
+                subheading: sectionContent.subheading || ""
+              } as HeroContent;
+              break;
+            case "Section2-Promise":
+              content = {
+                heading: sectionContent.heading || "",
+                subheading: sectionContent.subheading || ""
+              } as PromiseContent;
+              break;
+            case "Section2-What-We-Do":
+              content = { "about-text": sectionContent["about-text"] || "" } as WhatWeDoContent;
+              break;
+            case "Section4-Testimonials":
+              content = {
+                heading: sectionContent.heading || "",
+                subheading: sectionContent.subheading || "",
+                testimonials: Array.isArray(sectionContent.testimonials) ? sectionContent.testimonials : []
+              } as TestimonialsContent;
+              break;
+            case "Section5-Download":
+              content = {
+                heading: sectionContent.heading || "",
+                subheading: sectionContent.subheading || "",
+                benefits: Array.isArray(sectionContent.benefits) ? sectionContent.benefits : []
+              } as DownloadContent;
+              break;
+            case "Section6-Services":
+              content = {
+                heading: sectionContent.heading || "",
+                subheading: sectionContent.subheading || ""
+              } as ServicesContent;
+              break;
+            default:
+              // This should never happen with our type mapping
+              content = sectionContent as Record<string, string | Testimonial[] | Benefit[]>;
+          }
+
+          // Use type assertion for the Component
+          const TypedComponent = Component as React.ComponentType<{
+            content: typeof content;
+            isEditing?: boolean;
+            onUpdate?: (key: string, value: string) => void;
+          }>;
+
           return (
             <div key={section.id} className="relative">
-              <Component
-                content={sectionContent}
+              <TypedComponent
+                content={content}
                 isEditing={true}
                 onUpdate={(key: string, value: string) =>
                   handleTextChange(section.id, key, value)
