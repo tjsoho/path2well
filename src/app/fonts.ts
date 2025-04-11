@@ -53,11 +53,11 @@ export const ttChocolates = localFont({
       weight: '700',
       style: 'normal',
     },
-    {
-      path: '../../public/fonts/TT Chocolates Trial Bold italic.otf',
-      weight: '700',
-      style: 'italic',
-    },
+    // {
+    //   path: '../../public/fonts/TT Chocolates Trial Bold italic.otf',
+    //   weight: '700',
+    //   style: 'italic',
+    // },
   ],
   variable: '--font-tt-chocolates'
 });
