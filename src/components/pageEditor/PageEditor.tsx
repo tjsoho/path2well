@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { toast } from "react-hot-toast";
 import { getPageSections } from "@/lib/pageSections";
 import { SectionContents } from "../../../types/pageEditor";
@@ -15,55 +15,8 @@ export function PageEditor() {
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Load content when component mounts or page changes
-  useEffect(() => {
-    if (selectedPage) {
-      console.log('Loading content for page:', selectedPage);
-      extractContent();
-    }
-  }, [selectedPage]);
-
-  // Handle text change
-  const handleTextChange = (sectionId: string, key: string, value: string) => {
-    console.log("Updating content:", { sectionId, key, value });
-    setIsDirty(true);
-
-    setSectionContents((prev: SectionContents) => {
-      // Special handling for testimonials which are stored as JSON strings
-      let processedValue = value;
-
-      // If this is a testimonials field, try to parse it as JSON
-      if (key === 'testimonials') {
-        try {
-          // Validate that it's a valid JSON array
-          const parsed = JSON.parse(value);
-          if (!Array.isArray(parsed)) {
-            console.error("Testimonials must be an array");
-            toast.error("Invalid testimonials format");
-            return prev;
-          }
-          processedValue = value; // Keep as string for storage
-        } catch (e) {
-          console.error("Failed to parse testimonials JSON:", e);
-          toast.error("Invalid testimonials format");
-          return prev;
-        }
-      }
-
-      const newContents = {
-        ...prev,
-        [sectionId]: {
-          ...(prev[sectionId] || {}),
-          [key]: processedValue,
-        },
-      };
-      console.log("New section contents:", newContents);
-      return newContents;
-    });
-  };
-
   // Extract content from all sections
-  const extractContent = async () => {
+  const extractContent = useCallback(async () => {
     if (!selectedPage) return;
 
     try {
@@ -98,8 +51,18 @@ export function PageEditor() {
           contentValues: data.content ? Object.values(data.content) : []
         });
 
-        // Always initialize the section in contents, even if empty
-        contents[section.id] = data.content || {};
+        // Parse testimonials JSON if present
+        const sectionContent = data.content || {};
+        if (sectionContent.testimonials && typeof sectionContent.testimonials === 'string') {
+          try {
+            sectionContent.testimonials = JSON.parse(sectionContent.testimonials);
+          } catch (e) {
+            console.error(`Failed to parse testimonials JSON for section ${section.id}:`, e);
+            // Keep the string value if parsing fails
+          }
+        }
+
+        contents[section.id] = sectionContent;
         console.log(`Stored content for ${section.id}:`, {
           content: contents[section.id],
           keys: Object.keys(contents[section.id]),
@@ -115,9 +78,75 @@ export function PageEditor() {
       });
 
       setSectionContents(contents);
+      setIsDirty(false);
     } catch (error) {
       console.error("Error fetching section contents:", error);
       toast.error("Failed to load page content");
+    }
+  }, [selectedPage]);
+
+  // Load content when component mounts or page changes
+  useEffect(() => {
+    if (selectedPage) {
+      console.log('Loading content for page:', selectedPage);
+      extractContent();
+    }
+  }, [selectedPage, extractContent]);
+
+  // Handle text change
+  const handleTextChange = async (sectionId: string, field: string, value: string) => {
+    console.log(`Handling text change for section ${sectionId}, field ${field}:`, value);
+
+    if (!selectedPage) {
+      console.error('No page selected');
+      return;
+    }
+
+    const newContents = { ...sectionContents };
+    if (!newContents[sectionId]) {
+      newContents[sectionId] = {};
+    }
+
+    // Handle testimonials specially - ensure they're stored as a string in the database
+    if (field === 'testimonials') {
+      try {
+        // If value is already a string, try parsing it to validate JSON
+        const parsed = typeof value === 'string' ? JSON.parse(value) : value;
+        // Store the stringified version
+        newContents[sectionId][field] = JSON.stringify(parsed);
+      } catch (e) {
+        console.error('Invalid testimonials JSON:', e);
+        toast.error('Invalid testimonials format');
+        return;
+      }
+    } else {
+      newContents[sectionId][field] = value;
+    }
+
+    setSectionContents(newContents);
+
+    try {
+      // Use the update endpoint instead of content endpoint
+      const response = await fetch('/api/sections/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          pageId: selectedPage,
+          sectionId,
+          content: newContents[sectionId],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save content');
+      }
+
+      toast.success('Content saved successfully');
+    } catch (error) {
+      console.error('Error saving content:', error);
+      toast.error('Failed to save content');
     }
   };
 

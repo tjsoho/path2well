@@ -1,7 +1,8 @@
 import { getPageSections } from "@/lib/pageSections";
-import { SectionContents } from "../../../types/pageEditor";
+import { SectionContents, TestimonialsContent } from "../../../types/pageEditor";
 import { DEFAULT_CONTENT } from "@/lib/defaultContent";
 import dynamic from "next/dynamic";
+import { toast } from "sonner";
 
 // Dynamic Section Imports
 const sections = {
@@ -44,7 +45,26 @@ export function SectionRenderer({ selectedPage, sectionContents, onTextChange }:
                 });
 
                 // Use database content if it has valid values, otherwise use default
-                const content = hasValidDbContent ? dbContent : defaultContent;
+                const baseContent = hasValidDbContent ? { ...dbContent } : { ...defaultContent };
+
+                // Parse testimonials data if it exists and we're in the testimonials section
+                const content = sectionId === 'Section5-WhoWeHelp' ? {
+                    ...baseContent,
+                    testimonials: (() => {
+                        try {
+                            const testimonialsData = (baseContent as TestimonialsContent).testimonials;
+                            if (typeof testimonialsData === 'string') {
+                                return JSON.parse(testimonialsData);
+                            }
+                            return testimonialsData;
+                        } catch (error) {
+                            console.error('Error parsing testimonials:', error);
+                            toast.error('Error parsing testimonials data');
+                            // Fallback to default testimonials if parsing fails
+                            return (defaultContent as TestimonialsContent).testimonials || [];
+                        }
+                    })()
+                } : baseContent;
 
                 console.log(`Rendering ${section.id}:`, {
                     dbContent,

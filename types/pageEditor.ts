@@ -1,4 +1,4 @@
-interface PageSection {
+export interface PageSection {
   id: string;
   pageId: string;
   sectionId: string;
@@ -10,7 +10,7 @@ interface PageSection {
   };
 }
 
-interface Page {
+export interface Page {
   id: string;
   name: string;
   slug: string;

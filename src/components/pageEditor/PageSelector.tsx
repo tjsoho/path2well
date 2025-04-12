@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { Page } from "@/types/pageEditor";
 import { PAGES } from "@/lib/pageEditorConstants";
 
 interface PageSelectorProps {

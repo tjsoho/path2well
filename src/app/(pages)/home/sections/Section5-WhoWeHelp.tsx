@@ -47,9 +47,24 @@ export function Testimonials({
   const [direction, setDirection] = useState(0);
 
   const safeContent = {
-    heading: content.heading || "Hear from our patients",
-    subheading: content.subheading || "We help people who are looking to improve their health and wellbeing.",
-    testimonials: content.testimonials || defaultTestimonials,
+    ...content,
+    testimonials: (() => {
+      try {
+        // If testimonials is a string, parse it
+        if (typeof content.testimonials === 'string') {
+          return JSON.parse(content.testimonials);
+        }
+        // If testimonials is already an array, use it
+        if (Array.isArray(content.testimonials)) {
+          return content.testimonials;
+        }
+        // If testimonials is undefined or null, use default testimonials
+        return defaultTestimonials;
+      } catch (error) {
+        console.error('Error parsing testimonials:', error);
+        return defaultTestimonials;
+      }
+    })()
   };
 
   // Ensure currentIndex is valid
@@ -142,7 +157,7 @@ export function Testimonials({
           <EditableText
             id="heading"
             type="heading"
-            content={safeContent.heading}
+            content={safeContent.heading || "Hear from our patients"}
             isEditing={isEditing}
             onUpdate={onUpdate}
             className="text-3xl md:text-4xl text-white mb-4"
@@ -150,7 +165,7 @@ export function Testimonials({
           <EditableText
             id="subheading"
             type="paragraph"
-            content={safeContent.subheading}
+            content={safeContent.subheading || "We help people who are looking to improve their health and wellbeing."}
             isEditing={isEditing}
             onUpdate={onUpdate}
             className="text-gray-400"
@@ -226,16 +241,17 @@ export function Testimonials({
 
               {/* Dots Indicator */}
               <div className="flex justify-center gap-2">
-                {safeContent.testimonials.map((_, index) => (
+                {safeContent.testimonials.map((_: Testimonial, index: number) => (
                   <button
                     key={index}
                     onClick={() => {
-                      setIsAutoPlaying(false);
-                      setDirection(index > currentIndex ? 1 : -1);
                       setCurrentIndex(index);
                     }}
-                    className={`w-2 h-2 rounded-full transition-colors ${index === currentIndex ? "bg-brand-teal" : "bg-white/20"
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${currentIndex === index
+                      ? "bg-brand-teal w-4"
+                      : "bg-brand-teal/30 hover:bg-brand-teal/50"
                       }`}
+                    aria-label={`Go to testimonial ${index + 1}`}
                   />
                 ))}
               </div>
@@ -265,7 +281,7 @@ export function Testimonials({
 
         {/* Desktop View - Grid Layout */}
         <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {safeContent.testimonials.map((testimonial, index) => (
+          {safeContent.testimonials.map((testimonial: Testimonial, index: number) => (
             isEditing ? (
               <EditableTestimonial
                 key={index}
