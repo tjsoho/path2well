@@ -35,11 +35,32 @@ export function SectionRenderer({ selectedPage, sectionContents, onTextChange }:
                 const dbContent = sectionContents[section.id] || {};
                 const defaultContent = DEFAULT_CONTENT[sectionId] || {};
 
-                // Merge the content and type it correctly based on the section ID
-                const content = {
-                    ...defaultContent,
-                    ...dbContent
-                };
+                // Check if dbContent has any non-empty values
+                const hasValidDbContent = Object.entries(dbContent).some(([key, value]) => {
+                    if (value === null || value === undefined || value === '') return false;
+                    if (typeof value === 'string' && value.trim() === '') return false;
+                    if (Array.isArray(value) && value.length === 0) return false;
+                    return true;
+                });
+
+                // Use database content if it has valid values, otherwise use default
+                const content = hasValidDbContent ? dbContent : defaultContent;
+
+                console.log(`Rendering ${section.id}:`, {
+                    dbContent,
+                    dbContentKeys: Object.keys(dbContent),
+                    dbContentValues: Object.values(dbContent),
+                    defaultContent,
+                    hasValidDbContent,
+                    finalContent: content,
+                    contentCheck: Object.entries(dbContent).map(([key, value]) => ({
+                        key,
+                        value,
+                        isValid: value !== null && value !== undefined && value !== '' &&
+                            (typeof value !== 'string' || value.trim() !== '') &&
+                            (!Array.isArray(value) || value.length > 0)
+                    }))
+                });
 
                 return (
                     <div key={section.id} className="relative">

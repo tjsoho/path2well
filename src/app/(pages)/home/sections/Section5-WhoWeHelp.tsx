@@ -4,18 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { EditableText } from "@/components/pageEditor/EditableText";
+import { EditableTestimonial, Testimonial } from "@/components/pageEditor/EditableTestimonial";
 
 interface TestimonialsProps {
   isEditing?: boolean;
   content?: {
     heading?: string;
     subheading?: string;
-    testimonials?: Array<{
-      name: string;
-      image: string;
-      quote: string;
-      title: string;
-    }>;
+    testimonials?: Array<Testimonial>;
   };
   onUpdate?: (id: string, value: string) => void;
 }
@@ -87,6 +83,21 @@ export function Testimonials({
     setIsAutoPlaying(false);
     setDirection(-1);
     setCurrentIndex((prev) => (prev - 1 + safeContent.testimonials.length) % safeContent.testimonials.length);
+  };
+
+  // Handle testimonial field updates
+  const handleTestimonialUpdate = (index: number, field: keyof Testimonial, value: string) => {
+    if (onUpdate) {
+      // Create a new array with the updated testimonial
+      const updatedTestimonials = [...safeContent.testimonials];
+      updatedTestimonials[index] = {
+        ...updatedTestimonials[index],
+        [field]: value,
+      };
+
+      // Convert the array to a string to save in the database
+      onUpdate('testimonials', JSON.stringify(updatedTestimonials));
+    }
   };
 
   // Animation variants
@@ -255,35 +266,45 @@ export function Testimonials({
         {/* Desktop View - Grid Layout */}
         <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {safeContent.testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.name}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, margin: "-100px" }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.2,
-                ease: [0.4, 0, 0.2, 1],
-              }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden"
-            >
-              <div className="relative h-64">
-                <Image
-                  src={testimonial.image}
-                  alt={testimonial.name}
-                  fill
-                  className="object-cover"
-                  unoptimized
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-white text-xl mb-2">{testimonial.name}</h3>
-                <p className="text-brand-teal text-sm mb-4">{testimonial.title}</p>
-                <p className="text-gray-400 text-sm leading-relaxed">
-                  {testimonial.quote}
-                </p>
-              </div>
-            </motion.div>
+            isEditing ? (
+              <EditableTestimonial
+                key={index}
+                testimonial={testimonial}
+                index={index}
+                isEditing={isEditing}
+                onUpdate={handleTestimonialUpdate}
+              />
+            ) : (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false, margin: "-100px" }}
+                transition={{
+                  duration: 0.6,
+                  delay: index * 0.2,
+                  ease: [0.4, 0, 0.2, 1],
+                }}
+                className="bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden"
+              >
+                <div className="relative h-64">
+                  <Image
+                    src={testimonial.image}
+                    alt={testimonial.name}
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-white text-xl mb-2">{testimonial.name}</h3>
+                  <p className="text-brand-teal text-sm mb-4">{testimonial.title}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed">
+                    {testimonial.quote}
+                  </p>
+                </div>
+              </motion.div>
+            )
           ))}
         </div>
         {safeContent.testimonials.length > 1 && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { getPageSections } from "@/lib/pageSections";
 import { SectionContents } from "../../../types/pageEditor";
@@ -10,21 +10,51 @@ import { SectionRenderer } from "./SectionRenderer";
 
 export function PageEditor() {
   // State
-  const [selectedPage, setSelectedPage] = useState<string | null>(null);
+  const [selectedPage, setSelectedPage] = useState<string>("home"); // Set default page to "home"
   const [sectionContents, setSectionContents] = useState<SectionContents>({});
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Load content when component mounts or page changes
+  useEffect(() => {
+    if (selectedPage) {
+      console.log('Loading content for page:', selectedPage);
+      extractContent();
+    }
+  }, [selectedPage]);
 
   // Handle text change
   const handleTextChange = (sectionId: string, key: string, value: string) => {
     console.log("Updating content:", { sectionId, key, value });
     setIsDirty(true);
+
     setSectionContents((prev: SectionContents) => {
+      // Special handling for testimonials which are stored as JSON strings
+      let processedValue = value;
+
+      // If this is a testimonials field, try to parse it as JSON
+      if (key === 'testimonials') {
+        try {
+          // Validate that it's a valid JSON array
+          const parsed = JSON.parse(value);
+          if (!Array.isArray(parsed)) {
+            console.error("Testimonials must be an array");
+            toast.error("Invalid testimonials format");
+            return prev;
+          }
+          processedValue = value; // Keep as string for storage
+        } catch (e) {
+          console.error("Failed to parse testimonials JSON:", e);
+          toast.error("Invalid testimonials format");
+          return prev;
+        }
+      }
+
       const newContents = {
         ...prev,
         [sectionId]: {
           ...(prev[sectionId] || {}),
-          [key]: value,
+          [key]: processedValue,
         },
       };
       console.log("New section contents:", newContents);
@@ -40,21 +70,50 @@ export function PageEditor() {
       const pageSections = getPageSections(selectedPage);
       const contents: SectionContents = {};
 
+      console.log('Starting content extraction for page:', selectedPage);
+
       for (const section of pageSections) {
         console.log(`Fetching content for section: ${section.id}`);
-        const response = await fetch(
-          `/api/sections/content?pageId=${selectedPage}&sectionId=${section.id}`
-        );
+
+        const url = `/api/sections/content?pageId=${selectedPage}&sectionId=${section.id}`;
+        console.log('Fetching from URL:', url);
+
+        const response = await fetch(url);
+        console.log(`Response status for ${section.id}:`, response.status);
+
         if (!response.ok) {
+          console.error(`Failed to fetch content for section ${section.id}:`, {
+            status: response.status,
+            statusText: response.statusText,
+            url: response.url
+          });
           throw new Error(`Failed to fetch content for section ${section.id}`);
         }
 
         const data = await response.json();
-        console.log(`Received content for ${section.id}:`, data);
+        console.log(`Raw API response for ${section.id}:`, {
+          data,
+          contentType: typeof data.content,
+          contentKeys: data.content ? Object.keys(data.content) : [],
+          contentValues: data.content ? Object.values(data.content) : []
+        });
+
+        // Always initialize the section in contents, even if empty
         contents[section.id] = data.content || {};
+        console.log(`Stored content for ${section.id}:`, {
+          content: contents[section.id],
+          keys: Object.keys(contents[section.id]),
+          values: Object.values(contents[section.id])
+        });
       }
 
-      console.log("All fetched contents:", contents);
+      console.log("Final contents to be set:", {
+        contents,
+        sections: Object.keys(contents),
+        sampleContent: contents["Section4-WhatWeDo"],
+        sampleKeys: contents["Section4-WhatWeDo"] ? Object.keys(contents["Section4-WhatWeDo"]) : []
+      });
+
       setSectionContents(contents);
     } catch (error) {
       console.error("Error fetching section contents:", error);
@@ -74,6 +133,8 @@ export function PageEditor() {
         const content = sectionContents[section.id];
         if (!content) continue;
 
+        console.log(`Saving content for ${section.id}:`, content);
+
         const response = await fetch("/api/sections/update", {
           method: "POST",
           headers: {
@@ -82,13 +143,16 @@ export function PageEditor() {
           body: JSON.stringify({
             pageId: selectedPage,
             sectionId: section.id,
-            content,
+            content: content,
           }),
         });
 
         if (!response.ok) {
           throw new Error(`Failed to save content for section ${section.id}`);
         }
+
+        const result = await response.json();
+        console.log(`Save result for ${section.id}:`, result);
       }
 
       setIsDirty(false);
@@ -108,10 +172,7 @@ export function PageEditor() {
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <PageSelector
             selectedPage={selectedPage}
-            onPageSelect={(pageId) => {
-              setSelectedPage(pageId);
-              extractContent();
-            }}
+            onPageSelect={setSelectedPage}
           />
 
           {/* Actions */}
