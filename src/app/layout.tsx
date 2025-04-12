@@ -5,6 +5,7 @@ import "./globals.css";
 import { Footer } from "@/components/ui/Footer";
 import { Toaster } from "react-hot-toast";
 import { NavMenu } from "@/components/navigation/NavMenu";
+import { PointerEffect } from "@/components/ui/PointerEffect";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
         `}
         suppressHydrationWarning
       >
+        <PointerEffect />
         <NavMenu />
         {children}
         <Footer />

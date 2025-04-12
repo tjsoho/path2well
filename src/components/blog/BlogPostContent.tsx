@@ -5,7 +5,6 @@ import { TipTapContent } from "@/components/blog/TipTapContent";
 import { motion } from "framer-motion";
 import { ArrowLeft, Calendar, Eye } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 interface BlogPost {
     id: string;
@@ -21,17 +20,6 @@ interface BlogPost {
 }
 
 export function BlogPostContent({ post }: { post: BlogPost }) {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY });
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
-
     return (
         <article className="min-h-screen bg-[#001618] overflow-hidden">
             {/* Animated background grid */}
@@ -39,16 +27,6 @@ export function BlogPostContent({ post }: { post: BlogPost }) {
                 <div className="absolute inset-0 bg-[url('/images/circuit-pattern.png')] opacity-5"
                     style={{ backgroundSize: '30px 30px', backgroundRepeat: 'repeat' }} />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#4ECDC4]/5 to-transparent" />
-
-                {/* Interactive light effect */}
-                <div
-                    className="absolute w-[500px] h-[500px] rounded-full bg-[#4ECDC4]/10 blur-[100px] pointer-events-none transition-opacity duration-300"
-                    style={{
-                        left: `${mousePosition.x - 250}px`,
-                        top: `${mousePosition.y - 250}px`,
-                        opacity: 0.7
-                    }}
-                />
             </div>
 
             {/* Hero Section with Featured Image */}
@@ -92,14 +70,14 @@ export function BlogPostContent({ post }: { post: BlogPost }) {
                         >
                             {/* Glitch effect for title */}
                             <div>
-                            <h1 className="relative text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight font-kiona">
-                                <span className="text-white">
-                                    {post.title}
-                                </span>
-                            </h1>
-                            <p className="text-xl text-white/80 max-w-2xl mx-auto font-kiona tracking-wide">
-                                {post.subtitle}
-                            </p>
+                                <h1 className="relative text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight font-kiona">
+                                    <span className="text-white">
+                                        {post.title}
+                                    </span>
+                                </h1>
+                                <p className="text-xl text-white/80 max-w-2xl mx-auto font-kiona tracking-wide">
+                                    {post.subtitle}
+                                </p>
                             </div>
                         </motion.div>
                     </div>

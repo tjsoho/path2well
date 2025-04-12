@@ -57,14 +57,27 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
       {/* Hero Section with Background Image */}
-      <div className="relative h-[60vh] overflow-hidden">
-        <Image
-          src="/images/blogBG.png"
-          alt="Medical Technology Background"
-          fill
-          className="object-cover"
-          priority
-        />
+      <div className="relative h-[40vh] md:h-[50vh] overflow-hidden">
+        <motion.div
+          className="w-full h-full"
+          animate={{
+            scale: [1, 1.5, 1],
+          }}
+          transition={{
+            duration: 20,
+            ease: "easeInOut",
+            repeat: Infinity,
+            repeatType: "loop",
+          }}
+        >
+          <Image
+            src="/images/blogBG.png"
+            alt="Medical Technology Background"
+            fill
+            className="object-cover"
+            priority
+          />
+        </motion.div>
         <div className="absolute inset-0 bg-black/80" />
         <div
           className="absolute inset-0 bg-[url('/images/circuit-pattern.png')] opacity-10"
@@ -80,7 +93,7 @@ export default function BlogPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-5xl md:text-7xl font-bold text-white mb-6 text-center"
+            className="text-4xl md:text-6xl font-bold text-white mb-4 md:mb-6 text-center mt-8 lg:mt-0"
           >
             Research & Insights
           </motion.h1>
@@ -88,25 +101,25 @@ export default function BlogPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-xl text-gray-300 max-w-2xl text-center"
+            className="text-lg md:text-xl text-gray-300 max-w-2xl text-center px-4"
           >
             Exploring the intersection of medicine, technology, and wellness
           </motion.p>
         </div>
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-16 md:h-32 bg-gradient-to-t from-black to-transparent" />
       </div>
 
       {/* Latest Post Section - Compact Version */}
       {latestPost && (
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-32 relative z-10">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 md:-mt-24 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-gray-900/40 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-brand-teal shadow-brand-teal"
+            className="bg-gray-900/40 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-brand-teal/30 shadow-brand-teal/20"
           >
             <div className="flex flex-col lg:flex-row">
-              <div className="relative w-full lg:w-1/2 h-72">
+              <div className="relative w-full lg:w-1/2 h-48 md:h-72">
                 {latestPost.image_url ? (
                   <Image
                     src={latestPost.image_url}
@@ -119,14 +132,14 @@ export default function BlogPage() {
                   <div className="w-full h-full bg-gradient-to-br from-brand-teal/30 to-brand-teal/10" />
                 )}
                 <div className="absolute top-4 left-4">
-                  <span className="px-3 py-1.5 bg-brand-teal text-white rounded-full text-sm font-medium shadow-lg backdrop-blur-sm">
+                  <span className="px-3 py-1.5 bg-brand-teal backdrop-blur-sm text-white rounded-full text-sm font-medium shadow-lg">
                     Featured Article
                   </span>
                 </div>
               </div>
-              <div className="w-full lg:w-1/2 p-6 lg:p-8 flex flex-col justify-between">
+              <div className="w-full lg:w-1/2 p-4 md:p-6 lg:p-8 flex flex-col justify-between">
                 <div>
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {latestPost.tags.map((tag) => (
                       <span
                         key={tag}
@@ -136,7 +149,7 @@ export default function BlogPage() {
                       </span>
                     ))}
                   </div>
-                  <h2 className="text-2xl font-bold text-white mb-3">
+                  <h2 className="text-xl md:text-2xl font-bold text-white mb-2">
                     {latestPost.title}
                   </h2>
                   <p className="text-gray-400 mb-4 text-sm line-clamp-2">
@@ -146,7 +159,7 @@ export default function BlogPage() {
                 <div className="flex items-center justify-between">
                   <Link
                     href={`/${latestPost.slug}`}
-                    className="inline-flex items-center px-4 py-2 bg-brand-teal text-white rounded-full hover:bg-brand-teal/80 transition-colors duration-200 backdrop-blur-sm text-sm"
+                    className="inline-flex items-center px-4 py-2 bg-brand-teal/80 backdrop-blur-sm text-white rounded-full hover:bg-brand-teal/90 transition-colors duration-200 text-sm"
                   >
                     Read Article
                     <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -166,12 +179,12 @@ export default function BlogPage() {
       )}
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
-        <div className="flex flex-col lg:flex-row gap-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-24">
+        <div className="flex flex-col lg:flex-row gap-8 md:gap-12">
           {/* Sidebar */}
           <div className="w-full lg:w-1/4">
-            <div className="sticky top-8 bg-gray-900/40 backdrop-blur-lg rounded-xl p-6 border border-gray-800">
-              <h3 className="text-lg font-semibold text-white mb-6">
+            <div className="sticky top-8 bg-gray-900/40 backdrop-blur-lg rounded-xl p-4 md:p-6 border border-gray-800/50 shadow-lg">
+              <h3 className="text-lg font-semibold text-white mb-4 md:mb-6">
                 Filter by Topic
               </h3>
               <BlogFilter tags={uniqueTags} onTagsChange={setSelectedTags} />
@@ -180,7 +193,7 @@ export default function BlogPage() {
 
           {/* Posts Grid */}
           <div className="w-full lg:w-3/4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {filteredPosts.map((post, index) => (
                 <motion.div
                   key={post.id}
@@ -190,9 +203,9 @@ export default function BlogPage() {
                 >
                   <Link
                     href={`/${post.slug}`}
-                    className="group block bg-gray-900/40 backdrop-blur-lg rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-800"
+                    className="group block bg-gray-900/40 backdrop-blur-lg rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-800/50"
                   >
-                    <div className="relative h-64">
+                    <div className="relative h-48 md:h-64">
                       {post.image_url ? (
                         <Image
                           src={post.image_url}
@@ -206,25 +219,25 @@ export default function BlogPage() {
                       )}
                       <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
                     </div>
-                    <div className="p-6">
-                      <div className="flex flex-wrap gap-2 mb-4">
+                    <div className="p-4 md:p-6">
+                      <div className="flex flex-wrap gap-2 mb-3">
                         {post.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="px-3 py-1 bg-gray-800/50 backdrop-blur-sm text-gray-300 rounded-full text-sm border border-gray-700"
+                            className="px-2 py-1 bg-gray-800/50 backdrop-blur-sm text-gray-300 rounded-full text-xs border border-gray-700"
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-brand-teal transition-colors duration-200">
+                      <h3 className="text-lg md:text-xl font-bold text-white mb-2 group-hover:text-brand-teal transition-colors duration-200">
                         {post.title}
                       </h3>
-                      <p className="text-gray-400 mb-4 line-clamp-2">
+                      <p className="text-gray-400 mb-4 text-sm line-clamp-2">
                         {post.subtitle}
                       </p>
                       <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-500">
+                        <span className="text-xs text-gray-500">
                           {formatDistanceToNow(new Date(post.created_at), {
                             addSuffix: true,
                           })}
