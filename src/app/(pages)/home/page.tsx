@@ -7,6 +7,7 @@ import { Testimonials } from "./sections/Section5-WhoWeHelp";
 import { supabase } from "@/lib/supabase";
 import { DownloadSection } from "./sections/Section6-Download";
 import { ServicesSection } from "./sections/Section7-Services";
+import { PointerEffect } from "@/components/ui/PointerEffect";
 
 // Add type for section content
 type SectionContent = Record<string, string>;
@@ -60,6 +61,7 @@ export default async function HomePage() {
 
   return (
     <main>
+      <PointerEffect />
       <HeroSection content={heroContent as HeroContent} />
       <PromiseSection content={promiseContent as PromiseContent} />
       <SupportSection content={supportContent as SupportContent} />

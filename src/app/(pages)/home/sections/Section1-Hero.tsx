@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-
+import { PointerEffect } from "@/components/ui/PointerEffect";
 import { Calendar } from "lucide-react";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { GlowButton } from "@/components/ui/GlowButton";
@@ -60,6 +60,7 @@ export function HeroSection({
 
   return (
     <section className="relative min-h-screen w-full">
+      <PointerEffect />
       {/* Star Animation Containers */}
       <div className="absolute inset-4 z-10">
         {/* First star - moving right and down */}
