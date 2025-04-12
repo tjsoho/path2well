@@ -36,7 +36,7 @@ export function SectionRenderer({ selectedPage, sectionContents, onTextChange }:
                 const defaultContent = DEFAULT_CONTENT[sectionId] || {};
 
                 // Check if dbContent has any non-empty values
-                const hasValidDbContent = Object.entries(dbContent).some(([key, value]) => {
+                const hasValidDbContent = Object.values(dbContent).some(value => {
                     if (value === null || value === undefined || value === '') return false;
                     if (typeof value === 'string' && value.trim() === '') return false;
                     if (Array.isArray(value) && value.length === 0) return false;
