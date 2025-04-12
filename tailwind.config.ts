@@ -31,6 +31,28 @@ const config: Config = {
         sans: ['var(--font-geist-sans)'],
         mono: ['var(--font-geist-mono)'],
       },
+      animation: {
+        shine: "shine 3s linear infinite",
+        "shine-slow": "shine 2s linear infinite",
+        flip: "flip 6s infinite steps(2, end)",
+        kitrotate: "kitrotate 3s linear infinite both",
+      },
+      keyframes: {
+        shine: {
+          "0%": { backgroundPosition: "0 0" },
+          "100%": { backgroundPosition: "-200% 0" },
+        },
+        flip: {
+          to: {
+            transform: "rotate(360deg)",
+          },
+        },
+        kitrotate: {
+          to: {
+            transform: "rotate(90deg)",
+          },
+        },
+      },
     },
   },
   plugins: [],

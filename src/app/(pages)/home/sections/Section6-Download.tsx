@@ -66,7 +66,7 @@ export function DownloadSection({
             <div className="max-w-7xl mx-auto px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                     {/* Benefits Grid - Left Column */}
-                    <div className="relative">
+                    <div className="relative order-2 lg:order-1">
                         <div className="grid grid-cols-2 gap-4">
                             {safeContent.benefits.map((benefit, index) => (
                                 <motion.div
@@ -101,7 +101,7 @@ export function DownloadSection({
                                     </div>
 
                                     {/* Content */}
-                                    <h3 className="text-black font-medium mb-1 text-sm">{benefit.title}</h3>
+                                    <h3 className="text-black font-medium mb-1 text-xs md:text-sm">{benefit.title}</h3>
                                     <p className="text-gray-600 text-xs leading-relaxed">{benefit.description}</p>
                                 </motion.div>
                             ))}
@@ -109,12 +109,12 @@ export function DownloadSection({
                     </div>
 
                     {/* Content - Right Column */}
-                    <div className="lg:pl-12 flex flex-col justify-center">
+                    <div className="lg:pl-12 flex flex-col justify-center order-1 lg:order-2">
                         <div className="flex items-center gap-4 mb-4">
+                            <div className="w-12 h-[1px] bg-brand-teal"></div>
                             <span className="text-sm uppercase tracking-[0.2em] text-brand-teal">
                                 BENEFITS
                             </span>
-                            <div className="w-12 h-[1px] bg-brand-teal"></div>
                         </div>
 
                         <EditableText

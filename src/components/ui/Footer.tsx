@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
 import { Facebook, Instagram } from "lucide-react";
 import { GlowButton2 } from "./GlowButton2";
 import Link from "next/link";
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const pageLinks = [
   { name: "Home", href: "/" },
@@ -38,12 +39,25 @@ export function Footer() {
     <footer className="relative bg-brand-blue-dark overflow-hidden">
       {/* Tech pattern background */}
       <div className="absolute inset-0">
-        <Image
-          src="/images/footerBG.png"
-          alt="Tech pattern"
-          fill
-          className="object-cover opacity-70"
-        />
+        <motion.div
+          className="w-full h-full"
+          animate={{
+            scale: [1, 1.5, 1],
+          }}
+          transition={{
+            duration: 20,
+            ease: "easeInOut",
+            repeat: Infinity,
+            repeatType: "loop",
+          }}
+        >
+          <Image
+            src="/images/bg12.png"
+            alt="Tech pattern"
+            fill
+            className="object-cover opacity-30"
+          />
+        </motion.div>
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 pt-16 pb-8">

@@ -20,25 +20,47 @@ export function WhatWeDo({ isEditing = false, content, onUpdate }: WhatWeDoProps
 
   const finalContent = content || defaultContent;
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+  // Animation variants
+  const headingVariants = {
+    hidden: { opacity: 0, y: -30 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
+        duration: 0.8,
+        ease: [0.4, 0, 0.2, 1],
+      },
+    },
+  };
+
+  const textVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: [0.4, 0, 0.2, 1],
+        delay: 0.2,
+      },
+    },
+  };
+
+  const linkVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: {
         duration: 0.6,
         ease: [0.4, 0, 0.2, 1],
+        delay: 0.4,
+      },
+    },
+    hover: {
+      scale: 1.05,
+      transition: {
+        duration: 0.2,
       },
     },
   };
@@ -56,23 +78,26 @@ export function WhatWeDo({ isEditing = false, content, onUpdate }: WhatWeDoProps
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="text-center space-y-8"
-        >
+        <div className="text-center space-y-8">
           {/* ABOUT US heading */}
           <motion.h3
-            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, margin: "-100px" }}
+            variants={headingVariants}
             className="text-brand-teal font-kiona text-sm tracking-[0.2em] uppercase"
           >
             ABOUT US
           </motion.h3>
 
           {/* Main text content */}
-          <motion.div variants={itemVariants} className="text-white text-lg md:text-xl leading-relaxed">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, margin: "-100px" }}
+            variants={textVariants}
+            className="text-white text-lg md:text-xl leading-relaxed"
+          >
             <EditableText
               id="about-text"
               content={finalContent["about-text"]}
@@ -85,7 +110,11 @@ export function WhatWeDo({ isEditing = false, content, onUpdate }: WhatWeDoProps
 
           {/* Discover link */}
           <motion.div
-            variants={itemVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, margin: "-100px" }}
+            variants={linkVariants}
+            whileHover="hover"
             className="pt-2"
           >
             <Link
@@ -93,11 +122,18 @@ export function WhatWeDo({ isEditing = false, content, onUpdate }: WhatWeDoProps
               className="inline-flex items-center text-white text-sm hover:text-brand-teal transition-colors border-b border-white hover:border-brand-teal"
             >
               Discover our story
-              <svg
-                className="ml-2 w-3 h-3 transform group-hover:translate-x-1 transition-transform"
+              <motion.svg
+                className="ml-2 w-3 h-3"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                initial={{ x: 0 }}
+                animate={{ x: [0, 5, 0] }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
               >
                 <path
                   strokeLinecap="round"
@@ -105,10 +141,10 @@ export function WhatWeDo({ isEditing = false, content, onUpdate }: WhatWeDoProps
                   strokeWidth={2}
                   d="M17 8l4 4m0 0l-4 4m4-4H3"
                 />
-              </svg>
+              </motion.svg>
             </Link>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

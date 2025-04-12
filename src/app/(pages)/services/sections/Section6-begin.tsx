@@ -33,7 +33,7 @@ export function BeginSection({
                     {/* Tech pattern overlay */}
                     <div className="absolute inset-0">
                         <Image
-                            src="/images/tech4.png"
+                            src="/images/bg1.png"
                             alt="Tech pattern"
                             fill
                             className="object-cover opacity-20"

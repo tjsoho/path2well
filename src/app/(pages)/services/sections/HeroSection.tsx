@@ -69,7 +69,7 @@ export function HeroSection({ content = defaultContent }: HeroSectionProps) {
           {/* Purple Block */}
           <div className="relative bg-[#844dc6] p-8 rounded-tr-3xl w-[70vw] lg:w-[40vw] -mt-[3px] overflow-hidden">
             {/* Background Tech Pattern */}
-            
+
             <div className="text-left text-white relative z-10">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
@@ -126,7 +126,22 @@ export function HeroSection({ content = defaultContent }: HeroSectionProps) {
           {/* Service Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             {safeContent.cards.map((card, index) => (
-              <div key={index} className="backdrop-blur-lg bg-white/10 rounded-2xl overflow-hidden border border-white/20">
+              <motion.div
+                key={index}
+                className="backdrop-blur-lg bg-white/10 rounded-2xl overflow-hidden border border-white/20"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.2,
+                  ease: "easeOut"
+                }}
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+                  transition: { duration: 0.3 }
+                }}
+              >
                 <div className="relative">
                   <Image
                     src={card.image}
@@ -146,23 +161,37 @@ export function HeroSection({ content = defaultContent }: HeroSectionProps) {
                   <h3 className="text-white text-xl font-semibold mb-3">{card.title}</h3>
                   <p className="text-white/80 text-sm">{card.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
           {/* Consultation Button */}
           <div className="flex justify-center">
-            <Link
-              href={safeContent.ctaLink}
-              className="group bg-white hover:bg-opacity-95 text-brand-purple px-8 py-4 rounded-full flex items-center gap-3 transition-all duration-300"
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className="group relative grid overflow-hidden rounded-full px-8 py-4 shadow-[0_1000px_0_0_hsl(0_0%_100%)_inset] transition-colors duration-200"
             >
-              <span className="font-medium text-lg">{safeContent.ctaText}</span>
-              <div className="w-6 h-6 rounded-full bg-brand-purple flex items-center justify-center group-hover:bg-opacity-90 transition-all">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" className="w-4 h-4">
-                  <path d="M9 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </div>
-            </Link>
+              <span>
+                <span
+                  className="spark mask-gradient animate-flip before:animate-kitrotate absolute inset-0 h-[100%] w-[100%] overflow-hidden rounded-full [mask:linear-gradient(white,_transparent_50%)] before:absolute before:aspect-square before:w-[200%] before:rotate-[-90deg] before:bg-[conic-gradient(from_0deg,transparent_0_340deg,white_360deg)] before:content-[''] before:[inset:0_auto_auto_50%] before:[translate:-50%_-15%]"
+                />
+              </span>
+              <span
+                className="backdrop absolute inset-px rounded-full bg-white transition-colors duration-200"
+              />
+              <Link
+                href={safeContent.ctaLink}
+                className="group z-10 flex items-center gap-3"
+              >
+                <span className="font-medium text-lg text-brand-purple">{safeContent.ctaText}</span>
+                <div className="w-6 h-6 rounded-full bg-brand-purple flex items-center justify-center group-hover:bg-opacity-90 transition-all">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" className="w-4 h-4">
+                    <path d="M9 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              </Link>
+            </motion.div>
           </div>
         </div>
       </div>

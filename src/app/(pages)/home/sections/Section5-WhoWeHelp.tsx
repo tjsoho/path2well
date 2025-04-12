@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EditableText } from "@/components/pageEditor/EditableText";
 
 interface TestimonialsProps {
@@ -23,19 +23,19 @@ interface TestimonialsProps {
 const defaultTestimonials = [
   {
     name: "Amelia P.",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
+    image: "/images/staff1.png",
     quote: "Since starting my personalized plan at Path2Well, my energy levels have skyrocketed. I feel like a new person.",
     title: "Unlock your body&apos;s full potential",
   },
   {
     name: "David L.",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
+    image: "/images/staff2.png",
     quote: "I was hesitant about IV therapy, but the Path2Well team was amazing. The tailored infusion made a noticeable difference in my overall health.",
     title: "Bespoke IV therapy for optimal wellness.",
   },
   {
     name: "Sarah M.",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80",
+    image: "/images/staff3.png",
     quote: "The genetic testing revealed insights I never knew about my health. Now I can make informed decisions about my wellness journey.",
     title: "Discover your unique health profile",
   }
@@ -46,7 +46,9 @@ export function Testimonials({
   content = {},
   onUpdate,
 }: TestimonialsProps) {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [direction, setDirection] = useState(0);
 
   const safeContent = {
     heading: content.heading || "Hear from our patients",
@@ -54,12 +56,46 @@ export function Testimonials({
     testimonials: content.testimonials || defaultTestimonials,
   };
 
-  const nextPage = () => {
-    setCurrentPage((prev) => (prev + 1) % Math.ceil(safeContent.testimonials.length / 3));
+  // Auto-play functionality
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    const interval = setInterval(() => {
+      setDirection(1);
+      setCurrentIndex((prev) => (prev + 1) % safeContent.testimonials.length);
+    }, 5000); // Increased to 5 seconds
+
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, safeContent.testimonials.length]);
+
+  const nextTestimonial = () => {
+    setIsAutoPlaying(false);
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % safeContent.testimonials.length);
   };
 
-  const prevPage = () => {
-    setCurrentPage((prev) => (prev - 1 + Math.ceil(safeContent.testimonials.length / 3)) % Math.ceil(safeContent.testimonials.length / 3));
+  const prevTestimonial = () => {
+    setIsAutoPlaying(false);
+    setDirection(-1);
+    setCurrentIndex((prev) => (prev - 1 + safeContent.testimonials.length) % safeContent.testimonials.length);
+  };
+
+  // Animation variants
+  const cardVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0
+    })
   };
 
   return (
@@ -67,10 +103,10 @@ export function Testimonials({
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/tech2.png"
+          src="/images/newTech.png"
           alt="Technology Background"
           fill
-          className="object-cover opacity-30"
+          className="object-cover opacity-60"
         />
       </div>
 
@@ -78,10 +114,10 @@ export function Testimonials({
         {/* Section Title */}
         <div className="mb-16">
           <div className="flex items-center gap-4 mb-4">
+            <div className="w-12 h-[1px] bg-brand-teal"></div>
             <span className="text-sm uppercase tracking-[0.2em] text-brand-teal">
               TESTIMONIALS
             </span>
-            <div className="w-12 h-[1px] bg-brand-teal"></div>
           </div>
           <EditableText
             id="heading"
@@ -101,83 +137,139 @@ export function Testimonials({
           />
         </div>
 
-        {/* Navigation Arrows */}
-        <div className="flex justify-end mb-8 gap-4">
-          <button
-            onClick={prevPage}
-            className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-              />
-            </svg>
-          </button>
-          <button
-            onClick={nextPage}
-            className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </button>
+        {/* Mobile View - Single Card with Navigation */}
+        <div className="md:hidden">
+          <div className="relative">
+            {/* Fixed height container to prevent layout shifts */}
+            <div className="h-[500px] relative overflow-hidden">
+              <AnimatePresence initial={false} custom={direction} mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  custom={direction}
+                  variants={cardVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={{
+                    x: { type: "spring", stiffness: 200, damping: 25 },
+                    opacity: { duration: 0.4 }
+                  }}
+                  className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden"
+                >
+                  <div className="relative h-64">
+                    <Image
+                      src={safeContent.testimonials[currentIndex].image}
+                      alt={safeContent.testimonials[currentIndex].name}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-white text-xl mb-2">{safeContent.testimonials[currentIndex].name}</h3>
+                    <p className="text-brand-teal text-sm mb-4">{safeContent.testimonials[currentIndex].title}</p>
+                    <p className="text-gray-400 text-sm leading-relaxed">
+                      {safeContent.testimonials[currentIndex].quote}
+                    </p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Navigation Controls - Combined Arrows and Dots */}
+            <div className="flex items-center justify-center gap-4 mt-6">
+              <button
+                onClick={prevTestimonial}
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors bg-black/50 backdrop-blur-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                  />
+                </svg>
+              </button>
+
+              {/* Dots Indicator */}
+              <div className="flex justify-center gap-2">
+                {safeContent.testimonials.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setIsAutoPlaying(false);
+                      setDirection(index > currentIndex ? 1 : -1);
+                      setCurrentIndex(index);
+                    }}
+                    className={`w-2 h-2 rounded-full transition-colors ${index === currentIndex ? "bg-brand-teal" : "bg-white/20"
+                      }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={nextTestimonial}
+                className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors bg-black/50 backdrop-blur-sm"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-4 h-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* Testimonial Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {safeContent.testimonials
-            .slice(currentPage * 3, (currentPage + 1) * 3)
-            .map((testimonial, index) => (
-              <motion.div
-                key={testimonial.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, margin: "-100px" }}
-                transition={{
-                  duration: 0.6,
-                  delay: index * 0.2,
-                  ease: [0.4, 0, 0.2, 1],
-                }}
-                className="bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden"
-              >
-                <div className="relative h-64">
-                  <Image
-                    src={testimonial.image}
-                    alt={testimonial.name}
-                    fill
-                    className="object-cover"
-                    unoptimized
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-white text-xl mb-2">{testimonial.name}</h3>
-                  <p className="text-brand-teal text-sm mb-4">{testimonial.title}</p>
-                  <p className="text-gray-400 text-sm leading-relaxed">
-                    {testimonial.quote}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
+        {/* Desktop View - Grid Layout */}
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {safeContent.testimonials.map((testimonial, index) => (
+            <motion.div
+              key={testimonial.name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, margin: "-100px" }}
+              transition={{
+                duration: 0.6,
+                delay: index * 0.2,
+                ease: [0.4, 0, 0.2, 1],
+              }}
+              className="bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden"
+            >
+              <div className="relative h-64">
+                <Image
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-white text-xl mb-2">{testimonial.name}</h3>
+                <p className="text-brand-teal text-sm mb-4">{testimonial.title}</p>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {testimonial.quote}
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

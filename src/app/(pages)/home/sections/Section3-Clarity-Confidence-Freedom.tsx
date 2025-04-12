@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { EditableText } from "@/components/pageEditor/EditableText";
+import { motion } from "framer-motion";
 
 interface SupportSectionProps {
   isEditing?: boolean;
@@ -32,24 +33,92 @@ export function SupportSection({
   },
   onUpdate,
 }: SupportSectionProps) {
+  // Animation variants
+  const rowVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const contentVariants = {
+    hidden: { opacity: 0, x: -30 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        delay: 0.2,
+      },
+    },
+  };
+
+  const imageVariants = {
+    hidden: { opacity: 0, scale: 0.9, x: 30 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      x: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        delay: 0.3,
+      },
+    },
+  };
+
+  // Background image pulse animation
+  const bgPulseVariants = {
+    animate: {
+      scale: [1, 1.03, 1],
+      transition: {
+        duration: 8,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "loop" as const,
+      },
+    },
+  };
+
   return (
     <section className="relative bg-black min-h-screen overflow-hidden">
-      {/* Background Image with Ken Burns Effect */}
+      {/* Background Image with Pulse Animation */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/servicesbg4.png"
-          alt="Services Background"
-          fill
-          className="object-cover opacity-30"
-        />
+        <motion.div
+          className="w-full h-full"
+          variants={bgPulseVariants}
+          animate="animate"
+        >
+          <Image
+            src="/images/bg3.png"
+            alt="Services Background"
+            fill
+            className="object-cover opacity-30"
+          />
+        </motion.div>
       </div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 py-20">
         <div className="flex flex-col space-y-32">
           {/* Genetic Testing - Text Left, Image Right */}
-          <div className="relative flex items-center gap-20">
-            <div className="flex-1">
+          <motion.div
+            className="relative flex flex-col md:flex-row items-center gap-10 md:gap-20"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, margin: "-100px" }}
+            variants={rowVariants}
+          >
+            <motion.div
+              className="flex-1 w-full md:w-auto"
+              variants={contentVariants}
+            >
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <Image
@@ -85,8 +154,11 @@ export function SupportSection({
                   </Link>
                 </div>
               </div>
-            </div>
-            <div className="flex-1">
+            </motion.div>
+            <motion.div
+              className="flex-1 w-full md:w-auto mt-10 md:mt-0"
+              variants={imageVariants}
+            >
               <div className="relative">
                 {/* Offset glow effect */}
                 <div className="absolute -right-3 top-8 w-[90%] h-[95%] rounded-2xl shadow-[0_0_15px_rgba(78,205,196,0.3)]" />
@@ -101,12 +173,21 @@ export function SupportSection({
                   />
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* IV Therapy - Image Left, Text Right */}
-          <div className="relative flex items-center gap-20">
-            <div className="flex-1">
+          <motion.div
+            className="relative flex flex-col md:flex-row items-center gap-10 md:gap-20"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, margin: "-100px" }}
+            variants={rowVariants}
+          >
+            <motion.div
+              className="flex-1 w-full md:w-auto order-2 md:order-1"
+              variants={imageVariants}
+            >
               <div className="relative">
                 {/* Offset glow effect */}
                 <div className="absolute -left-3 top-8 w-full h-[95%] rounded-2xl shadow-[0_0_15px_rgba(78,205,196,0.3)]" />
@@ -121,8 +202,11 @@ export function SupportSection({
                   />
                 </div>
               </div>
-            </div>
-            <div className="flex-1">
+            </motion.div>
+            <motion.div
+              className="flex-1 w-full md:w-auto order-1 md:order-2 mt-10 md:mt-0"
+              variants={contentVariants}
+            >
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <Image
@@ -158,12 +242,21 @@ export function SupportSection({
                   </Link>
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Consultation - Text Left, Image Right */}
-          <div className="relative flex items-center gap-20">
-            <div className="flex-1">
+          <motion.div
+            className="relative flex flex-col md:flex-row items-center gap-10 md:gap-20"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, margin: "-100px" }}
+            variants={rowVariants}
+          >
+            <motion.div
+              className="flex-1 w-full md:w-auto"
+              variants={contentVariants}
+            >
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <Image
@@ -199,8 +292,11 @@ export function SupportSection({
                   </Link>
                 </div>
               </div>
-            </div>
-            <div className="flex-1">
+            </motion.div>
+            <motion.div
+              className="flex-1 w-full md:w-auto mt-10 md:mt-0"
+              variants={imageVariants}
+            >
               <div className="relative">
                 {/* Offset glow effect */}
                 <div className="absolute -right-3 top-8 w-[90%] h-[95%] rounded-2xl shadow-[0_0_15px_rgba(78,205,196,0.3)]" />
@@ -215,8 +311,8 @@ export function SupportSection({
                   />
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
 
