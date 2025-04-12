@@ -23,73 +23,9 @@ export async function GET(request: Request) {
 
     if (error) throw error;
 
-    // If no content exists yet, create it with default content
-    if (!data) {
-      let defaultContent = {};
-      
-      switch (sectionId) {
-        case 'Section1-Hero':
-          defaultContent = {
-            heading: "Welcome To Walker Lane",
-            subheading: "YOUR FINANCIAL ADVISORS"
-          };
-          break;
-        case 'Section2-Promise':
-          defaultContent = {
-            "promise-heading": "At <teal>Path2Well</teal>, we empower you to take <teal>control of your health</teal> through personalized, science-backed solutions.",
-            "promise-text": "We combine cutting-edge genetic testing with bespoke IV therapy to create a wellness plan uniquely <teal>tailored to your needs</teal>."
-          };
-          break;
-        case 'Section3-Clarity-Confidence-Freedom':
-          defaultContent = {
-            "clarity-heading": "Clarity",
-            "confidence-heading": "Confidence",
-            "freedom-heading": "Freedom"
-          };
-          break;
-        case 'Section4-WhatWeDo':
-          defaultContent = {
-            heading: "What We Do",
-            subheading: "We help you navigate your financial journey"
-          };
-          break;
-        case 'Section5-WhoWeHelp':
-          defaultContent = {
-            heading: "Who We Help",
-            subheading: "We serve clients at every stage of their financial journey"
-          };
-          break;
-        case 'Section6-Download':
-          defaultContent = {
-            heading: "Download Our Guide",
-            subheading: "Get started on your wellness journey today"
-          };
-          break;
-        case 'Section7-Services':
-          defaultContent = {
-            heading: "Our Services",
-            subheading: "Comprehensive wellness solutions tailored to your needs"
-          };
-          break;
-      }
-
-      // Insert the default content into the database
-      const { data: newData, error: insertError } = await supabase
-        .from('page_content')
-        .insert({
-          page_id: pageId,
-          section_id: sectionId,
-          content: defaultContent,
-          updated_at: new Date().toISOString()
-        })
-        .select('content')
-        .single();
-
-      if (insertError) throw insertError;
-      return NextResponse.json({ content: newData.content });
-    }
-
-    return NextResponse.json({ content: data.content });
+    // Just return the data as is, even if null
+    return NextResponse.json({ content: data?.content || {} });
+    
   } catch (error) {
     console.error('Error fetching section content:', error);
     return NextResponse.json(

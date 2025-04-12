@@ -47,9 +47,9 @@ export function ContentEditorModal({
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed inset-x-0 top-[2%] flex justify-center z-50"
+            className="fixed inset-0 flex items-center justify-center z-50 overflow-y-auto py-8"
           >
-            <div className="w-full max-w-2xl mx-4 bg-brand-black border border-brand-teal/30 rounded-lg shadow-lg shadow-brand-teal/20">
+            <div className="w-full max-w-2xl mx-4 bg-brand-black border border-brand-teal/30 rounded-lg shadow-lg shadow-brand-teal/20 my-auto">
               {/* Header */}
               <div className="flex items-center justify-between p-4 border-b border-brand-teal/20">
                 <h3 className="text-lg font-medium text-brand-white">

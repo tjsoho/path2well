@@ -29,6 +29,10 @@ type DownloadContent = {
   subheading: string;
   benefits: Array<{ title: string; description: string; }>;
 };
+type ServicesContent = {
+  heading: string;
+  subheading: string;
+};
 
 async function getSectionContent(
   sectionId: string
@@ -58,6 +62,7 @@ export default async function HomePage() {
   const whatWeDoContent = await getSectionContent("Section4-WhatWeDo");
   const targetMarketContent = await getSectionContent("Section5-WhoWeHelp");
   const downloadContent = await getSectionContent("Section6-Download");
+  const servicesContent = await getSectionContent("Section7-Services");
 
   return (
     <main>
@@ -68,7 +73,7 @@ export default async function HomePage() {
       <WhatWeDo content={whatWeDoContent as WhatWeDoContent} />
       <Testimonials content={targetMarketContent as SectionContent} />
       <DownloadSection content={downloadContent as unknown as DownloadContent} />
-      <ServicesSection />
+      <ServicesSection content={servicesContent as ServicesContent} />
     </main>
   );
 }

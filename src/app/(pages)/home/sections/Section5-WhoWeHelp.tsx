@@ -56,6 +56,15 @@ export function Testimonials({
     testimonials: content.testimonials || defaultTestimonials,
   };
 
+  // Ensure currentIndex is valid
+  useEffect(() => {
+    if (safeContent.testimonials.length === 0) {
+      setCurrentIndex(0);
+    } else if (currentIndex >= safeContent.testimonials.length) {
+      setCurrentIndex(0);
+    }
+  }, [safeContent.testimonials.length, currentIndex]);
+
   // Auto-play functionality
   useEffect(() => {
     if (!isAutoPlaying) return;
@@ -156,22 +165,28 @@ export function Testimonials({
                   }}
                   className="absolute inset-0 bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden"
                 >
-                  <div className="relative h-64">
-                    <Image
-                      src={safeContent.testimonials[currentIndex].image}
-                      alt={safeContent.testimonials[currentIndex].name}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-white text-xl mb-2">{safeContent.testimonials[currentIndex].name}</h3>
-                    <p className="text-brand-teal text-sm mb-4">{safeContent.testimonials[currentIndex].title}</p>
-                    <p className="text-gray-400 text-sm leading-relaxed">
-                      {safeContent.testimonials[currentIndex].quote}
-                    </p>
-                  </div>
+                  {safeContent.testimonials.length > 0 ? (
+                    <>
+                      <div className="relative h-64">
+                        <Image
+                          src={safeContent.testimonials[currentIndex].image}
+                          alt={safeContent.testimonials[currentIndex].name}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      </div>
+                      <div className="p-6">
+                        <h3 className="text-white text-xl mb-2">{safeContent.testimonials[currentIndex].name}</h3>
+                        <p className="text-brand-teal text-sm mb-4">{safeContent.testimonials[currentIndex].title}</p>
+                        <p className="text-white/80 italic">&quot;{safeContent.testimonials[currentIndex].quote}&quot;</p>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="p-6 flex items-center justify-center h-full">
+                      <p className="text-white text-center">No testimonials available yet.</p>
+                    </div>
+                  )}
                 </motion.div>
               </AnimatePresence>
             </div>
@@ -271,6 +286,50 @@ export function Testimonials({
             </motion.div>
           ))}
         </div>
+        {safeContent.testimonials.length > 1 && (
+          <div className="flex justify-center mt-8 gap-4">
+            <button
+              onClick={prevTestimonial}
+              className="p-2 rounded-full bg-brand-teal/20 hover:bg-brand-teal/30 transition-colors"
+              aria-label="Previous testimonial"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6 text-brand-teal"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
+              </svg>
+            </button>
+            <button
+              onClick={nextTestimonial}
+              className="p-2 rounded-full bg-brand-teal/20 hover:bg-brand-teal/30 transition-colors"
+              aria-label="Next testimonial"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="w-6 h-6 text-brand-teal"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

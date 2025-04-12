@@ -1,122 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { getPageSections } from "@/lib/pageSections";
-import dynamic from "next/dynamic";
 import { toast } from "react-hot-toast";
-
-// Types
-interface Page {
-  id: string;
-  name: string;
-}
-
-type Testimonial = {
-  name: string;
-  image: string;
-  quote: string;
-  title: string;
-};
-
-type Benefit = {
-  title: string;
-  description: string;
-};
-
-type HeroContent = {
-  heading: string;
-  subheading: string;
-};
-
-type PromiseContent = {
-  heading: string;
-  subheading: string;
-};
-
-type SupportContent = {
-  "clarity-heading": string;
-  "clarity-text": string;
-  "confidence-heading": string;
-  "confidence-text": string;
-  "freedom-heading": string;
-  "freedom-text": string;
-};
-
-type WhatWeDoContent = {
-  "about-text": string;
-};
-
-type TestimonialsContent = {
-  heading: string;
-  subheading: string;
-  testimonials: Testimonial[];
-};
-
-type DownloadContent = {
-  heading: string;
-  subheading: string;
-  benefits: Benefit[];
-};
-
-type ServicesContent = {
-  heading: string;
-  subheading: string;
-};
-
-// type SectionContent =
-//   | { type: "hero"; content: HeroContent }
-//   | { type: "promise"; content: PromiseContent }
-//   | { type: "support"; content: SupportContent }
-//   | { type: "whatWeDo"; content: WhatWeDoContent }
-//   | { type: "testimonials"; content: TestimonialsContent }
-//   | { type: "download"; content: DownloadContent }
-//   | { type: "services"; content: ServicesContent };
-
-type SectionContents = {
-  [key: string]: {
-    [key: string]: string | Testimonial[] | Benefit[];
-  };
-};
-
-// Constants
-const PAGES: Page[] = [
-  { id: "home", name: "Home Page" },
-  // Add other pages as needed
-];
-
-// Define a mapping of section IDs to their content types
-type SectionTypeMap = {
-  "Section1-Hero": HeroContent;
-  "Section2-Promise": PromiseContent;
-  "Section3-Clarity-Confidence-Freedom": SupportContent;
-  "Section2-What-We-Do": WhatWeDoContent;
-  "Section4-Testimonials": TestimonialsContent;
-  "Section5-Download": DownloadContent;
-  "Section6-Services": ServicesContent;
-};
-
-// Dynamic Section Imports
-const sections: {
-  [K in keyof SectionTypeMap]: React.ComponentType<{
-    content: SectionTypeMap[K];
-    isEditing?: boolean;
-    onUpdate?: (key: string, value: string) => void;
-  }>;
-} = {
-  "Section1-Hero": dynamic(() => import("@/app/(pages)/home/sections/Section1-Hero").then(mod => mod.HeroSection)),
-  "Section2-Promise": dynamic(() => import("@/app/(pages)/home/sections/Section2-Promise").then(mod => mod.PromiseSection)),
-  "Section3-Clarity-Confidence-Freedom": dynamic(() => import("@/app/(pages)/home/sections/Section3-Clarity-Confidence-Freedom").then(mod => mod.SupportSection)),
-  "Section2-What-We-Do": dynamic(() => import("@/app/(pages)/home/sections/Section4-about").then(mod => mod.WhatWeDo)),
-  "Section4-Testimonials": dynamic(() => import("@/app/(pages)/home/sections/Section5-WhoWeHelp").then(mod => mod.Testimonials)),
-  "Section5-Download": dynamic(() => import("@/app/(pages)/home/sections/Section6-Download").then(mod => mod.DownloadSection)),
-  "Section6-Services": dynamic(() => import("@/app/(pages)/home/sections/Section7-Services").then(mod => mod.ServicesSection)),
-} as const;
+import { getPageSections } from "@/lib/pageSections";
+import { SectionContents } from "../../../types/pageEditor";
+import { PageSelector } from "./PageSelector";
+import { SaveButton } from "./SaveButton";
+import { SectionRenderer } from "./SectionRenderer";
 
 export function PageEditor() {
   // State
   const [selectedPage, setSelectedPage] = useState<string | null>(null);
-  const [pagesOpen, setPagesOpen] = useState(false);
   const [sectionContents, setSectionContents] = useState<SectionContents>({});
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -125,7 +19,7 @@ export function PageEditor() {
   const handleTextChange = (sectionId: string, key: string, value: string) => {
     console.log("Updating content:", { sectionId, key, value });
     setIsDirty(true);
-    setSectionContents((prev) => {
+    setSectionContents((prev: SectionContents) => {
       const newContents = {
         ...prev,
         [sectionId]: {
@@ -207,166 +101,18 @@ export function PageEditor() {
     }
   };
 
-  // Render page content
-  const renderPageContent = () => {
-    if (!selectedPage) return null;
-
-    const pageSections = getPageSections(selectedPage);
-    return (
-      <div className="space-y-8">
-        {pageSections.map((section) => {
-          const Component = sections[section.id as keyof typeof sections];
-          if (!Component) return null;
-
-          const sectionContent = sectionContents[section.id] || {};
-
-          // Special handling for different section types
-          if (section.id === "Section3-Clarity-Confidence-Freedom") {
-            const defaultContent: SupportContent = {
-              "clarity-heading": "Genetic Testing & Interpretation",
-              "clarity-text": "Unlock the secrets of your DNA. Our comprehensive genetic testing reveals vital insights into your unique predispositions, helping you identify and address potential health concerns before they arise.",
-              "confidence-heading": "Bespoke IV Therapy",
-              "confidence-text": "Experience targeted, revitalising IV therapy, formulated precisely to address your individual health goals. Our range of infusions targets everything from boosting immunity and energy levels to promoting deep cellular hydration.",
-              "freedom-heading": "Complimentary Consultation",
-              "freedom-text": "Book your no-obligation consultation today and speak with a wellness expert. Discuss your health concerns, goals and discover your perfect personalised wellness plan.",
-              ...sectionContent
-            };
-
-            // Use type assertion to fix the type error
-            const SupportComponent = Component as React.ComponentType<{
-              content: SupportContent;
-              isEditing?: boolean;
-              onUpdate?: (key: string, value: string) => void;
-            }>;
-
-            return (
-              <div key={section.id} className="relative">
-                <SupportComponent
-                  content={defaultContent}
-                  isEditing={true}
-                  onUpdate={(key: string, value: string) =>
-                    handleTextChange(section.id, key, value)
-                  }
-                />
-              </div>
-            );
-          }
-
-          // Handle other section types based on their ID
-          let content;
-          switch (section.id) {
-            case "Section1-Hero":
-              content = {
-                heading: sectionContent.heading || "",
-                subheading: sectionContent.subheading || ""
-              } as HeroContent;
-              break;
-            case "Section2-Promise":
-              content = {
-                heading: sectionContent.heading || "",
-                subheading: sectionContent.subheading || ""
-              } as PromiseContent;
-              break;
-            case "Section2-What-We-Do":
-              content = { "about-text": sectionContent["about-text"] || "" } as WhatWeDoContent;
-              break;
-            case "Section4-Testimonials":
-              content = {
-                heading: sectionContent.heading || "",
-                subheading: sectionContent.subheading || "",
-                testimonials: Array.isArray(sectionContent.testimonials) ? sectionContent.testimonials : []
-              } as TestimonialsContent;
-              break;
-            case "Section5-Download":
-              content = {
-                heading: sectionContent.heading || "",
-                subheading: sectionContent.subheading || "",
-                benefits: Array.isArray(sectionContent.benefits) ? sectionContent.benefits : []
-              } as DownloadContent;
-              break;
-            case "Section6-Services":
-              content = {
-                heading: sectionContent.heading || "",
-                subheading: sectionContent.subheading || ""
-              } as ServicesContent;
-              break;
-            default:
-              // This should never happen with our type mapping
-              content = sectionContent as Record<string, string | Testimonial[] | Benefit[]>;
-          }
-
-          // Use type assertion for the Component
-          const TypedComponent = Component as React.ComponentType<{
-            content: typeof content;
-            isEditing?: boolean;
-            onUpdate?: (key: string, value: string) => void;
-          }>;
-
-          return (
-            <div key={section.id} className="relative">
-              <TypedComponent
-                content={content}
-                isEditing={true}
-                onUpdate={(key: string, value: string) =>
-                  handleTextChange(section.id, key, value)
-                }
-              />
-            </div>
-          );
-        })}
-      </div>
-    );
-  };
-
   return (
     <div className="min-h-screen bg-brand-black/95 rounded-xl border border-brand-teal shadow-[0_0_15px_rgba(1,141,141,0.3)] backdrop-blur-sm">
       {/* Navigation */}
       <div className="sticky top-0 z-50 bg-brand-black/80 border-b border-brand-teal/20 rounded-t-xl backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          {/* Page Dropdown */}
-          <div className="relative">
-            <button
-              onClick={() => setPagesOpen(!pagesOpen)}
-              className="flex items-center gap-3 px-4 py-2.5 rounded-lg 
-                        bg-brand-black/60 text-brand-white hover:bg-brand-teal/10 
-                        border border-brand-teal/30 hover:border-brand-teal
-                        transition-all duration-300"
-            >
-              <span className="min-w-[120px] font-chocolates">
-                {selectedPage
-                  ? PAGES.find((p) => p.id === selectedPage)?.name
-                  : "Select Page"}
-              </span>
-              <ChevronDown
-                className={`w-4 h-4 text-brand-teal transition-transform duration-300 ${pagesOpen ? "rotate-180" : ""
-                  }`}
-              />
-            </button>
-
-            {pagesOpen && (
-              <div
-                className="absolute top-full left-0 mt-2 w-52 bg-brand-black/95 
-                            rounded-lg border border-brand-teal/30 shadow-lg shadow-brand-teal/20 
-                            backdrop-blur-sm py-1 z-50"
-              >
-                {PAGES.map((page) => (
-                  <button
-                    key={page.id}
-                    onClick={() => {
-                      setSelectedPage(page.id);
-                      setPagesOpen(false);
-                      extractContent();
-                    }}
-                    className="w-full text-left px-4 py-3 text-brand-white 
-                            hover:bg-brand-teal/10 transition-colors duration-200
-                            font-chocolates"
-                  >
-                    {page.name}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          <PageSelector
+            selectedPage={selectedPage}
+            onPageSelect={(pageId) => {
+              setSelectedPage(pageId);
+              extractContent();
+            }}
+          />
 
           {/* Actions */}
           {selectedPage && (
@@ -376,62 +122,11 @@ export function PageEditor() {
                   You have unsaved changes
                 </span>
               )}
-              <button
-                onClick={handleSave}
-                disabled={!isDirty || isSaving}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg
-                          transition-all duration-300
-                          ${!isDirty
-                    ? "bg-brand-black/40 text-brand-white/50 border-transparent cursor-not-allowed"
-                    : "bg-brand-teal text-brand-white hover:bg-brand-teal/90 border-brand-teal"
-                  }`}
-              >
-                {isSaving ? (
-                  <>
-                    <svg
-                      className="animate-spin h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
-                    <span>Saving...</span>
-                  </>
-                ) : (
-                  <>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="w-4 h-4"
-                    >
-                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                      <polyline points="17 21 17 13 7 13 7 21" />
-                      <polyline points="7 3 7 8 15 8" />
-                    </svg>
-                    <span>Save All Changes</span>
-                  </>
-                )}
-              </button>
+              <SaveButton
+                isDirty={isDirty}
+                isSaving={isSaving}
+                onSave={handleSave}
+              />
             </div>
           )}
         </div>
@@ -441,7 +136,11 @@ export function PageEditor() {
       <div className="w-full">
         {selectedPage ? (
           <div className="max-w-7xl mx-auto px-4 py-8">
-            {renderPageContent()}
+            <SectionRenderer
+              selectedPage={selectedPage}
+              sectionContents={sectionContents}
+              onTextChange={handleTextChange}
+            />
           </div>
         ) : (
           <div className="max-w-7xl mx-auto px-4 py-20">
