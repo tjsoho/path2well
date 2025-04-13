@@ -16,10 +16,10 @@ export function PointerEffect() {
 
     return (
         <div
-            className="fixed w-[500px] h-[500px] rounded-full bg-white/70 blur-[100px] pointer-events-none transition-opacity duration-300 z-0"
+            className="fixed w-[300px] h-[300px] rounded-full bg-white/70 blur-[100px] pointer-events-none transition-opacity duration-300 z-0"
             style={{
-                left: `${mousePosition.x - 250}px`,
-                top: `${mousePosition.y - 250}px`,
+                left: `${mousePosition.x - 175}px`,
+                top: `${mousePosition.y - 125}px`,
                 opacity: 0.2
             }}
         />

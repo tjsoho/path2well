@@ -4,16 +4,14 @@ import { motion } from "framer-motion";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { EditableBenefitCard, Benefit } from "@/components/pageEditor/EditableBenefitCard";
 
 interface DownloadSectionProps {
     isEditing?: boolean;
     content?: {
         heading?: string;
         subheading?: string;
-        benefits?: Array<{
-            title: string;
-            description: string;
-        }>;
+        benefits?: Benefit[];
     };
     onUpdate?: (id: string, value: string) => void;
 }
@@ -53,7 +51,29 @@ export function DownloadSection({
     const safeContent = {
         heading: content.heading || "Download your guide to a healthier life",
         subheading: content.subheading || "Ready to take control of your wellness journey? Download our complimentary guide packed with expert tips, advice, and insights to help you achieve optimal health and lasting well-being.",
-        benefits: content.benefits || defaultBenefits,
+        benefits: (() => {
+            try {
+                if (Array.isArray(content.benefits)) {
+                    return content.benefits;
+                }
+                if (typeof content.benefits === 'string') {
+                    const parsed = JSON.parse(content.benefits);
+                    return Array.isArray(parsed) ? parsed : defaultBenefits;
+                }
+                return defaultBenefits;
+            } catch (error) {
+                console.error('Error parsing benefits:', error);
+                return defaultBenefits;
+            }
+        })(),
+    };
+
+    const handleBenefitUpdate = (index: number, updatedBenefit: Benefit) => {
+        if (!onUpdate) return;
+
+        const newBenefits = [...safeContent.benefits];
+        newBenefits[index] = updatedBenefit;
+        onUpdate('benefits', JSON.stringify(newBenefits));
     };
 
     return (
@@ -69,41 +89,14 @@ export function DownloadSection({
                     <div className="relative order-2 lg:order-1">
                         <div className="grid grid-cols-2 gap-4">
                             {safeContent.benefits.map((benefit, index) => (
-                                <motion.div
-                                    key={benefit.title}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: false, margin: "-100px" }}
-                                    transition={{
-                                        duration: 0.6,
-                                        delay: index * 0.1,
-                                        ease: [0.4, 0, 0.2, 1],
-                                    }}
-                                    className="relative bg-white rounded-lg p-4 border border-brand-teal/30 shadow-[0_0_10px_rgba(11,165,165,0.1)] hover:shadow-[0_0_15px_rgba(11,165,165,0.2)] transition-shadow"
-                                >
-                                    {/* Connector Lines */}
-                                    {index < safeContent.benefits.length - 1 && (
-                                        <>
-                                            {/* Horizontal connector */}
-                                            {index % 2 !== 1 && (
-                                                <div className="hidden lg:block absolute right-[-1rem] top-1/2 w-8 h-[1px] bg-gradient-to-r from-brand-teal/50 to-transparent"></div>
-                                            )}
-                                            {/* Vertical connector */}
-                                            {index < safeContent.benefits.length - 2 && (
-                                                <div className="hidden lg:block absolute bottom-[-1rem] left-1/2 w-[1px] h-8 bg-gradient-to-b from-brand-teal/50 to-transparent"></div>
-                                            )}
-                                        </>
-                                    )}
-
-                                    {/* Dot */}
-                                    <div className="w-3 h-3 rounded-full border border-brand-teal flex items-center justify-center mb-3">
-                                        <div className="w-1 h-1 rounded-full bg-brand-teal"></div>
-                                    </div>
-
-                                    {/* Content */}
-                                    <h3 className="text-black font-medium mb-1 text-xs md:text-sm">{benefit.title}</h3>
-                                    <p className="text-gray-600 text-xs leading-relaxed">{benefit.description}</p>
-                                </motion.div>
+                                <EditableBenefitCard
+                                    key={index}
+                                    benefit={benefit}
+                                    index={index}
+                                    isEditing={isEditing}
+                                    onUpdate={handleBenefitUpdate}
+                                    totalBenefits={safeContent.benefits.length}
+                                />
                             ))}
                         </div>
                     </div>
