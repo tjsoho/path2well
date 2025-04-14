@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { EditableTestimonial, Testimonial } from "@/components/pageEditor/EditableTestimonial";
+import { EditableImage } from "@/components/pageEditor/EditableImage";
 
 interface TestimonialsProps {
   isEditing?: boolean;
@@ -12,6 +13,7 @@ interface TestimonialsProps {
     heading?: string;
     subheading?: string;
     testimonials?: Array<Testimonial>;
+    backgroundImage?: string;
   };
   onUpdate?: (id: string, value: string) => void;
 }
@@ -48,6 +50,7 @@ export function Testimonials({
 
   const safeContent = {
     ...content,
+    backgroundImage: content.backgroundImage || "/images/newTech.png",
     testimonials: (() => {
       try {
         // If testimonials is a string, parse it
@@ -137,11 +140,13 @@ export function Testimonials({
     <section className="relative bg-black py-20 md:py-32 overflow-hidden">
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/newTech.png"
+        <EditableImage
+          src={safeContent.backgroundImage}
           alt="Technology Background"
           fill
           className="object-cover opacity-60"
+          isEditing={isEditing}
+          onUpdate={(newImageUrl) => onUpdate?.("backgroundImage", newImageUrl)}
         />
       </div>
 
@@ -194,12 +199,20 @@ export function Testimonials({
                   {safeContent.testimonials.length > 0 ? (
                     <>
                       <div className="relative h-64">
-                        <Image
+                        <EditableImage
                           src={safeContent.testimonials[currentIndex].image}
                           alt={safeContent.testimonials[currentIndex].name}
                           fill
                           className="object-cover"
-                          unoptimized
+                          isEditing={isEditing}
+                          onUpdate={(newImageUrl) => {
+                            const updatedTestimonials = [...safeContent.testimonials];
+                            updatedTestimonials[currentIndex] = {
+                              ...updatedTestimonials[currentIndex],
+                              image: newImageUrl,
+                            };
+                            onUpdate?.("testimonials", JSON.stringify(updatedTestimonials));
+                          }}
                         />
                       </div>
                       <div className="p-6">

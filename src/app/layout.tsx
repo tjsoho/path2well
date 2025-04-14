@@ -6,6 +6,7 @@ import { Footer } from "@/components/ui/Footer";
 import { Toaster } from "react-hot-toast";
 import { NavMenu } from "@/components/navigation/NavMenu";
 import { PointerEffect } from "@/components/ui/PointerEffect";
+import { ImageLibraryProvider } from "@/contexts/ImageLibraryContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,20 +43,22 @@ export default function RootLayout({
         `}
         suppressHydrationWarning
       >
-        <PointerEffect />
-        <NavMenu />
-        {children}
-        <Footer />
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 3000,
-            style: {
-              background: "#333",
-              color: "#fff",
-            },
-          }}
-        />
+        <ImageLibraryProvider>
+          <PointerEffect />
+          <NavMenu />
+          {children}
+          <Footer />
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: "#333",
+                color: "#fff",
+              },
+            }}
+          />
+        </ImageLibraryProvider>
       </body>
     </html>
   );

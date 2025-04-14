@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { PointerEffect } from "@/components/ui/PointerEffect";
 import { Calendar } from "lucide-react";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { GlowButton } from "@/components/ui/GlowButton";
+import { EditableImage } from "@/components/pageEditor/EditableImage";
 
 interface HeroSectionProps {
   isEditing?: boolean;
@@ -108,12 +108,13 @@ export function HeroSection({
             ease: "easeOut",
           }}
         >
-          <Image
+          <EditableImage
             src="/images/HeroBG.png"
             alt="Path2Well Hero"
             fill
-            priority
             className="object-cover"
+            isEditing={isEditing}
+            onUpdate={(newUrl) => onUpdate?.("hero-background", newUrl)}
           />
         </motion.div>
 

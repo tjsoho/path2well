@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Pencil, Check, X } from "lucide-react";
 import Image from "next/image";
+import { EditableImage } from "./EditableImage";
 
 export interface Testimonial {
     name: string;
@@ -81,11 +82,15 @@ export function EditableTestimonial({
         });
     };
 
+    const handleImageUpdate = (newImageUrl: string) => {
+        handleFieldChange('image', newImageUrl);
+    };
+
     return (
         <div
             className={`group relative ${isEditing
-                    ? "hover:bg-brand-teal/5 rounded-lg transition-all duration-300"
-                    : ""
+                ? "hover:bg-brand-teal/5 rounded-lg transition-all duration-300"
+                : ""
                 }`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
@@ -93,12 +98,13 @@ export function EditableTestimonial({
             {isEditingInPlace ? (
                 <div className="relative bg-gradient-to-br from-gray-900 to-black rounded-xl overflow-hidden">
                     <div className="relative h-64">
-                        <Image
+                        <EditableImage
                             src={editedTestimonial.image}
                             alt={editedTestimonial.name}
                             fill
                             className="object-cover"
-                            unoptimized
+                            isEditing={isEditing}
+                            onUpdate={handleImageUpdate}
                         />
                     </div>
                     <div className="p-6 space-y-4">
@@ -131,15 +137,6 @@ export function EditableTestimonial({
                                 rows={3}
                             />
                         </div>
-                        <div>
-                            <label className="block text-white text-sm mb-1">Image URL</label>
-                            <input
-                                type="text"
-                                value={editedTestimonial.image}
-                                onChange={(e) => handleFieldChange('image', e.target.value)}
-                                className="w-full bg-black/50 text-white p-2 rounded border border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
-                            />
-                        </div>
                         <div className="flex justify-end gap-2 mt-4">
                             <button
                                 onClick={handleCancel}
@@ -163,12 +160,13 @@ export function EditableTestimonial({
                         onClick={handleClick}
                     >
                         <div className="relative h-64">
-                            <Image
+                            <EditableImage
                                 src={testimonial.image}
                                 alt={testimonial.name}
                                 fill
                                 className="object-cover"
-                                unoptimized
+                                isEditing={isEditing}
+                                onUpdate={(newImageUrl) => onUpdate?.(index, 'image', newImageUrl)}
                             />
                         </div>
                         <div className="p-6">

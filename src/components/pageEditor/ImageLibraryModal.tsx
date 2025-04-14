@@ -1,20 +1,22 @@
-import { useState, useEffect } from 'react';
+"use client";
+
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import Image from 'next/image';
-import { X, Upload, Loader2, Trash2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { X, Loader2, Upload } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 interface ImageLibraryModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onSelectImage: (url: string) => void;
+    onSelect: (url: string) => void;
 }
 
-export function ImageLibraryModal({ isOpen, onClose, onSelectImage }: ImageLibraryModalProps) {
-    const [images, setImages] = useState<Array<{ name: string; url: string }>>([]);
-    const [loading, setLoading] = useState(true);
-    const [uploading, setUploading] = useState(false);
-    const [deletingImage, setDeletingImage] = useState<string | null>(null);
+export function ImageLibraryModal({ isOpen, onClose, onSelect }: ImageLibraryModalProps) {
+    const [images, setImages] = useState<{ name: string; url: string; }[]>([]);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (isOpen) {
@@ -24,18 +26,18 @@ export function ImageLibraryModal({ isOpen, onClose, onSelectImage }: ImageLibra
 
     const loadImages = async () => {
         try {
-            setLoading(true);
             const { data, error } = await supabase.storage
                 .from('section-images')
                 .list();
 
             if (error) throw error;
 
-            const imageList = await Promise.all(
-                (data || []).map(async (file) => {
+            const imageUrls = await Promise.all(
+                data.map(async (file) => {
                     const { data: { publicUrl } } = supabase.storage
                         .from('section-images')
                         .getPublicUrl(file.name);
+
                     return {
                         name: file.name,
                         url: publicUrl
@@ -43,147 +45,239 @@ export function ImageLibraryModal({ isOpen, onClose, onSelectImage }: ImageLibra
                 })
             );
 
-            setImages(imageList);
+            setImages(imageUrls);
         } catch (error) {
             console.error('Error loading images:', error);
-        } finally {
-            setLoading(false);
+            toast.error('Failed to load images', {
+                style: {
+                    background: 'white',
+                    color: '#333',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                },
+                iconTheme: {
+                    primary: '#ef4444',
+                    secondary: 'white',
+                },
+            });
         }
     };
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        setIsUploading(true);
+        const uploadPromises = Array.from(files).map(async (file) => {
+            try {
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('section-images')
+                    .upload(fileName, file, {
+                        cacheControl: '3600',
+                        upsert: true
+                    });
+
+                if (uploadError) throw uploadError;
+
+                const { data: { publicUrl } } = supabase.storage
+                    .from('section-images')
+                    .getPublicUrl(fileName);
+
+                setUploadProgress(prev => ({ ...prev, [file.name]: 100 }));
+                return { name: fileName, url: publicUrl };
+            } catch (error) {
+                console.error(`Error uploading ${file.name}:`, error);
+                toast.error(`Failed to upload ${file.name}`, {
+                    style: {
+                        background: 'white',
+                        color: '#333',
+                        borderRadius: '8px',
+                        padding: '12px 16px',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    },
+                    iconTheme: {
+                        primary: '#ef4444',
+                        secondary: 'white',
+                    },
+                });
+                return null;
+            }
+        });
 
         try {
-            setUploading(true);
-            const fileExt = file.name.split('.').pop();
-            const fileName = `${Date.now()}.${fileExt}`;
+            const uploadedImages = await Promise.all(uploadPromises);
+            const validImages = uploadedImages.filter((img): img is { name: string; url: string; } => img !== null);
 
-            const { error: uploadError } = await supabase.storage
-                .from('section-images')
-                .upload(fileName, file, {
-                    cacheControl: '3600',
-                    upsert: true
+            if (validImages.length > 0) {
+                setImages(prev => [...validImages, ...prev]);
+                toast.success(`Successfully uploaded ${validImages.length} image${validImages.length > 1 ? 's' : ''}`, {
+                    style: {
+                        background: 'white',
+                        color: '#333',
+                        borderRadius: '8px',
+                        padding: '12px 16px',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                    },
+                    iconTheme: {
+                        primary: '#4CAF50',
+                        secondary: 'white',
+                    },
                 });
-
-            if (uploadError) throw uploadError;
-
-            // Reload images after upload
-            await loadImages();
+            }
         } catch (error) {
-            console.error('Error uploading:', error);
+            console.error("Error uploading files:", error);
         } finally {
-            setUploading(false);
+            setIsUploading(false);
+            setUploadProgress({});
+            if (fileInputRef.current) {
+                fileInputRef.current.value = '';
+            }
         }
     };
 
-    const handleDeleteImage = async (imageName: string, e: React.MouseEvent) => {
-        e.stopPropagation(); // Prevent image selection when clicking delete
+    const handleDelete = async (imageName: string) => {
         try {
-            setDeletingImage(imageName);
             const { error } = await supabase.storage
                 .from('section-images')
                 .remove([imageName]);
 
             if (error) throw error;
 
-            // Remove image from state
-            setImages(images.filter(img => img.name !== imageName));
+            setImages(prev => prev.filter(img => img.name !== imageName));
+            toast.success('Image deleted successfully', {
+                style: {
+                    background: 'white',
+                    color: '#333',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                },
+                iconTheme: {
+                    primary: '#4CAF50',
+                    secondary: 'white',
+                },
+            });
         } catch (error) {
             console.error('Error deleting image:', error);
-        } finally {
-            setDeletingImage(null);
+            toast.error('Failed to delete image', {
+                style: {
+                    background: 'white',
+                    color: '#333',
+                    borderRadius: '8px',
+                    padding: '12px 16px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                },
+                iconTheme: {
+                    primary: '#ef4444',
+                    secondary: 'white',
+                },
+            });
         }
     };
 
+    // If the modal is not open, don't render anything
     if (!isOpen) return null;
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] overflow-y-auto"
-        >
-            <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#001618] rounded-lg p-6 w-full max-w-4xl max-h-[80vh] overflow-hidden flex flex-col"
-            >
-                {/* Header */}
-                <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl font-bold text-white">Image Library</h2>
-                    <button
-                        onClick={onClose}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                    >
-                        <X className="w-5 h-5 text-white" />
-                    </button>
-                </div>
-
-                {/* Upload Button */}
-                <div className="mb-6">
-                    <label className="inline-flex items-center px-4 py-2 bg-brand-teal text-white rounded-lg cursor-pointer hover:bg-brand-teal/80 transition-colors">
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploading ? 'Uploading...' : 'Upload New Image'}
-                        <input
-                            type="file"
-                            className="hidden"
-                            accept="image/*"
-                            onChange={handleFileUpload}
-                            disabled={uploading}
-                        />
-                    </label>
-                </div>
-
-                {/* Image Grid */}
-                <div className="flex-1 overflow-y-auto">
-                    {loading ? (
-                        <div className="flex items-center justify-center h-full">
-                            <Loader2 className="w-8 h-8 text-brand-teal animate-spin" />
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+                <div className="p-6 border-b">
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-2xl font-semibold text-gray-900">Image Library</h2>
+                        <div className="flex items-center gap-4">
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleFileUpload}
+                                accept="image/*"
+                                multiple
+                                className="hidden"
+                            />
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={isUploading}
+                                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isUploading ? (
+                                    <>
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                        <span>Uploading...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Upload className="w-4 h-4" />
+                                        <span>Upload Images</span>
+                                    </>
+                                )}
+                            </button>
+                            <button
+                                onClick={onClose}
+                                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                            >
+                                <X className="w-5 h-5 text-gray-500" />
+                            </button>
                         </div>
-                    ) : (
-                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                            {images.map((image) => (
-                                <motion.div
-                                    key={image.name}
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    className="relative aspect-square group cursor-pointer"
-                                    onClick={() => {
-                                        onSelectImage(image.url);
-                                        onClose();
-                                    }}
-                                >
-                                    <Image
-                                        src={image.url}
-                                        alt={image.name}
-                                        fill
-                                        className="object-cover rounded-lg transition-all duration-300 group-hover:border-2 group-hover:border-pink-500"
-                                    />
-                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
-                                        <span className="text-white text-sm">Select Image</span>
+                    </div>
+                    {Object.keys(uploadProgress).length > 0 && (
+                        <div className="mt-4 space-y-2">
+                            {Object.entries(uploadProgress).map(([fileName, progress]) => (
+                                <div key={fileName} className="space-y-1">
+                                    <div className="flex justify-between text-sm text-gray-600">
+                                        <span className="truncate">{fileName}</span>
+                                        <span>{progress}%</span>
                                     </div>
-                                    <button
-                                        onClick={(e) => handleDeleteImage(image.name, e)}
-                                        className="absolute top-2 right-2 p-1.5 bg-pink-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-pink-600"
-                                        disabled={deletingImage === image.name}
-                                    >
-                                        {deletingImage === image.name ? (
-                                            <Loader2 className="w-4 h-4 animate-spin" />
-                                        ) : (
-                                            <Trash2 className="w-4 h-4" />
-                                        )}
-                                    </button>
-                                </motion.div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                                            style={{ width: `${progress}%` }}
+                                        />
+                                    </div>
+                                </div>
                             ))}
                         </div>
                     )}
                 </div>
-            </motion.div>
-        </motion.div>
+                <div className="flex-1 overflow-y-auto p-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {images.map((image) => (
+                            <div
+                                key={image.name}
+                                className="group relative aspect-square rounded-lg overflow-hidden bg-gray-100"
+                            >
+                                <Image
+                                    src={image.url}
+                                    alt={image.name}
+                                    fill
+                                    className="object-cover"
+                                />
+                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                                    <div className="text-white text-sm font-medium mb-2 px-2 text-center">
+                                        {image.name}
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => onSelect(image.url)}
+                                            className="px-3 py-1 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                                        >
+                                            Select
+                                        </button>
+                                        <button
+                                            onClick={() => handleDelete(image.name)}
+                                            className="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                                        >
+                                            <X className="w-4 h-4" />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 } 

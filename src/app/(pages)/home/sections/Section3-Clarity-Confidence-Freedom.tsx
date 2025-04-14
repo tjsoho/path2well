@@ -3,7 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { EditableText } from "@/components/pageEditor/EditableText";
+import { EditableImage } from "@/components/pageEditor/EditableImage";
 import { motion } from "framer-motion";
+import { Upload, Loader2 } from "lucide-react";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 interface SupportSectionProps {
   isEditing?: boolean;
@@ -14,6 +18,9 @@ interface SupportSectionProps {
     "confidence-text": string;
     "freedom-heading": string;
     "freedom-text": string;
+    "clarity-lab-image"?: string;
+    "clarity-bikes-image"?: string;
+    "clarity-doctor-image"?: string;
   };
   onUpdate?: (id: string, value: string) => void;
 }
@@ -33,6 +40,10 @@ export function SupportSection({
   },
   onUpdate,
 }: SupportSectionProps) {
+  const [uploadingLab, setUploadingLab] = useState(false);
+  const [uploadingBikes, setUploadingBikes] = useState(false);
+  const [uploadingDoctor, setUploadingDoctor] = useState(false);
+
   // Animation variants
   const rowVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -84,6 +95,40 @@ export function SupportSection({
         repeatType: "loop" as const,
       },
     },
+  };
+
+  const handleImageUpdate = (id: string, defaultImage: string) => {
+    if (!onUpdate) return;
+
+    // Set the appropriate loading state
+    if (id === "clarity-lab-image") setUploadingLab(true);
+    if (id === "clarity-bikes-image") setUploadingBikes(true);
+    if (id === "clarity-doctor-image") setUploadingDoctor(true);
+
+    // Update the image
+    onUpdate(id, defaultImage);
+
+    // Show a toast notification with white background
+    toast.success("Image updated successfully", {
+      style: {
+        background: 'white',
+        color: '#333',
+        borderRadius: '8px',
+        padding: '12px 16px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+      },
+      iconTheme: {
+        primary: '#4CAF50',
+        secondary: 'white',
+      },
+    });
+
+    // Reset loading state after a short delay
+    setTimeout(() => {
+      if (id === "clarity-lab-image") setUploadingLab(false);
+      if (id === "clarity-bikes-image") setUploadingBikes(false);
+      if (id === "clarity-doctor-image") setUploadingDoctor(false);
+    }, 1000);
   };
 
   return (
@@ -160,17 +205,37 @@ export function SupportSection({
               variants={imageVariants}
             >
               <div className="relative">
-                {/* Offset glow effect */}
+                {/* Offset glow effect - Always show */}
                 <div className="absolute -right-3 top-8 w-[90%] h-[95%] rounded-2xl shadow-[0_0_15px_rgba(78,205,196,0.3)]" />
                 {/* Main image */}
-                <div className="relative rounded-xl overflow-hidden">
-                  <Image
-                    src="/images/lab.png"
-                    alt="Lab Work"
-                    width={600}
-                    height={400}
-                    className="w-full h-auto"
-                  />
+                <div className="relative rounded-xl overflow-hidden h-[300px]">
+                  {(!content["clarity-lab-image"] || content["clarity-lab-image"] === "") && (
+                    <div
+                      className="w-full h-full bg-gray-800 flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
+                      onClick={() => handleImageUpdate("clarity-lab-image", "/images/lab.png")}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        {uploadingLab ? (
+                          <Loader2 size={24} className="text-gray-400 animate-spin" />
+                        ) : (
+                          <Upload size={24} className="text-gray-400" />
+                        )}
+                        <span className="text-gray-400">
+                          {uploadingLab ? "Uploading..." : "Upload Lab Image"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {content["clarity-lab-image"] && content["clarity-lab-image"] !== "" && (
+                    <EditableImage
+                      src={content["clarity-lab-image"]}
+                      alt="Lab Work"
+                      fill
+                      className="w-full h-auto object-cover"
+                      isEditing={isEditing}
+                      onUpdate={(newUrl) => onUpdate?.("clarity-lab-image", newUrl)}
+                    />
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -189,17 +254,37 @@ export function SupportSection({
               variants={imageVariants}
             >
               <div className="relative">
-                {/* Offset glow effect */}
+                {/* Offset glow effect - Always show */}
                 <div className="absolute -left-3 top-8 w-full h-[95%] rounded-2xl shadow-[0_0_15px_rgba(78,205,196,0.3)]" />
                 {/* Main image */}
-                <div className="relative rounded-xl overflow-hidden">
-                  <Image
-                    src="/images/bikes.png"
-                    alt="Bikes"
-                    width={600}
-                    height={400}
-                    className="w-full h-auto"
-                  />
+                <div className="relative rounded-xl overflow-hidden h-[300px]">
+                  {(!content["clarity-bikes-image"] || content["clarity-bikes-image"] === "") && (
+                    <div
+                      className="w-full h-full bg-gray-800 flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
+                      onClick={() => handleImageUpdate("clarity-bikes-image", "/images/bikes.png")}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        {uploadingBikes ? (
+                          <Loader2 size={24} className="text-gray-400 animate-spin" />
+                        ) : (
+                          <Upload size={24} className="text-gray-400" />
+                        )}
+                        <span className="text-gray-400">
+                          {uploadingBikes ? "Uploading..." : "Upload Bikes Image"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {content["clarity-bikes-image"] && content["clarity-bikes-image"] !== "" && (
+                    <EditableImage
+                      src={content["clarity-bikes-image"]}
+                      alt="Bikes"
+                      fill
+                      className="w-full h-auto object-cover"
+                      isEditing={isEditing}
+                      onUpdate={(newUrl) => onUpdate?.("clarity-bikes-image", newUrl)}
+                    />
+                  )}
                 </div>
               </div>
             </motion.div>
@@ -298,17 +383,37 @@ export function SupportSection({
               variants={imageVariants}
             >
               <div className="relative">
-                {/* Offset glow effect */}
+                {/* Offset glow effect - Always show */}
                 <div className="absolute -right-3 top-8 w-[90%] h-[95%] rounded-2xl shadow-[0_0_15px_rgba(78,205,196,0.3)]" />
                 {/* Main image */}
-                <div className="relative rounded-xl overflow-hidden">
-                  <Image
-                    src="/images/dr.png"
-                    alt="Doctor"
-                    width={600}
-                    height={400}
-                    className="w-full h-auto"
-                  />
+                <div className="relative rounded-xl overflow-hidden h-[300px]">
+                  {(!content["clarity-doctor-image"] || content["clarity-doctor-image"] === "") && (
+                    <div
+                      className="w-full h-full bg-gray-800 flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors"
+                      onClick={() => handleImageUpdate("clarity-doctor-image", "/images/dr.png")}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        {uploadingDoctor ? (
+                          <Loader2 size={24} className="text-gray-400 animate-spin" />
+                        ) : (
+                          <Upload size={24} className="text-gray-400" />
+                        )}
+                        <span className="text-gray-400">
+                          {uploadingDoctor ? "Uploading..." : "Upload Doctor Image"}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {content["clarity-doctor-image"] && content["clarity-doctor-image"] !== "" && (
+                    <EditableImage
+                      src={content["clarity-doctor-image"]}
+                      alt="Doctor"
+                      fill
+                      className="w-full h-auto object-cover rounded-lg"
+                      isEditing={isEditing}
+                      onUpdate={(newUrl) => onUpdate?.("clarity-doctor-image", newUrl)}
+                    />
+                  )}
                 </div>
               </div>
             </motion.div>
