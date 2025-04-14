@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { Download } from "lucide-react";
 import { Button } from "@/components/ui/Button";

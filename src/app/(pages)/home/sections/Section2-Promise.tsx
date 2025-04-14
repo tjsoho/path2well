@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { EditableText } from "@/components/pageEditor/EditableText";
+import { EditableImage } from "@/components/pageEditor/EditableImage";
 
 interface PromiseSectionProps {
   isEditing?: boolean;
@@ -28,6 +29,8 @@ export function PromiseSection({
     "promise-text":
       content["promise-text"] ||
       "We combine cutting-edge genetic testing with bespoke IV therapy to create a wellness plan uniquely tailored to your needs.",
+    "promise-image-1": content["promise-image-1"] || "/images/runners.png",
+    "promise-image-2": content["promise-image-2"] || "/images/bikes.png",
   };
 
   const renderColoredText = (text: string) => {
@@ -64,12 +67,12 @@ export function PromiseSection({
             transition={{ duration: 0.6 }}
             className="relative h-[260px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white"
           >
-            <Image
-              src="/images/runners.png"
+            <EditableImage
+              src={safeContent["promise-image-1"]}
               alt="Group Exercise"
               fill
-              className="object-cover"
-              priority
+              isEditing={isEditing}
+              onUpdate={(newUrl) => onUpdate?.("promise-image-1", newUrl)}
             />
           </motion.div>
 
@@ -81,12 +84,12 @@ export function PromiseSection({
             transition={{ duration: 0.6 }}
             className="relative h-[260px] rounded-2xl overflow-hidden shadow-2xl border-4 border-white"
           >
-            <Image
-              src="/images/bikes.png"
+            <EditableImage
+              src={safeContent["promise-image-2"]}
               alt="Nurse with Patient"
               fill
-              className="object-cover"
-              priority
+              isEditing={isEditing}
+              onUpdate={(newUrl) => onUpdate?.("promise-image-2", newUrl)}
             />
           </motion.div>
         </div>
