@@ -2,6 +2,12 @@ import { Page } from "@/types/pageEditor";
 
 export const PAGES: Page[] = [
   { id: "home", name: "Home Page", slug: "home", sections: [] },
+  { id: "about", name: "About Page", slug: "about", sections: [] },
+  { id: "contact", name: "Contact Page", slug: "contact", sections: [] },
+  { id: "services", name: "Services Page", slug: "services", sections: [] },
+  { id: "blog", name: "Blog Page", slug: "blog", sections: [] },
+  { id: "privacy-policy", name: "Privacy Policy Page", slug: "privacy-policy", sections: [] },
+  
   // Add other pages as needed
 ];
 

@@ -7,22 +7,25 @@ import { EditableText } from "@/components/pageEditor/EditableText";
 interface ApproachSectionProps {
     isEditing?: boolean;
     content?: {
-        label: string;
-        heading: string;
-        text: string;
+        label?: string;
+        heading?: string;
+        text?: string;
     };
     onUpdate?: (id: string, value: string) => void;
 }
 
 export function ApproachSection({
     isEditing = false,
-    content = {
-        label: "PHILOSOPHY",
-        heading: "Our Approach to Personalised Wellness",
-        text: "At Path2Well, we believe true wellness is achieved through a unique blend of scientific precision and holistic care. We go beyond addressing symptoms; we delve into the root causes of your health concerns.\n\nOur approach begins with cutting-edge genetic and blood testing, providing a deep understanding of your unique biological blueprint.\n\nThis data, combined with our expertise in IV therapy and integrative wellness strategies, allows us to create a truly personalised plan designed to optimise your health and well-being from the inside out. We don't just treat; we empower you to take control of your health journey."
-    },
+    content = {},
     onUpdate,
 }: ApproachSectionProps) {
+    // Ensure content has all required fields with safe defaults
+    const safeContent = {
+        label: content?.label || "PHILOSOPHY",
+        heading: content?.heading || "Our Approach to Personalised Wellness",
+        text: content?.text || "At Path2Well, we believe true wellness is achieved through a unique blend of scientific precision and holistic care. We go beyond addressing symptoms; we delve into the root causes of your health concerns.\n\nOur approach begins with cutting-edge genetic and blood testing, providing a deep understanding of your unique biological blueprint.\n\nThis data, combined with our expertise in IV therapy and integrative wellness strategies, allows us to create a truly personalised plan designed to optimise your health and well-being from the inside out. We don't just treat; we empower you to take control of your health journey."
+    };
+
     return (
         <section className="relative bg-[#001618] text-white py-24 overflow-hidden">
             {/* Background Image Overlay */}
@@ -51,7 +54,7 @@ export function ApproachSection({
                                 <EditableText
                                     id="label"
                                     type="subtext"
-                                    content={content.label}
+                                    content={safeContent.label}
                                     isEditing={isEditing}
                                     onUpdate={onUpdate}
                                     className="text-brand-teal text-sm tracking-[0.2em] uppercase"
@@ -60,7 +63,7 @@ export function ApproachSection({
                             <EditableText
                                 id="heading"
                                 type="heading"
-                                content={content.heading}
+                                content={safeContent.heading}
                                 isEditing={isEditing}
                                 onUpdate={onUpdate}
                                 className="text-2xl md:text-3xl lg:text-4xl font-medium leading-tight"
@@ -78,7 +81,7 @@ export function ApproachSection({
                         <EditableText
                             id="text"
                             type="paragraph"
-                            content={content.text}
+                            content={safeContent.text}
                             isEditing={isEditing}
                             onUpdate={onUpdate}
                             className="text-white/80 text-lg leading-relaxed whitespace-pre-line"

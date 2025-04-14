@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 // Dynamic Section Imports
 const sections = {
+    // Home Page Sections
     "Section1-Hero": dynamic(() => import("@/app/(pages)/home/sections/Section1-Hero").then(mod => mod.HeroSection)),
     "Section2-Promise": dynamic(() => import("@/app/(pages)/home/sections/Section2-Promise").then(mod => mod.PromiseSection)),
     "Section3-Clarity-Confidence-Freedom": dynamic(() => import("@/app/(pages)/home/sections/Section3-Clarity-Confidence-Freedom").then(mod => mod.SupportSection)),
@@ -13,6 +14,14 @@ const sections = {
     "Section5-WhoWeHelp": dynamic(() => import("@/app/(pages)/home/sections/Section5-WhoWeHelp").then(mod => mod.Testimonials)),
     "Section6-Download": dynamic(() => import("@/app/(pages)/home/sections/Section6-Download").then(mod => mod.DownloadSection)),
     "Section7-Services": dynamic(() => import("@/app/(pages)/home/sections/Section7-Services").then(mod => mod.ServicesSection)),
+
+    // About Page Sections
+    "Section1-Hero-About": dynamic(() => import("@/app/(pages)/about/sections/HeroSection").then(mod => mod.HeroSection)),
+    "Section2-Journey": dynamic(() => import("@/app/(pages)/about/sections/Section2-journey").then(mod => mod.JourneySection)),
+    "Section3-Approach": dynamic(() => import("@/app/(pages)/about/sections/Section3-approach").then(mod => mod.ApproachSection)),
+    "Section4-Team": dynamic(() => import("@/app/(pages)/about/sections/Section4-team").then(mod => mod.TeamSection)),
+    "Section5-Promise-About": dynamic(() => import("@/app/(pages)/about/sections/Section5-promise").then(mod => mod.PromiseSection)),
+    "Section6-Begin": dynamic(() => import("@/app/(pages)/about/sections/Section6-begin").then(mod => mod.BeginSection)),
 } as const;
 
 type SectionId = keyof typeof sections;

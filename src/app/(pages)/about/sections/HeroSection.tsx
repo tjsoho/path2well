@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useMemo } from "react";
 import Image from "next/image";
 import { EditableText } from "@/components/pageEditor/EditableText";
+import { EditableImage } from "@/components/pageEditor/EditableImage";
 
 
 interface HeroSectionProps {
@@ -16,46 +18,53 @@ export function HeroSection({
   content = {},
   onUpdate,
 }: HeroSectionProps) {
-  console.log("HeroSection rendering with:", { isEditing, content });
+  console.log("About HeroSection rendering with:", { isEditing, content });
+  console.log("Content keys:", Object.keys(content));
+  console.log("Content values:", Object.values(content));
+  console.log("Content heading:", content.heading);
+  console.log("Content subheading:", content.subheading);
 
-  // Ensure content has all required fields
+  // Use content directly from the database without fallback
   const safeContent = {
     label: content.label || "ABOUT US",
     heading: content.heading || "ABOUT PATH2WELL:\nYOUR JOURNEY TO\nOPTIMAL WELLNESS\nBEGINS HERE.",
     subheading: content.subheading || "Discover the story behind our personalised approach to health\nand wellness.",
   };
 
-  // Star component to avoid repetition
-  const Star = ({ className = "" }) => (
-    <div className={`relative ${className}`}>
-      <div className="absolute w-4 h-4">
-        {/* Create 10 points with random lengths */}
-        {[...Array(10)].map((_, i) => {
-          const angle = i * 36 * (Math.PI / 180); // 360/10 = 36 degrees
-          const length = Math.random() < 0.3 ? "12px" : "8px"; // 30% chance of longer point
-          return (
+  console.log("Safe content:", safeContent);
+
+  // Star component with fixed point lengths and angles
+  const Star = ({ className = "" }) => {
+    // Pre-calculate all angles and store them
+    const points = useMemo(() => {
+      return Array.from({ length: 10 }, (_, i) => ({
+        angle: (i * 36 * Math.PI) / 180,
+        length: i % 2 === 0 ? 12 : 8
+      }));
+    }, []);
+
+    return (
+      <div className={`relative ${className}`}>
+        <div className="absolute w-4 h-4">
+          {points.map(({ angle, length }, i) => (
             <div
               key={i}
-              className="absolute w-0.5 bg-[#4ECDC4]"
+              className="absolute w-0.5 bg-brand-teal"
               style={{
-                height: length,
-                left: "50%",
-                top: "50%",
-                transformOrigin: "0 0",
-                transform: `rotate(${angle}rad) translateY(-50%)`,
-                boxShadow: "0 0 10px #4ECDC4, 0 0 20px #4ECDC4",
+                height: `${length}px`,
+                transform: `rotate(${angle.toFixed(6)}rad) translateY(-50%)`,
+                left: '50%',
+                top: '50%',
+                transformOrigin: '0 0',
+                boxShadow: '0 0 10px #4ECDC4, 0 0 20px #4ECDC4'
               }}
             />
-          );
-        })}
-        {/* Center dot */}
-        <div
-          className="absolute w-2 h-2 bg-[#4ECDC4] rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-                    shadow-[0_0_15px_#4ECDC4,0_0_30px_#4ECDC4,0_0_45px_#4ECDC4]"
-        />
+          ))}
+          <div className="absolute w-2 h-2 bg-brand-teal rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 shadow-[0_0_15px_#4ECDC4,0_0_30px_#4ECDC4,0_0_45px_#4ECDC4]" />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section className="relative min-h-screen w-full">
@@ -106,12 +115,14 @@ export function HeroSection({
             ease: "easeOut",
           }}
         >
-          <Image
-            src="/images/HeroBG.png"
+          <EditableImage
+            src={content["hero-background"] || "/images/HeroBG.png"}
             alt="Path2Well Hero"
             fill
             priority
             className="object-cover"
+            isEditing={isEditing}
+            onUpdate={(newUrl) => onUpdate?.("hero-background", newUrl)}
           />
         </motion.div>
 
@@ -128,9 +139,14 @@ export function HeroSection({
           <div className="max-w-4xl mx-auto text-center px-4">
             <div className="space-y-6">
               <div className="flex flex-col items-center gap-4">
-                <span className="text-brand-teal text-sm tracking-[0.2em]">
-                  {safeContent.label}
-                </span>
+                <EditableText
+                  id="label"
+                  type="subtext"
+                  content={safeContent.label}
+                  isEditing={isEditing}
+                  onUpdate={onUpdate}
+                  className="text-brand-teal text-sm tracking-[0.2em]"
+                />
                 <EditableText
                   id="heading"
                   type="heading"
@@ -148,8 +164,6 @@ export function HeroSection({
                 onUpdate={onUpdate}
                 className="text-lg text-brand-teal/80 whitespace-pre-line"
               />
-
-            
             </div>
           </div>
         </motion.div>
