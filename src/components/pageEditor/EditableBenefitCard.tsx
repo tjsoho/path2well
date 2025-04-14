@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Edit2, Check, X } from "lucide-react";
+import { Check, X } from "lucide-react";
 import { motion } from "framer-motion";
 
 export interface Benefit {
@@ -26,7 +26,6 @@ export function EditableBenefitCard({
 }: EditableBenefitCardProps) {
     const [isEditingInPlace, setIsEditingInPlace] = useState(false);
     const [editedBenefit, setEditedBenefit] = useState(benefit);
-    const [isHovered, setIsHovered] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
@@ -140,8 +139,7 @@ export function EditableBenefitCard({
             animate={{ opacity: 1, y: 0 }}
             className={`relative bg-white rounded-lg p-4 border ${isEditing ? 'border-pink-300 shadow-[0_0_0_2px_rgba(244,114,182,0.1)]' : 'border-brand-teal/30'
                 } shadow-[0_0_10px_rgba(11,165,165,0.1)] hover:shadow-[0_0_15px_rgba(11,165,165,0.2)] transition-shadow group cursor-default`}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            
             onClick={() => isEditing && !isEditingInPlace && setIsEditingInPlace(true)}
         >
             {cardContent}
