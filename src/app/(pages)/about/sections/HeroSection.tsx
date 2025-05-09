@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { useMemo } from "react";
-import Image from "next/image";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { EditableImage } from "@/components/pageEditor/EditableImage";
 
@@ -119,7 +118,7 @@ export function HeroSection({
             src={content["hero-background"] || "/images/HeroBG.png"}
             alt="Path2Well Hero"
             fill
-            priority
+            
             className="object-cover"
             isEditing={isEditing}
             onUpdate={(newUrl) => onUpdate?.("hero-background", newUrl)}

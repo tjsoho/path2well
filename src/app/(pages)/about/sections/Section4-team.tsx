@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { EditableImage } from "@/components/pageEditor/EditableImage";
 import { EditableTeamMember, TeamMember } from "@/components/pageEditor/EditableTeamMember";
@@ -51,7 +51,7 @@ export function TeamSection({
     console.log("Team data:", content.team);
 
     // Parse team data once during initialization
-    const parseTeamData = () => {
+    const parseTeamData = useCallback(() => {
         try {
             // If team is a string, parse it
             if (typeof content.team === 'string') {
@@ -77,7 +77,7 @@ export function TeamSection({
             console.error('Error parsing team data:', error);
             return defaultTeamMembers;
         }
-    };
+    }, [content.team]);
 
     // Initialize state with parsed team data
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>(parseTeamData());
@@ -88,15 +88,15 @@ export function TeamSection({
         const newTeamData = parseTeamData();
         console.log("Setting new team data:", newTeamData);
         setTeamMembers(newTeamData);
-    }, [content.team]);
+    }, [content.team, parseTeamData]);
 
     // Create a safe content object that updates with content changes
-    const safeContent = {
+    const safeContent = useMemo(() => ({
         label: content.label ?? "TEAM",
         heading: content.heading ?? "Meet Our Team",
         subheading: content.subheading ?? "Expert Healthcare Professionals",
         backgroundImage: content.backgroundImage ?? "/images/servicesbg4.png",
-    };
+    }), [content.label, content.heading, content.subheading, content.backgroundImage]);
 
     // Log content updates
     useEffect(() => {
@@ -153,12 +153,12 @@ export function TeamSection({
                             <div className="w-12 h-[1px] bg-white/30"></div>
                             {isEditing ? (
                                 <EditableText
-                                    isEditing={isEditing}
-                                    content={safeContent.label}
-                                    onUpdate={(value) => onUpdate?.('label', value)}
-                                    className="text-white/70 text-sm tracking-[0.2em] uppercase"
                                     id="label"
                                     type="subtext"
+                                    content={safeContent.label}
+                                    isEditing={isEditing}
+                                    onUpdate={onUpdate}
+                                    className="text-white/70 text-sm tracking-[0.2em] uppercase"
                                 />
                             ) : (
                                 <span className="text-white/70 text-sm tracking-[0.2em] uppercase">
@@ -178,12 +178,12 @@ export function TeamSection({
                         >
                             {isEditing ? (
                                 <EditableText
-                                    isEditing={isEditing}
-                                    content={safeContent.heading}
-                                    onUpdate={(value) => onUpdate?.('heading', value)}
-                                    className="text-3xl md:text-4xl font-medium"
                                     id="heading"
                                     type="heading"
+                                    content={safeContent.heading}
+                                    isEditing={isEditing}
+                                    onUpdate={onUpdate}
+                                    className="text-3xl md:text-4xl font-medium"
                                 />
                             ) : (
                                 <h2 className="text-3xl md:text-4xl font-medium">
@@ -202,12 +202,12 @@ export function TeamSection({
                         >
                             {isEditing ? (
                                 <EditableText
-                                    isEditing={isEditing}
-                                    content={safeContent.subheading}
-                                    onUpdate={(value) => onUpdate?.('subheading', value)}
-                                    className="text-white/70 text-lg"
                                     id="subheading"
                                     type="paragraph"
+                                    content={safeContent.subheading}
+                                    isEditing={isEditing}
+                                    onUpdate={onUpdate}
+                                    className="text-white/70 text-lg"
                                 />
                             ) : (
                                 <p className="text-white/70 text-lg">
