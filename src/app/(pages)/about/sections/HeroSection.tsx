@@ -138,24 +138,22 @@ export function HeroSection({
         >
           <div className="max-w-4xl mx-auto text-center px-4">
             <div className="space-y-6">
-              <div className="flex flex-col items-center gap-4">
-                <EditableText
-                  id="label"
-                  type="subtext"
-                  content={safeContent.label}
-                  isEditing={isEditing}
-                  onUpdate={onUpdate}
-                  className="text-brand-teal text-sm tracking-[0.2em]"
-                />
-                <EditableText
-                  id="heading"
-                  type="heading"
-                  content={safeContent.heading}
-                  isEditing={isEditing}
-                  onUpdate={onUpdate}
-                  className="text-xl md:text-5xl font-bold text-white tracking-wider uppercase whitespace-pre-line leading-tight"
-                />
-              </div>
+              <EditableText
+                id="label"
+                type="subtext"
+                content={safeContent.label}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+                className="text-brand-teal text-sm tracking-[0.2em]"
+              />
+              <EditableText
+                id="heading"
+                type="heading"
+                content={safeContent.heading}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+                className="text-xl md:text-5xl font-bold text-white tracking-wider uppercase whitespace-pre-line leading-tight"
+              />
               <EditableText
                 id="subheading"
                 type="subtext"
