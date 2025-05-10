@@ -76,8 +76,6 @@ export function EditableTeamMember({
         setIsEditingInPlace(false);
     };
 
-
-
     const handleFieldChange = (field: keyof TeamMember, value: string) => {
         console.log('handleFieldChange called with:', { field, value });
 
@@ -102,6 +100,11 @@ export function EditableTeamMember({
                 }`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={() => {
+                if (isEditing && !isEditingInPlace) {
+                    setIsEditingInPlace(true);
+                }
+            }}
         >
             {isEditingInPlace ? (
                 <div className="relative bg-white/10 rounded-3xl overflow-hidden">
@@ -178,19 +181,14 @@ export function EditableTeamMember({
                     </div>
 
                     {/* Edit Icon */}
-                    {isEditing && (
-                        <div
-                            className={`absolute -right-12 top-1/2 -translate-y-1/2 p-2.5 
-                         rounded-full bg-pink-500 text-white shadow-lg
-                         transform transition-all duration-300 cursor-pointer
-                         hover:bg-pink-600 hover:scale-110
-                         ${isHovered
-                                    ? "opacity-100 translate-x-0"
-                                    : "opacity-0 translate-x-2"
-                                }`}
-                            onClick={handleClick}
-                        >
-                            <Pencil className="w-5 h-5" />
+                    {isEditing && isHovered && (
+                        <div className="flex justify-center mt-2">
+                            <button
+                                type="button"
+                                className="p-2.5 rounded-full bg-pink-500 text-white shadow-lg hover:bg-pink-600 hover:scale-110 transition-all duration-300"
+                            >
+                                <Pencil className="w-5 h-5" />
+                            </button>
                         </div>
                     )}
 

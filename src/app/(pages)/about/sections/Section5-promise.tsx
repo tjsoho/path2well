@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { EditableText } from "@/components/pageEditor/EditableText";
-import { EditableImage } from "@/components/pageEditor/EditableImage";
+import { EditablePromiseCard } from "@/components/pageEditor/EditablePromiseCard";
 
 interface PromiseCard {
     title: string;
@@ -73,23 +73,6 @@ export function PromiseSection({
         cards: parseCards()
     };
 
-    // Handle card updates
-    const handleCardUpdate = (index: number, field: keyof PromiseCard, value: string) => {
-        if (!onUpdate) return;
-
-        try {
-            const updatedCards = [...safeContent.cards];
-            updatedCards[index] = {
-                ...updatedCards[index],
-                [field]: value
-            };
-
-            onUpdate('cards', JSON.stringify(updatedCards));
-        } catch (error) {
-            console.error('Error updating card:', error);
-        }
-    };
-
     return (
         <section className="relative bg-gradient-to-br from-white to-teal-50 py-24">
             <div className="container mx-auto px-4">
@@ -150,44 +133,17 @@ export function PromiseSection({
                     {/* Cards Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {safeContent.cards.map((card: PromiseCard, index: number) => (
-                            <motion.div
+                            <EditablePromiseCard
                                 key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: 0.2 + index * 0.1 }}
-                                className="bg-white/30 backdrop-blur-lg p-6 rounded-2xl shadow-lg border border-teal-200"
-                            >
-                                <div className="flex-shrink-0 mb-4">
-                                    <div className="w-12 h-12 rounded-full border border-brand-teal flex items-center justify-center">
-                                        <EditableImage
-                                            src={card.icon}
-                                            alt={card.title}
-                                            width={28}
-                                            height={28}
-                                            className="animate-spin-slow animate-scale-random-1"
-                                            isEditing={isEditing}
-                                            onUpdate={(value) => handleCardUpdate(index, 'icon', value)}
-                                        />
-                                    </div>
-                                </div>
-                                <EditableText
-                                    id={`cards.${index}.title`}
-                                    type="heading"
-                                    content={card.title}
-                                    isEditing={isEditing}
-                                    onUpdate={(value) => handleCardUpdate(index, 'title', value)}
-                                    className="text-sm font-medium mb-2 text-gray-900"
-                                />
-                                <EditableText
-                                    id={`cards.${index}.description`}
-                                    type="paragraph"
-                                    content={card.description}
-                                    isEditing={isEditing}
-                                    onUpdate={(value) => handleCardUpdate(index, 'description', value)}
-                                    className="text-gray-600 text-sm leading-relaxed"
-                                />
-                            </motion.div>
+                                card={card}
+                                index={index}
+                                isEditing={isEditing}
+                                onUpdate={(idx, updatedCard) => {
+                                    const updatedCards = [...safeContent.cards];
+                                    updatedCards[idx] = updatedCard;
+                                    if (onUpdate) onUpdate('cards', JSON.stringify(updatedCards));
+                                }}
+                            />
                         ))}
                     </div>
                 </div>

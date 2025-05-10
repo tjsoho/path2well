@@ -38,7 +38,7 @@ export default async function AboutPage() {
   const heroContent = await getSectionContent("Section1-Hero-About");
   const journeyContent = await getSectionContent("Section2-Journey");
   const approachContent = await getSectionContent("Section3-Approach");
-  const teamContent = await getSectionContent("Section4-Team-About");
+  const teamContent = await getSectionContent("Section4-Team");
   const promiseContent = await getSectionContent("Section5-Promise-About");
   const beginContent = await getSectionContent("Section6-Begin");
 
