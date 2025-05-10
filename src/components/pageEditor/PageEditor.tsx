@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { toast } from "react-hot-toast";
 import { getPageSections } from "@/lib/pageSections";
 import { SectionContents } from "../../../types/pageEditor";
@@ -194,6 +194,55 @@ export function PageEditor() {
     }
   };
 
+  const handlePublish = async () => {
+    const deployHookUrl = process.env.NEXT_PUBLIC_VERCEL_DEPLOY_HOOK_URL;
+    if (!deployHookUrl) {
+      toast.error("Deploy hook URL is not configured");
+      return;
+    }
+
+    // Custom Toast Component
+    function PublishToast({ tId }: { tId: string }) {
+      const [seconds, setSeconds] = useState(120);
+      const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+      useEffect(() => {
+        intervalRef.current = setInterval(() => {
+          setSeconds((s) => {
+            if (s <= 1) {
+              toast.dismiss(tId);
+              clearInterval(intervalRef.current!);
+              return 0;
+            }
+            return s - 1;
+          });
+        }, 1000);
+        return () => clearInterval(intervalRef.current!);
+      }, [tId]);
+
+      return (
+        <div className="flex flex-col items-center gap-2 p-4 bg-[#71cec4] rounded-lg">
+          <div className="text-lg font-bold text-brand-black">Publishing your changes...</div>
+          <div className="text-sm text-brand-black">Please wait <span className="font-mono">{Math.floor(seconds / 60)}:{(seconds % 60).toString().padStart(2, '0')}</span> for content to be updated.</div>
+          <button
+            className="mt-2 px-3 py-1 rounded bg-pink-500 text-white font-semibold hover:bg-pink-600 transition"
+            onClick={() => toast.dismiss(tId)}
+          >
+            Close
+          </button>
+        </div>
+      );
+    }
+
+    toast.custom((t) => <PublishToast tId={t.id} />, { duration: 120000 });
+
+    try {
+      await fetch(deployHookUrl, { method: "POST" });
+    } catch {
+      toast.error("Failed to trigger deployment");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-brand-black/95 rounded-xl border border-brand-teal shadow-[0_0_15px_rgba(1,141,141,0.3)] backdrop-blur-sm">
       {/* Navigation */}
@@ -216,7 +265,29 @@ export function PageEditor() {
                 isDirty={isDirty}
                 isSaving={isSaving}
                 onSave={handleSave}
+
               />
+              <button
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-pink-500 font-bold text-brand-white hover:bg-pink-500/70 border-brand-teal transition-all duration-300"
+                onClick={handlePublish}
+                type="button"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="w-4 h-4"
+                >
+                  <path d="M12 19V6M5 12l7-7 7 7" />
+                </svg>
+                <span>Publish</span>
+              </button>
             </div>
           )}
         </div>
