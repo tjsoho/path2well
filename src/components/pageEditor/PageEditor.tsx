@@ -208,17 +208,23 @@ export function PageEditor() {
 
       useEffect(() => {
         intervalRef.current = setInterval(() => {
-          setSeconds((s) => {
-            if (s <= 1) {
-              toast.dismiss(tId);
-              clearInterval(intervalRef.current!);
-              return 0;
-            }
-            return s - 1;
-          });
+          setSeconds((s) => Math.max(s - 1, 0));
         }, 1000);
         return () => clearInterval(intervalRef.current!);
       }, [tId]);
+
+      useEffect(() => {
+        if (seconds === 0) {
+          toast.dismiss(tId);
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          // Show refresh toast and reload page
+          const refreshToastId = toast("Page Refresh in 3 seconds", { duration: 3000 });
+          setTimeout(() => {
+            toast.dismiss(refreshToastId);
+          }, 3000);
+          window.location.reload();
+        }
+      }, [seconds, tId]);
 
       return (
         <div className="flex flex-col items-center gap-2 p-4 bg-[#71cec4] rounded-lg">
