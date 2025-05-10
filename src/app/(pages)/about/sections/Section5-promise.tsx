@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { EditableText } from "@/components/pageEditor/EditableText";
-import Image from "next/image";
 import { EditableImage } from "@/components/pageEditor/EditableImage";
 
 interface PromiseCard {
@@ -150,7 +149,7 @@ export function PromiseSection({
 
                     {/* Cards Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {safeContent.cards.map((card, index) => (
+                        {safeContent.cards.map((card: PromiseCard, index: number) => (
                             <motion.div
                                 key={index}
                                 initial={{ opacity: 0, y: 20 }}

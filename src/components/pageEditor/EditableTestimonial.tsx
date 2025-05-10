@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Pencil, Check, X } from "lucide-react";
-import Image from "next/image";
+
 import { EditableImage } from "./EditableImage";
 
 export interface Testimonial {

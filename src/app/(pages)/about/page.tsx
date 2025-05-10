@@ -13,49 +13,7 @@ import { useState, useEffect } from "react";
 type SectionContent = Record<string, string>;
 
 // Define specific content types for each section
-type HeroContent = {
-  label: string;
-  heading: string;
-  subheading: string;
-};
 
-type JourneyContent = {
-  heading: string;
-  text: string;
-};
-
-type ApproachContent = {
-  label: string;
-  heading: string;
-  text: string;
-};
-
-type TeamContent = {
-  label: string;
-  heading: string;
-  subheading: string;
-  team: Array<{
-    image: string;
-    name: string;
-    role: string;
-  }>;
-};
-
-type PromiseContent = {
-  label: string;
-  heading: string;
-  subheading: string;
-  cards: Array<{
-    title: string;
-    description: string;
-    icon: string;
-  }>;
-};
-
-type BeginContent = {
-  heading: string;
-  buttonText: string;
-};
 
 async function getSectionContent(
   sectionId: string
@@ -78,151 +36,66 @@ async function getSectionContent(
   return data?.content || undefined;
 }
 
-async function getAllPageContent(): Promise<Record<string, SectionContent>> {
-  console.log("Fetching all content for About page");
-  const { data, error } = await supabase
-    .from("page_content")
-    .select("section_id, content")
-    .eq("page_id", "about");
-
-  if (error) {
-    console.error("Error fetching all content:", error);
-    return {};
-  }
-
-  console.log("All content fetched:", data);
-
-  // Convert array to object with section_id as key
-  const contentMap: Record<string, SectionContent> = {};
-  data?.forEach(item => {
-    contentMap[item.section_id] = item.content;
-  });
-
-  console.log("Content map:", contentMap);
-  return contentMap;
-}
-
-// Default content for each section
-const defaultHeroContent: HeroContent = {
-  label: "ABOUT US",
-  heading: "ABOUT PATH2WELL:\nYOUR JOURNEY TO\nOPTIMAL WELLNESS\nBEGINS HERE.",
-  subheading: "Discover the story behind our personalised approach to health\nand wellness."
-};
-
-const defaultJourneyContent: JourneyContent = {
-  heading: "Our Journey",
-  text: "Path2Well was founded with a simple mission: to empower individuals to take control of their health through personalized, science-backed solutions."
-};
-
-const defaultApproachContent: ApproachContent = {
-  label: "OUR APPROACH",
-  heading: "Our Holistic Approach",
-  text: "We believe in addressing the whole person, not just symptoms. Our approach combines cutting-edge genetic testing with bespoke IV therapy to create a wellness plan uniquely tailored to your needs."
-};
-
-const defaultTeamContent: TeamContent = {
-  label: "TEAM",
-  heading: "Meet Our Team",
-  subheading: "Expert Healthcare Professionals",
-  team: JSON.stringify([
-    {
-      image: "/images/placeholder-profile.jpg",
-      name: "Dr. Sarah Mitchell",
-      role: "Medical Director"
-    },
-    {
-      image: "/images/placeholder-profile.jpg",
-      name: "Dr. James Wilson",
-      role: "Genetic Testing Specialist"
-    },
-    {
-      image: "/images/placeholder-profile.jpg",
-      name: "Dr. Emily Chen",
-      role: "IV Therapy Expert"
-    }
-  ])
-};
-
-const defaultPromiseContent: PromiseContent = {
-  label: "OUR COMMITMENT",
-  heading: "Our Promise to You",
-  subheading: "Our promise is simple: to provide the highest quality, most personalised care. Everything we do at Path2Well reflects our dedication to these core principles:",
-  cards: [
-    {
-      title: "Holistic Wellness",
-      description: "A commitment to addressing the whole person, not just a single condition or symptom. This means integrating various approaches and collaborating with other healthcare providers.",
-      icon: "/images/icon2.png"
-    },
-    {
-      title: "Scientific Evidence",
-      description: "Using evidence-based methods, including genetic and blood testing, to guide our approach. This demonstrates a commitment to using cutting-edge science for accurate diagnoses.",
-      icon: "/images/icon2.png"
-    },
-    {
-      title: "Long-Term Health Solutions",
-      description: "Focusing on sustainable, long-term wellness rather than quick fixes. This means developing strategies that can be build lasting, positive health habits.",
-      icon: "/images/icon2.png"
-    },
-    {
-      title: "Empowerment",
-      description: "Equipping clients with the knowledge and tools to take control of their health journey. We believe in educating and empowering clients to actively participate in their own wellness.",
-      icon: "/images/icon2.png"
-    }
-  ]
-};
-
-const defaultBeginContent: BeginContent = {
-  heading: "Begin Your Journey",
-  buttonText: "Get Started"
-};
-
 export default function AboutPage() {
-  const [allContent, setAllContent] = useState<Record<string, any>>({});
-  const [isEditing, setIsEditing] = useState(false);
+  const [heroContent, setHeroContent] = useState<SectionContent>({});
+  const [journeyContent, setJourneyContent] = useState<SectionContent>({});
+  const [approachContent, setApproachContent] = useState<SectionContent>({});
+  const [teamContent, setTeamContent] = useState<SectionContent>({});
+  const [promiseContent, setPromiseContent] = useState<SectionContent>({});
+  const [beginContent, setBeginContent] = useState<SectionContent>({});
+  const isEditing = false;
 
   useEffect(() => {
-    const fetchContent = async () => {
-      const content = await getAllPageContent();
-      console.log("Fetched all content:", content);
-      setAllContent(content);
-    };
-    fetchContent();
+    async function fetchAll() {
+      setHeroContent((await getSectionContent('Section1-Hero-About')) || {});
+      setJourneyContent((await getSectionContent('Section2-Journey-About')) || {});
+      setApproachContent((await getSectionContent('Section3-Approach-About')) || {});
+      setTeamContent((await getSectionContent('Section4-Team-About')) || {});
+      setPromiseContent((await getSectionContent('Section5-Promise-About')) || {});
+      setBeginContent((await getSectionContent('Section6-Begin-About')) || {});
+    }
+    fetchAll();
   }, []);
 
   const handleUpdate = async (sectionId: string, field: string, value: string) => {
     try {
-      const { data, error } = await supabase
+      // Fetch current content for the section
+      const currentContent =
+        (await getSectionContent(sectionId)) || {};
+      const newContent = { ...currentContent, [field]: value };
+      const { error } = await supabase
         .from('page_content')
         .upsert({
           page_id: 'about',
           section_id: sectionId,
-          content: { [field]: value }
+          content: newContent
         });
-
       if (error) throw error;
-
-      // Update local state
-      setAllContent(prev => ({
-        ...prev,
-        [sectionId]: {
-          ...prev[sectionId],
-          [field]: value
-        }
-      }));
+      // Update local state for the correct section
+      switch (sectionId) {
+        case 'Section1-Hero-About':
+          setHeroContent(newContent);
+          break;
+        case 'Section2-Journey-About':
+          setJourneyContent(newContent);
+          break;
+        case 'Section3-Approach-About':
+          setApproachContent(newContent);
+          break;
+        case 'Section4-Team-About':
+          setTeamContent(newContent);
+          break;
+        case 'Section5-Promise-About':
+          setPromiseContent(newContent);
+          break;
+        case 'Section6-Begin-About':
+          setBeginContent(newContent);
+          break;
+      }
     } catch (error) {
       console.error('Error updating content:', error);
     }
   };
-
-  // Get content for each section
-  const heroContent = allContent['Section1-Hero-About'] || defaultHeroContent;
-  const journeyContent = allContent['Section2-Journey-About'] || defaultJourneyContent;
-  const approachContent = allContent['Section3-Approach-About'] || defaultApproachContent;
-  const teamContent = allContent['Section4-Team-About'] || defaultTeamContent;
-  const promiseContent = allContent['Section5-Promise-About'] || defaultPromiseContent;
-  const beginContent = allContent['Section6-Begin-About'] || defaultBeginContent;
-
-  console.log("Team content:", teamContent);
 
   return (
     <main>
