@@ -45,7 +45,7 @@ export default function EditorPage() {
        *****************************************************************/}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-3xl font-ethnocentric text-brand-white mb-8 pt-8">
-          Content Editor
+          Content Editor!
         </h1>
         <PageEditor />
       </div>
