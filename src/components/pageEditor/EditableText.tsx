@@ -86,8 +86,8 @@ export function EditableText({
   return (
     <div
       className={`group relative ${isEditing
-          ? "hover:bg-brand-teal/5 rounded-lg transition-all duration-300"
-          : ""
+        ? "hover:bg-brand-teal/5 rounded-lg transition-all duration-300"
+        : ""
         }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -108,7 +108,7 @@ export function EditableText({
               lineHeight: "inherit"
             }}
           />
-          <div className="absolute -right-12 top-1/2 -translate-y-1/2 flex flex-col gap-2">
+          <div className="flex justify-center gap-2 mt-2">
             <button
               onClick={handleSave}
               className="p-2 rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600 transition-all duration-300"
@@ -128,8 +128,8 @@ export function EditableText({
           <Component
             onClick={handleClick}
             className={`${className} ${isEditing
-                ? "cursor-pointer transition-all duration-300 rounded-lg p-2"
-                : ""
+              ? "cursor-pointer transition-all duration-300 rounded-lg p-2"
+              : ""
               }`}
           >
             {renderedContent}

@@ -137,7 +137,7 @@ export function EditableTestimonial({
                                 rows={3}
                             />
                         </div>
-                        <div className="flex justify-end gap-2 mt-4">
+                        <div className="flex justify-center gap-2 mt-2">
                             <button
                                 onClick={handleCancel}
                                 className="p-2 rounded-full bg-red-500 text-white shadow-lg hover:bg-red-600 transition-all duration-300"

@@ -18,7 +18,7 @@ const ABOUT_SECTIONS: Section[] = [
   { id: "Section1-Hero-About", name: "Hero Section" },
   { id: "Section2-Journey", name: "Journey Section" },
   { id: "Section3-Approach", name: "Approach Section" },
-  { id: "Section4-Team", name: "Team Section" },
+  { id: "Section4-Team-About", name: "Team Section" },
   { id: "Section5-Promise-About", name: "Promise Section" },
   { id: "Section6-Begin", name: "Begin Section" },
 ];

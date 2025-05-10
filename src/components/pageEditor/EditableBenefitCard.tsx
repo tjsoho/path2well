@@ -98,7 +98,7 @@ export function EditableBenefitCard({
                         placeholder="Enter description..."
                         rows={3}
                     />
-                    <div className="flex justify-end gap-1">
+                    <div className="flex justify-center gap-2 mt-2">
                         <button
                             onClick={(e) => { e.stopPropagation(); handleSave(); }}
                             className="p-1 rounded-full bg-pink-100 hover:bg-pink-200 transition-colors"
@@ -139,7 +139,7 @@ export function EditableBenefitCard({
             animate={{ opacity: 1, y: 0 }}
             className={`relative bg-white rounded-lg p-4 border ${isEditing ? 'border-pink-300 shadow-[0_0_0_2px_rgba(244,114,182,0.1)]' : 'border-brand-teal/30'
                 } shadow-[0_0_10px_rgba(11,165,165,0.1)] hover:shadow-[0_0_15px_rgba(11,165,165,0.2)] transition-shadow group cursor-default`}
-            
+
             onClick={() => isEditing && !isEditingInPlace && setIsEditingInPlace(true)}
         >
             {cardContent}

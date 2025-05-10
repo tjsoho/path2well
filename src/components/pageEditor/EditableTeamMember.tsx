@@ -76,7 +76,7 @@ export function EditableTeamMember({
         setIsEditingInPlace(false);
     };
 
-  
+
 
     const handleFieldChange = (field: keyof TeamMember, value: string) => {
         console.log('handleFieldChange called with:', { field, value });
@@ -136,7 +136,7 @@ export function EditableTeamMember({
                                 className="w-full bg-black/50 text-white p-2 rounded border border-pink-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
                             />
                         </div>
-                        <div className="flex justify-end gap-2 mt-4">
+                        <div className="flex justify-center gap-2 mt-2">
                             <button
                                 onClick={handleCancel}
                                 className="p-2 rounded-full bg-red-500 text-white shadow-lg hover:bg-red-600 transition-all duration-300"
@@ -207,7 +207,7 @@ export function EditableTeamMember({
             )}
         </div>
     );
-} 
+}
 
 
 
