@@ -43,7 +43,7 @@ async function getSectionContent(
     .eq("page_id", "home")
     .eq("section_id", sectionId)
     .single();
-
+  console.log({ data, error });
   if (error) {
     console.error(`Error fetching content for ${sectionId}:`, error);
     return undefined;
