@@ -104,16 +104,31 @@ export function Testimonials({
   };
 
   // Handle testimonial field updates
-  const handleTestimonialUpdate = (index: number, field: keyof Testimonial, value: string) => {
+  const handleTestimonialUpdate = (index: number, updatedTestimonial: Testimonial) => {
     if (onUpdate) {
-      // Create a new array with the updated testimonial
       const updatedTestimonials = [...safeContent.testimonials];
-      updatedTestimonials[index] = {
-        ...updatedTestimonials[index],
-        [field]: value,
-      };
+      updatedTestimonials[index] = updatedTestimonial;
+      onUpdate('testimonials', JSON.stringify(updatedTestimonials));
+    }
+  };
 
-      // Convert the array to a string to save in the database
+  const handleDeleteTestimonial = (index: number) => {
+    if (onUpdate) {
+      const updatedTestimonials = [...safeContent.testimonials];
+      updatedTestimonials.splice(index, 1);
+      onUpdate('testimonials', JSON.stringify(updatedTestimonials));
+    }
+  };
+
+  const handleAddTestimonial = () => {
+    if (onUpdate) {
+      const newTestimonial = {
+        name: "New Testimonial",
+        image: "/images/staff1.png",
+        quote: "Add your testimonial here",
+        title: "Add title here",
+      };
+      const updatedTestimonials = [...safeContent.testimonials, newTestimonial];
       onUpdate('testimonials', JSON.stringify(updatedTestimonials));
     }
   };
@@ -302,6 +317,7 @@ export function Testimonials({
                 index={index}
                 isEditing={isEditing}
                 onUpdate={handleTestimonialUpdate}
+                onDelete={handleDeleteTestimonial}
               />
             ) : (
               <motion.div
@@ -335,8 +351,35 @@ export function Testimonials({
               </motion.div>
             )
           ))}
+          {isEditing && (
+            <button
+              onClick={handleAddTestimonial}
+              className="flex flex-col items-center justify-center h-full min-h-[400px] bg-gradient-to-br from-gray-900 to-black rounded-xl border-2 border-dashed border-brand-teal/30 hover:border-brand-teal/50 transition-colors group"
+            >
+              <div className="w-16 h-16 rounded-full bg-brand-teal/10 flex items-center justify-center group-hover:bg-brand-teal/20 transition-colors">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-8 h-8 text-brand-teal"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </div>
+              <span className="mt-4 text-brand-teal font-medium">Add New Testimonial</span>
+              <span className="mt-2 text-brand-teal/50 text-sm">Click to create a new testimonial card</span>
+            </button>
+          )}
         </div>
-        {safeContent.testimonials.length > 1 && (
+
+        {/* Show navigation arrows when there are more than 3 testimonials */}
+        {safeContent.testimonials.length > 3 && (
           <div className="flex justify-center mt-8 gap-4">
             <button
               onClick={prevTestimonial}
@@ -377,6 +420,34 @@ export function Testimonials({
                   d="M8.25 4.5l7.5 7.5-7.5 7.5"
                 />
               </svg>
+            </button>
+          </div>
+        )}
+
+        {/* Mobile View - Add Testimonial Button */}
+        {isEditing && (
+          <div className="md:hidden mt-8">
+            <button
+              onClick={handleAddTestimonial}
+              className="w-full flex items-center justify-center gap-3 py-4 bg-gradient-to-br from-gray-900 to-black rounded-xl border-2 border-dashed border-brand-teal/30 hover:border-brand-teal/50 transition-colors group"
+            >
+              <div className="w-10 h-10 rounded-full bg-brand-teal/10 flex items-center justify-center group-hover:bg-brand-teal/20 transition-colors">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-5 h-5 text-brand-teal"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 4.5v15m7.5-7.5h-15"
+                  />
+                </svg>
+              </div>
+              <span className="text-brand-teal font-medium">Add New Testimonial</span>
             </button>
           </div>
         )}
