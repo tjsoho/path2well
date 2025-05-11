@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
+import { EditableText } from '@/components/pageEditor/EditableText';
+import { EditableServiceCard } from '@/components/pageEditor/EditableServiceCard';
 
 interface ServiceCard {
   image: string;
@@ -49,10 +50,19 @@ const defaultContent: ServicesContent = {
 
 interface HeroSectionProps {
   content?: ServicesContent;
+  isEditing?: boolean;
+  onUpdate?: (id: string, value: string) => void;
 }
 
-export function HeroSection({ content = defaultContent }: HeroSectionProps) {
+export function HeroSection({ content = defaultContent, isEditing = false, onUpdate }: HeroSectionProps) {
   const safeContent = { ...defaultContent, ...content };
+
+  // Ensure cards is always an array
+  const cards = Array.isArray(safeContent.cards)
+    ? safeContent.cards
+    : typeof safeContent.cards === 'string'
+      ? JSON.parse(safeContent.cards)
+      : [];
 
   return (
     <section className="relative">
@@ -77,16 +87,23 @@ export function HeroSection({ content = defaultContent }: HeroSectionProps) {
                 transition={{ duration: 0.8 }}
                 className="text-xl md:text-4xl font-bold mb-6"
               >
-                {safeContent.heroHeading}
+                <EditableText
+                  id="heroHeading"
+                  type="heading"
+                  content={safeContent.heroHeading}
+                  isEditing={isEditing}
+                  onUpdate={onUpdate}
+                  className="text-white"
+                />
               </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="text-xl"
-              >
-                {safeContent.heroSubheading}
-              </motion.p>
+              <EditableText
+                id="heroSubheading"
+                type="paragraph"
+                content={safeContent.heroSubheading}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+                className="text-xl text-white"
+              />
             </div>
           </div>
 
@@ -117,51 +134,40 @@ export function HeroSection({ content = defaultContent }: HeroSectionProps) {
           <div className="flex flex-col items-center mb-16">
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-[1px] bg-white opacity-60"></div>
-              <span className="text-white uppercase tracking-wider text-sm">{safeContent.label}</span>
+              <EditableText
+                id="label"
+                type="subtext"
+                content={safeContent.label}
+                isEditing={isEditing}
+                onUpdate={onUpdate}
+                className="text-white uppercase tracking-wider text-sm"
+              />
               <div className="w-8 h-[1px] bg-white opacity-60"></div>
             </div>
-            <h2 className="text-4xl md:text-5xl text-white font-bold text-center">{safeContent.heading}</h2>
+            <EditableText
+              id="heading"
+              type="heading"
+              content={safeContent.heading}
+              isEditing={isEditing}
+              onUpdate={onUpdate}
+              className="text-4xl md:text-5xl text-white font-bold text-center"
+            />
           </div>
 
           {/* Service Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {safeContent.cards.map((card, index) => (
-              <motion.div
+            {cards.map((card: ServiceCard, index: number) => (
+              <EditableServiceCard
                 key={index}
-                className="backdrop-blur-lg bg-white/10 rounded-2xl overflow-hidden border border-white/20"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 0.5,
-                  delay: index * 0.2,
-                  ease: "easeOut"
+                card={card}
+                index={index}
+                isEditing={isEditing}
+                onUpdate={(idx, updatedCard) => {
+                  const updatedCards = [...cards];
+                  updatedCards[idx] = updatedCard;
+                  if (onUpdate) onUpdate('cards', JSON.stringify(updatedCards));
                 }}
-                whileHover={{
-                  scale: 1.03,
-                  boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
-                  transition: { duration: 0.3 }
-                }}
-              >
-                <div className="relative">
-                  <Image
-                    src={card.image}
-                    alt={card.title}
-                    width={400}
-                    height={250}
-                    className="w-full h-48 object-cover brightness-[0.85]"
-                  />
-                  <div className="absolute inset-0 bg-black/20" />
-                  {card.disclaimer && (
-                    <div className="absolute bottom-0 left-0 right-0 p-4 bg-black/50 backdrop-blur-sm">
-                      <p className="text-white text-xs">{card.disclaimer}</p>
-                    </div>
-                  )}
-                </div>
-                <div className="p-6">
-                  <h3 className="text-white text-xl font-semibold mb-3">{card.title}</h3>
-                  <p className="text-white/80 text-sm">{card.description}</p>
-                </div>
-              </motion.div>
+              />
             ))}
           </div>
 
@@ -180,17 +186,24 @@ export function HeroSection({ content = defaultContent }: HeroSectionProps) {
               <span
                 className="backdrop absolute inset-px rounded-full bg-white transition-colors duration-200"
               />
-              <Link
+              <a
                 href={safeContent.ctaLink}
                 className="group z-10 flex items-center gap-3"
               >
-                <span className="font-medium text-lg text-brand-purple">{safeContent.ctaText}</span>
+                <EditableText
+                  id="ctaText"
+                  type="paragraph"
+                  content={safeContent.ctaText}
+                  isEditing={isEditing}
+                  onUpdate={onUpdate}
+                  className="font-medium text-lg text-brand-purple"
+                />
                 <div className="w-6 h-6 rounded-full bg-brand-purple flex items-center justify-center group-hover:bg-opacity-90 transition-all">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" className="w-4 h-4">
                     <path d="M9 5l7 7-7 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-              </Link>
+              </a>
             </motion.div>
           </div>
         </div>

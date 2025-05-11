@@ -22,6 +22,11 @@ const sections = {
     "Section4-Team": dynamic(() => import("@/app/(pages)/about/sections/Section4-team").then(mod => mod.TeamSection)),
     "Section5-Promise-About": dynamic(() => import("@/app/(pages)/about/sections/Section5-promise").then(mod => mod.PromiseSection)),
     "Section6-Begin": dynamic(() => import("@/app/(pages)/about/sections/Section6-begin").then(mod => mod.BeginSection)),
+
+    // Services Page Sections
+    "HeroSection": dynamic(() => import("@/app/(pages)/services/sections/HeroSection").then(mod => mod.HeroSection)),
+    "ServiceDetailsSection": dynamic(() => import("@/app/(pages)/services/sections/ServiceDetailsSection").then(mod => mod.ServiceDetailsSection)),
+    "Section6-begin": dynamic(() => import("@/app/(pages)/services/sections/Section6-begin").then(mod => mod.BeginSection)),
 } as const;
 
 type SectionId = keyof typeof sections;
@@ -43,7 +48,7 @@ export function SectionRenderer({ selectedPage, sectionContents, onTextChange }:
                 if (!Component) return null;
 
                 const dbContent = sectionContents[section.id] || {};
-                const defaultContent = DEFAULT_CONTENT[sectionId] || {};
+                const defaultContent = DEFAULT_CONTENT[sectionId as keyof typeof DEFAULT_CONTENT] || {};
 
                 // Check if dbContent has any non-empty values
                 const hasValidDbContent = Object.values(dbContent).some(value => {

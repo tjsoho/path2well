@@ -80,7 +80,7 @@ export function PageSectionEditor({
   }, [loadSection]);
 
   async function handleUpdate(id: string, value: string) {
-    let newValue = value;
+    const newValue = value;
     if (id === 'cards') {
       try {
         // Ensure the value is a valid JSON string

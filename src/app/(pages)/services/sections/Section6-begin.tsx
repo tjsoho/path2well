@@ -66,7 +66,14 @@ export function BeginSection({
                                 iconPosition="left"
                                 className="mt-4"
                             >
-                                {safeContent.buttonText}
+                                <EditableText
+                                    id="buttonText"
+                                    type="paragraph"
+                                    content={safeContent.buttonText}
+                                    isEditing={isEditing}
+                                    onUpdate={onUpdate}
+                                    className="text-brand-teal font-semibold"
+                                />
                             </Button>
                         </div>
                     </div>
