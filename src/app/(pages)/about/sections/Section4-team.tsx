@@ -105,26 +105,38 @@ export function TeamSection({
     }, [safeContent, teamMembers]);
 
     // Handle team member field updates
-    const handleTeamUpdate = (index: number, field: keyof TeamMember, value: string) => {
-        console.log('handleTeamUpdate called with:', { index, field, value });
-
+    const handleTeamUpdate = (index: number, updatedMember: TeamMember) => {
         if (onUpdate) {
             // Create a new array with the updated team member
             const updatedTeam = [...teamMembers];
-            updatedTeam[index] = {
-                ...updatedTeam[index],
-                [field]: value,
-            };
-
-            console.log('Updated team array:', updatedTeam);
+            updatedTeam[index] = updatedMember;
 
             // Update local state immediately
             setTeamMembers(updatedTeam);
 
             // Convert the array to a string to save in the database
             const teamString = JSON.stringify(updatedTeam);
-            console.log('Saving team data:', teamString);
             onUpdate('team', teamString);
+        }
+    };
+
+    const handleDeleteTeamMember = (index: number) => {
+        if (onUpdate) {
+            const updatedTeam = [...teamMembers];
+            updatedTeam.splice(index, 1);
+            onUpdate('team', JSON.stringify(updatedTeam));
+        }
+    };
+
+    const handleAddTeamMember = () => {
+        if (onUpdate) {
+            const newMember = {
+                image: "/images/team1.jpg",
+                name: "New Team Member",
+                role: "Add role here",
+            };
+            const updatedTeam = [...teamMembers, newMember];
+            onUpdate('team', JSON.stringify(updatedTeam));
         }
     };
 
@@ -236,6 +248,7 @@ export function TeamSection({
                                             index={index}
                                             isEditing={isEditing}
                                             onUpdate={handleTeamUpdate}
+                                            onDelete={handleDeleteTeamMember}
                                         />
                                     ) : (
                                         <>
@@ -261,6 +274,39 @@ export function TeamSection({
                                 </motion.div>
                             );
                         })}
+                        {isEditing && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6, delay: 0.2 + teamMembers.length * 0.1 }}
+                                className="relative group"
+                            >
+                                <button
+                                    onClick={handleAddTeamMember}
+                                    className="w-full h-full min-h-[400px] flex flex-col items-center justify-center bg-white/10 rounded-3xl border-2 border-dashed border-white/30 hover:border-white/50 transition-colors group"
+                                >
+                                    <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="w-8 h-8 text-white"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <span className="mt-4 text-white font-medium">Add New Team Member</span>
+                                    <span className="mt-2 text-white/50 text-sm">Click to create a new team member card</span>
+                                </button>
+                            </motion.div>
+                        )}
                     </div>
                 </div>
             </div>

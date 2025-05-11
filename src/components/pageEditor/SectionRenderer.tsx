@@ -27,6 +27,15 @@ const sections = {
     "HeroSection": dynamic(() => import("@/app/(pages)/services/sections/HeroSection").then(mod => mod.HeroSection)),
     "ServiceDetailsSection": dynamic(() => import("@/app/(pages)/services/sections/ServiceDetailsSection").then(mod => mod.ServiceDetailsSection)),
     "Section6-begin": dynamic(() => import("@/app/(pages)/services/sections/Section6-begin").then(mod => mod.BeginSection)),
+
+    // Contact Page Sections
+    "ContactContent": dynamic(() => import("@/app/(pages)/contact/sections/ContactContent").then(mod => mod.ContactContent)),
+
+    // Privacy Policy Page Sections
+    "PrivacyContent": dynamic(() => import("@/app/(pages)/privacy-policy/sections/PrivacyContent").then(mod => mod.PrivacyContent)),
+
+    // Terms Page Sections
+    "TermsContent": dynamic(() => import("@/app/(pages)/terms/sections/TermsContent").then(mod => mod.TermsContent)),
 } as const;
 
 type SectionId = keyof typeof sections;

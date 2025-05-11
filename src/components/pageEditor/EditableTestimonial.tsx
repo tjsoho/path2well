@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Pencil, Check, X } from "lucide-react";
+import { toast } from "react-hot-toast";
 
 import { EditableImage } from "./EditableImage";
 
@@ -82,6 +83,35 @@ export function EditableTestimonial({
         handleFieldChange('image', newImageUrl);
     };
 
+    const handleDelete = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Prevent triggering the edit mode
+        toast((t) => (
+            <div className="flex flex-col gap-2">
+                <p>Are you sure you want to delete this testimonial?</p>
+                <div className="flex justify-end gap-2">
+                    <button
+                        onClick={() => toast.dismiss(t.id)}
+                        className="px-3 py-1 text-sm bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition-colors"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={() => {
+                            onDelete?.(index);
+                            toast.dismiss(t.id);
+                        }}
+                        className="px-3 py-1 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                    >
+                        Delete
+                    </button>
+                </div>
+            </div>
+        ), {
+            duration: 5000,
+            position: 'top-center',
+        });
+    };
+
     return (
         <div
             className={`group relative ${isEditing
@@ -135,7 +165,7 @@ export function EditableTestimonial({
                         </div>
                         <div className="flex justify-center gap-2 mt-2">
                             <button
-                                onClick={() => onDelete?.(index)}
+                                onClick={handleDelete}
                                 className="p-2 rounded-full bg-red-500 text-white shadow-lg hover:bg-red-600 transition-all duration-300"
                                 title="Delete testimonial"
                             >
@@ -185,12 +215,7 @@ export function EditableTestimonial({
                         {/* Delete Button */}
                         {isEditing && (
                             <button
-                                onClick={(e) => {
-                                    e.stopPropagation(); // Prevent triggering the edit mode
-                                    if (window.confirm('Are you sure you want to delete this testimonial?')) {
-                                        onDelete?.(index);
-                                    }
-                                }}
+                                onClick={handleDelete}
                                 className={`absolute bottom-4 right-4 p-2 rounded-full bg-red-500/90 text-white shadow-lg
                                 transform transition-all duration-300 cursor-pointer
                                 hover:bg-red-600 hover:scale-110

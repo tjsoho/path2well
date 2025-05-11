@@ -25,14 +25,29 @@ const ABOUT_SECTIONS: Section[] = [
 
 const SERVICES_SECTIONS: Section[] = [
   { id: "HeroSection", name: "Hero Section" },
-  { id: "Section6-begin", name: "Begin Section" },
   { id: "ServiceDetailsSection", name: "Service Details Section" },
+  { id: "Section6-begin", name: "Begin Section" },
+];
+
+const CONTACT_SECTIONS: Section[] = [
+  { id: "ContactContent", name: "Contact Content" },
+];
+
+const PRIVACY_SECTIONS: Section[] = [
+  { id: "PrivacyContent", name: "Privacy Policy Content" },
+];
+
+const TERMS_SECTIONS: Section[] = [
+  { id: "TermsContent", name: "Terms and Conditions Content" },
 ];
 
 const PAGES = {
   home: HOME_SECTIONS,
   about: ABOUT_SECTIONS,
   services: SERVICES_SECTIONS,
+  contact: CONTACT_SECTIONS,
+  "privacy-policy": PRIVACY_SECTIONS,
+  terms: TERMS_SECTIONS,
   // Add other pages here as needed
 };
 
