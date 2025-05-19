@@ -38,6 +38,7 @@ export function Footer() {
   return (
     <footer className="relative bg-brand-blue-dark overflow-hidden">
       {/* Tech pattern background */}
+        <div className="absolute inset-0 bg-black" />
       <div className="absolute inset-0">
         <motion.div
           className="w-full h-full"
@@ -55,9 +56,10 @@ export function Footer() {
             src="/images/bg12.png"
             alt="Tech pattern"
             fill
-            className="object-cover opacity-30"
+            className="object-cover opacity-80"
           />
         </motion.div>
+        {/* Dark overlay */}
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 pt-16 pb-8">
@@ -148,7 +150,7 @@ export function Footer() {
           <div className="flex items-center gap-2 text-white/60 text-sm mb-4 md:mb-0">
             <span>© {new Date().getFullYear()} Path2Well. All rights reserved.</span>
           </div>
-          <div className="text-white/60 text-sm">
+          <div className="text-white/60 text-sm flex items-center gap-2">
             Designed by{" "}
             <a
               href="https://www.ai-guy.co"
@@ -156,8 +158,8 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-brand-teal hover:text-brand-teal/80 transition-colors"
             >
-              The AI Guy
             </a>
+              <Image src="/images/aiGuy.png" alt="The AI Guy" width={50} height={50} />
           </div>
         </div>
       </div>
