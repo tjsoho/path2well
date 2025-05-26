@@ -38,7 +38,7 @@ export function Footer() {
   return (
     <footer className="relative bg-brand-blue-dark overflow-hidden">
       {/* Tech pattern background */}
-        <div className="absolute inset-0 bg-black" />
+      <div className="absolute inset-0 bg-black" />
       <div className="absolute inset-0">
         <motion.div
           className="w-full h-full"
@@ -159,7 +159,7 @@ export function Footer() {
               className="text-brand-teal hover:text-brand-teal/80 transition-colors"
             >
             </a>
-              <Image src="/images/aiGuy.png" alt="The AI Guy" width={50} height={50} />
+            <Image src="/images/aiGuy.png" alt="The AI Guy" width={50} height={50} />
           </div>
         </div>
       </div>

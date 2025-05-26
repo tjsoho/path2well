@@ -115,6 +115,8 @@ export function ServicesSection({
                                     icon={Search}
                                     iconPosition="left"
                                     className="mt-4"
+                                    // directo to /services
+                                    
                                 >
                                     Explore our services
                                 </Button>

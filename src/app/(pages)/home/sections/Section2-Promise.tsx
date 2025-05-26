@@ -98,18 +98,18 @@ export function PromiseSection({
       {/* Content Section */}
       <div className="container mx-auto px-4 mt-16 text-center pb-16">
         {/* Icon with Lines */}
-        <div className="flex items-center justify-center gap-4 mb-8">
-          <div className="w-24 h-[1px] bg-gradient-to-l from-brand-teal to-white" />
-          <div className="relative w-12 h-12">
-            <Image
-              src="/images/icon1.png"
-              alt="Science Icon"
-              fill
-              className="object-contain"
-            />
-          </div>
-          <div className="w-24 h-[1px] bg-gradient-to-r from-brand-teal to-white" />
-        </div>
+        <div className="flex items-center justify-center gap-4 ">
+                        <div className="w-24 h-[1px] bg-gradient-to-l from-brand-teal to-white" />
+                        <div className="relative w-32 h-32">
+                            <Image
+                                src="/images/logo.png"
+                                alt="Science Icon"
+                                fill
+                                className="object-contain"
+                            />
+                        </div>
+                        <div className="w-24 h-[1px] bg-gradient-to-r from-brand-teal to-white" />
+                    </div>
 
         {/* Text Content */}
         <motion.div

@@ -109,10 +109,10 @@ export function HeroSection({
           }}
         >
           <EditableImage
-            src="/images/HeroBG.png"
+            src="/images/heroBG3.png"
             alt="Path2Well Hero"
             fill
-            className="object-cover"
+            className="object-cover scale-125"
             isEditing={isEditing}
             onUpdate={(newUrl) => onUpdate?.("hero-background", newUrl)}
           />
@@ -136,7 +136,7 @@ export function HeroSection({
                 content={safeContent.heading}
                 isEditing={isEditing}
                 onUpdate={onUpdate}
-                className="text-2xl md:text-5xl font-bold text-white tracking-wider uppercase"
+                className="text-2xl md:text-5xl font-bold text-white tracking-wider"
               />
               <EditableText
                 id="subheading"
@@ -144,8 +144,9 @@ export function HeroSection({
                 content={safeContent.subheading}
                 isEditing={isEditing}
                 onUpdate={onUpdate}
-                className="text-xl md:text-2xl text-[#4ECDC4] tracking-widest uppercase"
+                className="text-xl md:text-2xl text-[#4ECDC4] tracking-widest"
               />
+              
 
               {/* Book Consultation Button */}
               <motion.div

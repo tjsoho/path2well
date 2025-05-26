@@ -1,13 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { EditableImage } from "@/components/pageEditor/EditableImage";
 import { motion } from "framer-motion";
-import { Upload, Loader2 } from "lucide-react";
+import { Upload, Loader2, Calendar } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+
+import { GlowButton3 } from "@/components/ui/GlodButton3";
 
 interface SupportSectionProps {
   isEditing?: boolean;
@@ -191,12 +193,18 @@ export function SupportSection({
                     onUpdate={onUpdate}
                     className="text-gray-400"
                   />
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors"
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="pt-8"
                   >
-                    Book consultation
-                  </Link>
+                    <GlowButton3
+                      href="/contact"
+                      text="Book Consultation"
+                      icon={Calendar}
+                    />
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
@@ -319,12 +327,18 @@ export function SupportSection({
                     onUpdate={onUpdate}
                     className="text-gray-400"
                   />
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors"
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="pt-8"
                   >
-                    Book consultation
-                  </Link>
+                    <GlowButton3
+                      href="/contact"
+                      text="Book Consultation"
+                      icon={Calendar}
+                    />
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
@@ -369,12 +383,18 @@ export function SupportSection({
                     onUpdate={onUpdate}
                     className="text-gray-400"
                   />
-                  <Link
-                    href="/contact"
-                    className="inline-flex items-center text-sm text-gray-400 hover:text-white transition-colors"
+                 <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="pt-8"
                   >
-                    Book consultation
-                  </Link>
+                    <GlowButton3
+                      href="/contact"
+                      text="Book Consultation"
+                      icon={Calendar}
+                    />
+                  </motion.div>
                 </div>
               </div>
             </motion.div>

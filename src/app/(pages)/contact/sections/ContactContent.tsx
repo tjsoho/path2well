@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Phone, MapPin, Mail, Send, Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Phone, MapPin, Mail, Send, Loader2, X } from "lucide-react";
 import { EditableText } from '@/components/pageEditor/EditableText';
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 interface ContactContent {
     heroHeading: string;
@@ -39,10 +40,13 @@ const defaultContent: ContactContent = {
 };
 
 export function ContactContent({ content = defaultContent, isEditing = false, onUpdate }: ContactContentProps) {
+    const router = useRouter();
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
+        mobile: "",
         message: "",
         type: "general",
     });
@@ -52,27 +56,101 @@ export function ContactContent({ content = defaultContent, isEditing = false, on
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate form submission
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-        toast.success("Message sent successfully!");
-        setIsSubmitting(false);
-        setFormData({
-            name: "",
-            email: "",
-            phone: "",
-            message: "",
-            type: "general",
-        });
+        try {
+            const response = await fetch("https://api.web3forms.com/submit", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({
+                    access_key: "f1e09265-5b3e-4ff3-b68b-3308547c15cf",
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    mobile: formData.mobile,
+                    message: formData.message,
+                    type: formData.type,
+                }),
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                console.log("Form submitted successfully:", result);
+                setFormData({
+                    name: "",
+                    email: "",
+                    phone: "",
+                    mobile: "",
+                    message: "",
+                    type: "general",
+                });
+                setShowSuccessModal(true);
+            } else {
+                console.error("Form submission failed:", result);
+                toast.error("Failed to send message. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+            toast.error("An error occurred. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setShowSuccessModal(false);
+        setTimeout(() => {
+            router.push('/');
+        }, 300);
     };
 
     const safeContent = { ...defaultContent, ...content };
 
     return (
         <>
+            {/* Success Modal */}
+            <AnimatePresence>
+                {showSuccessModal && (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            transition={{ duration: 0.2 }}
+                            className="bg-[#001618] border border-[#4ECDC4]/20 rounded-2xl p-8 max-w-md w-full relative"
+                        >
+                            <button
+                                onClick={handleCloseModal}
+                                className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"
+                            >
+                                <X className="w-6 h-6" />
+                            </button>
+                            <div className="text-center space-y-4">
+                                <div className="w-16 h-16 bg-[#4ECDC4]/20 rounded-full flex items-center justify-center mx-auto">
+                                    <Send className="w-8 h-8 text-[#4ECDC4]" />
+                                </div>
+                                <h3 className="text-2xl font-kiona text-white">Thank You!</h3>
+                                <p className="text-white/80 font-kiona">
+                                    Thanks for your message. We&apos;ll be in touch with you shortly.
+                                </p>
+                                <button
+                                    onClick={handleCloseModal}
+                                    className="mt-6 px-6 py-3 bg-[#4ECDC4] text-[#001618] rounded-lg font-kiona hover:bg-[#4ECDC4]/90 transition-colors"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </motion.div>
+                    </div>
+                )}
+            </AnimatePresence>
+
             {/* Hero Section */}
             <section className="relative pt-32 pb-16 px-4">
                 <div className="max-w-7xl mx-auto text-center">
-                    <motion.h1
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8 }}
@@ -86,8 +164,8 @@ export function ContactContent({ content = defaultContent, isEditing = false, on
                             onUpdate={onUpdate}
                             className="text-white"
                         />
-                    </motion.h1>
-                    <motion.p
+                    </motion.div>
+                    <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.2 }}
@@ -101,7 +179,7 @@ export function ContactContent({ content = defaultContent, isEditing = false, on
                             onUpdate={onUpdate}
                             className="text-white/80"
                         />
-                    </motion.p>
+                    </motion.div>
                 </div>
             </section>
 
@@ -281,6 +359,20 @@ export function ContactContent({ content = defaultContent, isEditing = false, on
                                             }
                                             className="w-full px-4 py-3 rounded-lg bg-[#001618] border border-[#4ECDC4]/20 text-white focus:outline-none focus:border-[#4ECDC4] transition-colors font-kiona"
                                             placeholder="Your phone number"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[#4ECDC4] text-sm mb-2 font-kiona">
+                                            Mobile Number
+                                        </label>
+                                        <input
+                                            type="tel"
+                                            value={formData.mobile}
+                                            onChange={(e) =>
+                                                setFormData({ ...formData, mobile: e.target.value })
+                                            }
+                                            className="w-full px-4 py-3 rounded-lg bg-[#001618] border border-[#4ECDC4]/20 text-white focus:outline-none focus:border-[#4ECDC4] transition-colors font-kiona"
+                                            placeholder="Your mobile number"
                                         />
                                     </div>
                                     <div>
