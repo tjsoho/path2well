@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { EditableImage } from "@/components/pageEditor/EditableImage";
 import { motion } from "framer-motion";
@@ -239,7 +238,7 @@ export function SupportSection({
                       src={content["clarity-lab-image"]}
                       alt="Lab Work"
                       fill
-                      className="w-full h-auto object-cover"
+                      className="w-full h-auto object-cover scale-105 rounded-xl"
                       isEditing={isEditing}
                       onUpdate={(newUrl) => onUpdate?.("clarity-lab-image", newUrl)}
                     />
@@ -383,7 +382,7 @@ export function SupportSection({
                     onUpdate={onUpdate}
                     className="text-gray-400"
                   />
-                 <motion.div
+                  <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
@@ -439,6 +438,69 @@ export function SupportSection({
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Modern Call-to-Action Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: false, margin: "-100px" }}
+          className="mt-32 relative"
+        >
+          {/* Glowing background effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#4ECDC4]/10 via-[#4ECDC4]/5 to-[#4ECDC4]/10 rounded-3xl blur-2xl" />
+
+          <div className="relative bg-[#001618]/50 backdrop-blur-lg rounded-3xl p-12 border border-[#4ECDC4]/20">
+            <div className="max-w-4xl mx-auto text-center space-y-8">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="inline-block"
+              >
+                <Image
+                  src="/images/icon2.png"
+                  alt="Services Icon"
+                  width={48}
+                  height={48}
+                  className="animate-spin-slow"
+                />
+              </motion.div>
+
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="text-3xl md:text-4xl font-kiona text-white"
+              >
+                Cutting edge wellness solutions
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="text-lg text-white/80 font-kiona max-w-2xl mx-auto"
+              >
+                Discover our comprehensive range of cutting-edge wellness solutions, from genetic testing to personalized IV therapy. Take the next step towards optimal health.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              >
+                <GlowButton3
+                  href="/services"
+                  text="Explore Our Services"
+                  icon={Calendar}
+                />
+            
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
       </div>
 
       <style jsx global>{`
@@ -522,3 +584,5 @@ export function SupportSection({
     </section>
   );
 }
+
+

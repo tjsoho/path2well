@@ -23,7 +23,7 @@ const adminLinks = [
 
 const socialLinks = [
   { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
-  { icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+  { icon: Instagram, href: "https://www.instagram.com/path_2_well/", label: "Instagram" },
 ];
 
 export function Footer() {

@@ -4,6 +4,7 @@ import { EditableText } from "@/components/pageEditor/EditableText";
 import { Calendar } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/Button";
+import { useRouter } from "next/navigation";
 
 interface BeginSectionProps {
     isEditing?: boolean;
@@ -25,6 +26,8 @@ export function BeginSection({
         subheading: content.subheading || "Take the first step towards optimal health with a personalised consultation.",
         buttonText: content.buttonText || "Book Your Consultation Now"
     };
+
+    const router = useRouter();
 
     return (
         <section className="bg-white py-12">
@@ -62,9 +65,11 @@ export function BeginSection({
                             />
 
                             <Button
+                                type="button"
                                 icon={Calendar}
                                 iconPosition="left"
                                 className="mt-4"
+                                onClick={() => router.push('/contact')}
                             >
                                 <EditableText
                                     id="buttonText"

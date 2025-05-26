@@ -2,32 +2,47 @@
 
 ; Home page- Allow for case sensitive text. “PATH2WELL: WELCOME TO THE…”
             ;  ------------------------------- Done - Can't change the text to uppercase due to font
+
 ; Home Page- remove book consultation button- already one on header of page.
         ;  ------------------------------- ; Check - i reccomend against this
+
 ; Home page- Path2Well logo in background- can we please make it “pop” a little more while not interfering with text in front?
         ;  ------------------------------- done
+
 ; Home page- Replace little monitor looking image with Path2Well Logo. Same as About Us page above “our journey”.
         ;  ------------------------------- done
+
 ; Home page- Download your guide to a healthier life! How can I upload a .pdf?
+________________________________________________________________________
 
 ; Home Page- Complementary consultation- book consultation button. Make glow like the one I want removed “contact details”  not saving!      
+        ; ------------------------------- done
 
 ; Home Page- let’s have a “view all services” button at the bottom of that section linking to our services page.
 
+
 ; Home Page- bottom of page- “begin your journey to optimal health today” –“explore or services” button not working.
+
 
 ; Contact page- details not saving/ not linked with “book consultation” button.
 
+
 ; About us page- when editing text- eg. “Our commitment section”. It reverts back to original text you created. I have to click out and back in, to edit text. Took some figuring out! Little buggy.
+
 
 ; About us page- “Ready to begin your wellness journey?” – “Book you consultation now”- button has no link to contact page.
 
+
 ; Services Page- Allow us to change background image. Currently the one people jogging- not a fan.
 
+
 ; Services page- “book your free consultation button”- 404 error link not found.
+        ; ------------------------------- done
 
 ; “Connect with us” bottom of web page- link IG and Facebook links to our social media accounts.
 
+
 ; Currently cannot edit/change privacy page or T&C page.
+
 
 ; Also change our login credentials to our Path2Well email dimi@path2well.com.au email now we have them up and running.
