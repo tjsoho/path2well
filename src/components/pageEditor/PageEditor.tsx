@@ -7,6 +7,7 @@ import { SectionContents } from "../../../types/pageEditor";
 import { PageSelector } from "./PageSelector";
 import { SaveButton } from "./SaveButton";
 import { SectionRenderer } from "./SectionRenderer";
+import Loader from "../ui/Loader";
 
 export function PageEditor() {
   // State
@@ -14,74 +15,47 @@ export function PageEditor() {
   const [sectionContents, setSectionContents] = useState<SectionContents>({});
   const [isDirty, setIsDirty] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Extract content from all sections
   const extractContent = useCallback(async () => {
     if (!selectedPage) return;
-
+    setIsLoading(true);
     try {
       const pageSections = getPageSections(selectedPage);
       const contents: SectionContents = {};
 
-      console.log('Starting content extraction for page:', selectedPage);
-
-      for (const section of pageSections) {
-        console.log(`Fetching content for section: ${section.id}`);
-
+      const fetchPromises = pageSections.map(async (section) => {
         const url = `/api/sections/content?pageId=${selectedPage}&sectionId=${section.id}`;
-        console.log('Fetching from URL:', url);
-
         const response = await fetch(url);
-        console.log(`Response status for ${section.id}:`, response.status);
 
         if (!response.ok) {
-          console.error(`Failed to fetch content for section ${section.id}:`, {
-            status: response.status,
-            statusText: response.statusText,
-            url: response.url
-          });
           throw new Error(`Failed to fetch content for section ${section.id}`);
         }
 
         const data = await response.json();
-        console.log(`Raw API response for ${section.id}:`, {
-          data,
-          contentType: typeof data.content,
-          contentKeys: data.content ? Object.keys(data.content) : [],
-          contentValues: data.content ? Object.values(data.content) : []
-        });
 
-        // Parse testimonials JSON if present
         const sectionContent = data.content || {};
-        if (sectionContent.testimonials && typeof sectionContent.testimonials === 'string') {
+        if (sectionContent.testimonials && typeof sectionContent.testimonials === "string") {
           try {
             sectionContent.testimonials = JSON.parse(sectionContent.testimonials);
           } catch (e) {
-            console.error(`Failed to parse testimonials JSON for section ${section.id}:`, e);
-            // Keep the string value if parsing fails
+            console.error(`Failed to parse testimonials JSON for section ${section.id}`, e);
           }
         }
 
         contents[section.id] = sectionContent;
-        console.log(`Stored content for ${section.id}:`, {
-          content: contents[section.id],
-          keys: Object.keys(contents[section.id]),
-          values: Object.values(contents[section.id])
-        });
-      }
-
-      console.log("Final contents to be set:", {
-        contents,
-        sections: Object.keys(contents),
-        sampleContent: contents["Section4-WhatWeDo"],
-        sampleKeys: contents["Section4-WhatWeDo"] ? Object.keys(contents["Section4-WhatWeDo"]) : []
       });
+
+      await Promise.all(fetchPromises);
 
       setSectionContents(contents);
       setIsDirty(false);
     } catch (error) {
       console.error("Error fetching section contents:", error);
       toast.error("Failed to load page content");
+    } finally {
+      setIsLoading(false);
     }
   }, [selectedPage]);
 
@@ -303,11 +277,15 @@ export function PageEditor() {
       <div className="w-full">
         {selectedPage ? (
           <div className="max-w-7xl mx-auto px-4 py-8">
-            <SectionRenderer
-              selectedPage={selectedPage}
-              sectionContents={sectionContents}
-              onTextChange={handleTextChange}
-            />
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <SectionRenderer
+                selectedPage={selectedPage}
+                sectionContents={sectionContents}
+                onTextChange={handleTextChange}
+              />
+            )}
           </div>
         ) : (
           <div className="max-w-7xl mx-auto px-4 py-20">
