@@ -22,6 +22,8 @@ interface SupportSectionProps {
     "clarity-lab-image"?: string;
     "clarity-bikes-image"?: string;
     "clarity-doctor-image"?: string;
+    "section3-title": string;
+    "section3-description": string;
   };
   onUpdate?: (id: string, value: string) => void;
 }
@@ -38,6 +40,8 @@ export function SupportSection({
     "freedom-heading": "Complimentary Consultation",
     "freedom-text":
       "Book your no-obligation consultation today and speak with a wellness expert. Discuss your health concerns, goals and discover your perfect personalised wellness plan.",
+    "section3-title": "Cutting edge wellness solutions",
+    "section3-description": "Discover our comprehensive range of cutting-edge wellness solutions, from genetic testing to personalized IV therapy. Take the next step towards optimal health.",
   },
   onUpdate,
 }: SupportSectionProps) {
@@ -473,7 +477,14 @@ export function SupportSection({
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="text-3xl md:text-4xl font-kiona text-white"
               >
-                Cutting edge wellness solutions
+                <EditableText
+                  id="section3-title"
+                  type="heading"
+                  content={content["section3-title"]}
+                  isEditing={isEditing}
+                  onUpdate={onUpdate}
+                  className="text-3xl md:text-4xl font-kiona text-white"
+                />
               </motion.h2>
 
               <motion.p
@@ -482,7 +493,14 @@ export function SupportSection({
                 transition={{ duration: 0.5, delay: 0.4 }}
                 className="text-lg text-white/80 font-kiona max-w-2xl mx-auto"
               >
-                Discover our comprehensive range of cutting-edge wellness solutions, from genetic testing to personalized IV therapy. Take the next step towards optimal health.
+                <EditableText
+                  id="section3-description"
+                  type="paragraph"
+                  content={content["section3-description"]}
+                  isEditing={isEditing}
+                  onUpdate={onUpdate}
+                  className="text-lg text-white/80 font-kiona"
+                />
               </motion.p>
 
               <motion.div
@@ -496,7 +514,7 @@ export function SupportSection({
                   text="Explore Our Services"
                   icon={Calendar}
                 />
-            
+
               </motion.div>
             </div>
           </div>

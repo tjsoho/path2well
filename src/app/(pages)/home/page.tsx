@@ -22,6 +22,11 @@ type SupportContent = {
   "confidence-text": string;
   "freedom-heading": string;
   "freedom-text": string;
+  "section3-title": string;
+  "section3-description": string;
+  "clarity-lab-image"?: string;
+  "clarity-bikes-image"?: string;
+  "clarity-doctor-image"?: string;
 };
 type WhatWeDoContent = { "about-text": string };
 type DownloadContent = {

@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Pencil, BookOpen } from "lucide-react";
+import { Pencil, BookOpen, } from "lucide-react";
+import { PDFManager } from "./PDFManager";
+import { LeadsList } from "./LeadsList";
 
 export function AdminDashboard() {
   return (
@@ -13,7 +15,7 @@ export function AdminDashboard() {
           </h1>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           <Link
             href="/blog-editor"
             className="group block p-8 bg-[#001618] border-2 border-[#4ECDC4]/20 rounded-xl 
@@ -54,6 +56,14 @@ export function AdminDashboard() {
             </div>
           </Link>
         </div>
+
+        <div className="mb-8">
+          <div className="flex items-center space-x-4 mb-6">
+         
+          </div>
+          <PDFManager />
+        </div>
+        <LeadsList />
       </div>
     </div>
   );

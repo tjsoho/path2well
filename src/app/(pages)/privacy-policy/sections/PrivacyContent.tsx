@@ -1,54 +1,48 @@
-"use client";
-
 import { motion } from "framer-motion";
 import { EditableText } from '@/components/pageEditor/EditableText';
 
-interface PrivacyContent {
-    heroHeading: string;
-    heroSubheading: string;
-    lastUpdated: string;
-    sections: {
-        title: string;
-        content: string;
-    }[];
-}
-
 interface PrivacyContentProps {
-    content?: PrivacyContent;
+    content?: {
+        heroHeading?: string;
+        heroSubheading?: string;
+        lastUpdated?: string;
+        sections?: {
+            title: string;
+            content: string;
+        }[];
+    };
     isEditing?: boolean;
     onUpdate?: (id: string, value: string) => void;
 }
 
-const defaultContent: PrivacyContent = {
-    heroHeading: "Privacy Policy",
-    heroSubheading: "Your privacy is our priority. Learn how we protect and manage your data.",
-    lastUpdated: "Last Updated: March 15, 2024",
-    sections: [
-        {
-            title: "Information We Collect",
-            content: "We collect information that you provide directly to us, including but not limited to:\n\n• Personal identification information (Name, email address, phone number)\n• Health and wellness information\n• Payment information\n• Communication preferences\n\nWe also collect information automatically through cookies and similar technologies when you use our website."
-        },
-        {
-            title: "How We Use Your Information",
-            content: "We use the information we collect to:\n\n• Provide and maintain our services\n• Process your transactions\n• Send you important updates and notifications\n• Improve our services and user experience\n• Comply with legal obligations\n• Protect our rights and prevent fraud"
-        },
-        {
-            title: "Data Security",
-            content: "We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure."
-        },
-        {
-            title: "Your Rights",
-            content: "You have the right to:\n\n• Access your personal information\n• Correct inaccurate data\n• Request deletion of your data\n• Object to processing of your data\n• Data portability\n• Withdraw consent\n\nTo exercise these rights, please contact us using the information provided below."
-        },
-        {
-            title: "Contact Us",
-            content: "If you have any questions about this Privacy Policy, please contact us at:\n\nEmail: privacy@path2well.com\nPhone: +1 (555) 123-4567\nAddress: 123 Health Street, Wellness City, WC 12345"
-        }
-    ]
-};
-
-export function PrivacyContent({ content = defaultContent, isEditing = false, onUpdate }: PrivacyContentProps) {
-    const safeContent = { ...defaultContent, ...content };
+export function PrivacyContent({ content = {}, isEditing = false, onUpdate }: PrivacyContentProps) {
+    const safeContent = {
+        heroHeading: content.heroHeading || "Privacy Policy",
+        heroSubheading: content.heroSubheading || "Your privacy is our priority. Learn how we protect and manage your data.",
+        lastUpdated: content.lastUpdated || "Last Updated: March 15, 2024",
+        sections: content.sections || [
+            {
+                title: "Information We Collect",
+                content: "We collect information that you provide directly to us, including but not limited to:\n\n• Personal identification information (Name, email address, phone number)\n• Health and wellness information\n• Payment information\n• Communication preferences\n\nWe also collect information automatically through cookies and similar technologies when you use our website."
+            },
+            {
+                title: "How We Use Your Information",
+                content: "We use the information we collect to:\n\n• Provide and maintain our services\n• Process your transactions\n• Send you important updates and notifications\n• Improve our services and user experience\n• Comply with legal obligations\n• Protect our rights and prevent fraud"
+            },
+            {
+                title: "Data Security",
+                content: "We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the Internet or electronic storage is 100% secure."
+            },
+            {
+                title: "Your Rights",
+                content: "You have the right to:\n\n• Access your personal information\n• Correct inaccurate data\n• Request deletion of your data\n• Object to processing of your data\n• Data portability\n• Withdraw consent\n\nTo exercise these rights, please contact us using the information provided below."
+            },
+            {
+                title: "Contact Us",
+                content: "If you have any questions about this Privacy Policy, please contact us at:\n\nEmail: privacy@path2well.com\nPhone: +1 (555) 123-4567\nAddress: 123 Health Street, Wellness City, WC 12345"
+            }
+        ]
+    };
 
     return (
         <div className="min-h-screen bg-[#001618] text-white py-20 px-4">

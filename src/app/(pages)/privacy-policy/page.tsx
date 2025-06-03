@@ -1,9 +1,24 @@
-"use client";
-
 import Image from "next/image";
 import { PrivacyContent } from "./sections/PrivacyContent";
+import { supabase } from "@/lib/supabase";
 
-export default function PrivacyPolicyPage() {
+async function getPrivacyContent() {
+    const { data, error } = await supabase
+        .from("page_content")
+        .select("content")
+        .eq("page_id", "privacy-policy")
+        .eq("section_id", "PrivacyContent")
+        .single();
+    if (error) {
+        console.error("Error fetching privacy content:", error);
+        return undefined;
+    }
+    return data?.content || undefined;
+}
+
+export default async function PrivacyPolicyPage() {
+    const content = await getPrivacyContent();
+
     return (
         <main className="min-h-screen bg-[#001618] overflow-hidden relative">
             {/* Background Elements */}
@@ -30,7 +45,7 @@ export default function PrivacyPolicyPage() {
             </div>
 
             {/* Privacy Policy Content */}
-            <PrivacyContent />
+            <PrivacyContent content={content} />
         </main>
     );
 } 

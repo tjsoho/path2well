@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Facebook, Instagram } from "lucide-react";
+import { Instagram } from "lucide-react";
 import { GlowButton2 } from "./GlowButton2";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,7 +22,6 @@ const adminLinks = [
 ];
 
 const socialLinks = [
-  { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
   { icon: Instagram, href: "https://www.instagram.com/path_2_well/", label: "Instagram" },
 ];
 
