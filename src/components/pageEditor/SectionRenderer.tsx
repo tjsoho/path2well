@@ -32,7 +32,7 @@ const sections = {
     "ContactContent": dynamic(() => import("@/app/(pages)/contact/sections/ContactContent").then(mod => mod.ContactContent)),
 
     // Privacy Policy Page Sections
-    "PrivacyContent": dynamic(() => import("@/app/(pages)/privacy-policy/sections/PrivacyContent").then(mod => mod.PrivacyContent)),
+    // "PrivacyContent": dynamic(() => import("@/app/(pages)/privacy-policy/sections/PrivacyContent").then(mod => mod.PrivacyContent)),
 
     // Terms Page Sections
     "TermsContent": dynamic(() => import("@/app/(pages)/terms/sections/TermsContent").then(mod => mod.TermsContent)),

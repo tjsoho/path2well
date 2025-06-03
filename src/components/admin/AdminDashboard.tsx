@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Pencil, BookOpen, } from "lucide-react";
 import { PDFManager } from "./PDFManager";
 import { LeadsList } from "./LeadsList";
+import { PrivacyPolicyEditor } from "./PrivacyPolicyEditor";
 
 export function AdminDashboard() {
   return (
@@ -59,11 +60,12 @@ export function AdminDashboard() {
 
         <div className="mb-8">
           <div className="flex items-center space-x-4 mb-6">
-         
+
           </div>
           <PDFManager />
         </div>
         <LeadsList />
+        <PrivacyPolicyEditor />
       </div>
     </div>
   );
