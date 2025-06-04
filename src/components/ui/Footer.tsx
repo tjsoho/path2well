@@ -18,7 +18,7 @@ const pageLinks = [
 const adminLinks = [
   { name: "Admin", href: "/admin" },
   { name: "Privacy Policy", href: "/privacy-policy" },
-  { name: "Terms & Conditions", href: "/terms" },
+  { name: "Terms & Conditions", href: "/terms-conditions" },
 ];
 
 const socialLinks = [

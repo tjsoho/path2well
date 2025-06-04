@@ -5,6 +5,7 @@ import { Pencil, BookOpen, } from "lucide-react";
 import { PDFManager } from "./PDFManager";
 import { LeadsList } from "./LeadsList";
 import { PrivacyPolicyEditor } from "./PrivacyPolicyEditor";
+import { TermsAndConditionsEditor } from "./TermsAndConditionsEditor";
 
 export function AdminDashboard() {
   return (
@@ -66,6 +67,7 @@ export function AdminDashboard() {
         </div>
         <LeadsList />
         <PrivacyPolicyEditor />
+        <TermsAndConditionsEditor />
       </div>
     </div>
   );

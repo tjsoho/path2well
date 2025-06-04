@@ -13,7 +13,7 @@ const PageEditorContext = createContext<PageEditorContextType>({
 });
 
 export function PageEditorProvider({ children }: { children: ReactNode }) {
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing] = useState(false);
 
     const onUpdate = async (id: string, value: string) => {
         try {

@@ -7,19 +7,19 @@ import { Button } from "@/components/ui/Button";
 import { Trash, Plus } from "lucide-react";
 import { toast } from "react-hot-toast";
 
-interface PolicySection {
+interface TermsSection {
     title: string;
     content: string;
 }
 
-interface PrivacyPolicyContent {
+interface TermsContent {
     heroHeading?: string;
     heroSubheading?: string;
-    sections: PolicySection[];
+    sections: TermsSection[];
 }
 
-export function PrivacyPolicyEditor() {
-    const [content, setContent] = useState<PrivacyPolicyContent | null>(null);
+export function TermsAndConditionsEditor() {
+    const [content, setContent] = useState<TermsContent | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
@@ -33,8 +33,8 @@ export function PrivacyPolicyEditor() {
         const { data } = await supabase
             .from("page_content")
             .select("content")
-            .eq("page_id", "privacy-policy")
-            .eq("section_id", "PrivacyContent")
+            .eq("page_id", "terms")
+            .eq("section_id", "TermsContent")
             .single();
         if (data) setContent(data.content);
         setLoading(false);
@@ -58,7 +58,7 @@ export function PrivacyPolicyEditor() {
             ...prev,
             sections: [
                 ...(prev.sections || []),
-                { title: "New Policy Title", content: "Policy details..." },
+                { title: "New Terms Title", content: "Terms details..." },
             ],
         }) : null);
     }
@@ -75,11 +75,11 @@ export function PrivacyPolicyEditor() {
         const { error } = await supabase
             .from("page_content")
             .update({ content })
-            .eq("page_id", "privacy-policy")
-            .eq("section_id", "PrivacyContent");
+            .eq("page_id", "terms")
+            .eq("section_id", "TermsContent");
         setSaving(false);
         if (!error) {
-            toast.success("Privacy Policy updated!");
+            toast.success("Terms & Conditions updated!");
             setIsEditing(false);
         } else {
             toast.error("Failed to save. Try again.");
@@ -87,12 +87,12 @@ export function PrivacyPolicyEditor() {
     }
 
     if (loading) return <div className="text-[#4ECDC4]">Loading...</div>;
-    if (!content) return <div className="text-pink-400">No privacy policy found.</div>;
+    if (!content) return <div className="text-pink-400">No terms found.</div>;
 
     return (
-        <div className="rounded-xl border-2 border-[#4ECDC4]/30 bg-[#001618]/90 shadow-lg shadow-brand-teal/20 p-6 backdrop-blur-xl my-8">
+        <div className="rounded-xl border-2 border-[#4ECDC4]/30 bg-[#001618]/90 shadow-lg shadow-brand-teal/20 p-6 backdrop-blur-xl mb-8">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold text-white tracking-wide font-kiona drop-shadow">Privacy Policy Editor</h2>
+                <h2 className="text-2xl font-bold text-white tracking-wide font-kiona drop-shadow">Terms & Conditions Editor</h2>
                 <Button onClick={() => setIsEditing((v) => !v)} variant="secondary" className="border-[#4ECDC4] text-[#4ECDC4]">
                     {isEditing ? "Stop Editing" : "Edit"}
                 </Button>
@@ -101,7 +101,7 @@ export function PrivacyPolicyEditor() {
                 <EditableText
                     id="heroHeading"
                     type="heading"
-                    content={content.heroHeading || "Privacy Policy"}
+                    content={content.heroHeading || "Terms & Conditions"}
                     isEditing={isEditing}
                     onUpdate={handleUpdateField}
                     className="text-3xl md:text-4xl text-white mb-4 font-kiona"
@@ -109,14 +109,14 @@ export function PrivacyPolicyEditor() {
                 <EditableText
                     id="heroSubheading"
                     type="paragraph"
-                    content={content.heroSubheading || "Your privacy is our priority."}
+                    content={content.heroSubheading || "Please read these terms carefully."}
                     isEditing={isEditing}
                     onUpdate={handleUpdateField}
                     className="text-lg text-white/80 mb-2 font-kiona"
                 />
             </div>
             <div className="space-y-6">
-                {content.sections?.map((section: PolicySection, idx: number) => (
+                {content.sections?.map((section: TermsSection, idx: number) => (
                     <div key={idx} className="relative bg-[#001618]/80 border border-[#4ECDC4]/10 rounded-lg p-6 mb-2">
                         <EditableText
                             id={`sections.${idx}.title`}
@@ -138,7 +138,7 @@ export function PrivacyPolicyEditor() {
                             <button
                                 onClick={() => handleDeleteSection(idx)}
                                 className="absolute top-4 right-4 p-2 rounded-full bg-pink-500 text-white shadow-lg hover:bg-pink-600 transition-all duration-300"
-                                title="Delete policy section"
+                                title="Delete terms section"
                             >
                                 <Trash className="w-5 h-5" />
                             </button>
@@ -150,7 +150,7 @@ export function PrivacyPolicyEditor() {
                         onClick={handleAddSection}
                         className="flex items-center gap-2 px-4 py-2 bg-[#4ECDC4] text-[#001618] font-bold rounded-lg hover:bg-[#4ECDC4]/90 transition-colors mt-2 shadow-md shadow-[#4ECDC4]/20"
                     >
-                        <Plus className="w-5 h-5" /> Add Policy Section
+                        <Plus className="w-5 h-5" /> Add Terms Section
                     </button>
                 )}
             </div>

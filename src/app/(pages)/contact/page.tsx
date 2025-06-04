@@ -1,9 +1,24 @@
-"use client";
 
 import Image from "next/image";
 import { ContactContent } from "./sections/ContactContent";
+import { supabase } from '@/lib/supabase';
+import { Suspense } from 'react';
 
-export default function ContactPage() {
+async function getContactContent() {
+  const { data, error } = await supabase
+    .from('page_content')
+    .select('content')
+    .eq('page_id', 'contact')
+    .single();
+  if (error) {
+    console.error('Error fetching contact content:', error);
+    return undefined;
+  }
+  return data?.content || undefined;
+}
+
+export default async function ContactPage() {
+  const content = await getContactContent();
   return (
     <main className="min-h-screen bg-[#001618] overflow-hidden relative">
       {/* Background Elements */}
@@ -30,7 +45,9 @@ export default function ContactPage() {
       </div>
 
       {/* Contact Content */}
-      <ContactContent />
+      <Suspense fallback={<div className="text-white p-8">Loading...</div>}>
+        <ContactContent content={content} />
+      </Suspense>
     </main>
   );
 }

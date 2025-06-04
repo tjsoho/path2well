@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { EditableText } from '@/components/pageEditor/EditableText';
 import { EditableServiceCard } from '@/components/pageEditor/EditableServiceCard';
+import { useImageLibrary } from '@/contexts/ImageLibraryContext';
 
 interface ServiceCard {
   image: string;
@@ -17,6 +18,7 @@ interface ServicesContent {
   heading: string;
   heroHeading: string;
   heroSubheading: string;
+  heroBgImage?: string;
   cards: ServiceCard[];
   ctaText: string;
   ctaLink: string;
@@ -27,6 +29,7 @@ const defaultContent: ServicesContent = {
   heading: "Our Service for You",
   heroHeading: "Unlock Your Optimal Wellness",
   heroSubheading: "Discover our personalised services",
+  heroBgImage: "/images/runners.png",
   cards: [
     {
       image: "/images/service2.png",
@@ -56,6 +59,7 @@ interface HeroSectionProps {
 
 export function HeroSection({ content = defaultContent, isEditing = false, onUpdate }: HeroSectionProps) {
   const safeContent = { ...defaultContent, ...content };
+  const { openImageLibrary } = useImageLibrary();
 
   // Ensure cards is always an array
   const cards = Array.isArray(safeContent.cards)
@@ -89,17 +93,29 @@ export function HeroSection({ content = defaultContent, isEditing = false, onUpd
       {/* Background Image Section */}
       <div className="relative min-h-[90vh]">
         <Image
-          src="/images/runners.png"
-          alt="Runners"
+          src={safeContent.heroBgImage || "/images/runners.png"}
+          alt="Hero Background"
           layout="fill"
           className="object-cover brightness-[0.85]"
         />
         <div className="absolute inset-0 bg-black/30" />
+        {/* Centered Pink Change Background Image Button (editing only) */}
+        {isEditing && (
+          <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+            <button
+              type="button"
+              className="pointer-events-auto px-6 py-3 rounded-lg bg-pink-500 text-white shadow-lg hover:bg-pink-600 transition-colors text-lg"
+              onClick={() => openImageLibrary((url) => onUpdate && onUpdate('heroBgImage', url))}
+            >
+              {/* TODO: import a nice icon here from a library */}
+
+              Change Background Image
+            </button>
+          </div>
+        )}
         <div className="absolute bottom-0 left-0 flex items-end">
           {/* Purple Block */}
           <div className="relative bg-[#844dc6] p-8 rounded-tr-3xl w-[70vw] lg:w-[40vw] -mt-[3px] overflow-hidden">
-            {/* Background Tech Pattern */}
-
             <div className="text-left text-white relative z-10">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}

@@ -35,7 +35,7 @@ const sections = {
     // "PrivacyContent": dynamic(() => import("@/app/(pages)/privacy-policy/sections/PrivacyContent").then(mod => mod.PrivacyContent)),
 
     // Terms Page Sections
-    "TermsContent": dynamic(() => import("@/app/(pages)/terms/sections/TermsContent").then(mod => mod.TermsContent)),
+    // "TermsContent": dynamic(() => import("@/app/(pages)/terms-conditions/sections/TermsContent").then(mod => mod.TermsContent)),
 } as const;
 
 type SectionId = keyof typeof sections;
