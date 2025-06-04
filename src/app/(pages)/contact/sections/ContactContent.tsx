@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Phone, MapPin, Mail, Send, Loader2, X } from "lucide-react";
+import { Phone, MapPin, Mail, Send, Loader2, X, Clock } from "lucide-react";
 import { EditableText } from '@/components/pageEditor/EditableText';
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -13,11 +13,7 @@ interface ContactContent {
     phone: string;
     email: string;
     address: string;
-    businessHours: {
-        weekdays: string;
-        saturday: string;
-        sunday: string;
-    };
+    operatingHours: string;
 }
 
 interface ContactContentProps {
@@ -32,11 +28,7 @@ const defaultContent: ContactContent = {
     phone: "+1 (555) 123-4567",
     email: "contact@path2well.com",
     address: "123 Health Street\nWellness City, WC 12345",
-    businessHours: {
-        weekdays: "9:00 - 18:00",
-        saturday: "10:00 - 15:00",
-        sunday: "Closed"
-    }
+    operatingHours: "Monday - Friday: 9:00 AM - 6:00 PM\nSaturday: 10:00 AM - 4:00 PM\nSunday: Closed",
 };
 
 export function ContactContent({ content = defaultContent, isEditing = false, onUpdate }: ContactContentProps) {
@@ -250,46 +242,30 @@ export function ContactContent({ content = defaultContent, isEditing = false, on
                                 </div>
                             </div>
 
+                            {/* Operating Hours */}
                             <div className="bg-[#001618]/50 backdrop-blur-lg rounded-2xl p-8 border border-[#4ECDC4]/20">
                                 <h2 className="text-2xl font-kiona text-white mb-6">
-                                    Business Hours
+                                    Operating Hours
                                 </h2>
-                                <div className="space-y-3">
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-white font-kiona">Monday - Friday</span>
-                                        <EditableText
-                                            id="businessHours.weekdays"
-                                            type="paragraph"
-                                            content={safeContent.businessHours.weekdays}
-                                            isEditing={isEditing}
-                                            onUpdate={onUpdate}
-                                            className="text-[#4ECDC4] font-kiona"
-                                        />
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-white font-kiona">Saturday</span>
-                                        <EditableText
-                                            id="businessHours.saturday"
-                                            type="paragraph"
-                                            content={safeContent.businessHours.saturday}
-                                            isEditing={isEditing}
-                                            onUpdate={onUpdate}
-                                            className="text-[#4ECDC4] font-kiona"
-                                        />
-                                    </div>
-                                    <div className="flex justify-between items-center">
-                                        <span className="text-white font-kiona">Sunday</span>
-                                        <EditableText
-                                            id="businessHours.sunday"
-                                            type="paragraph"
-                                            content={safeContent.businessHours.sunday}
-                                            isEditing={isEditing}
-                                            onUpdate={onUpdate}
-                                            className="text-[#4ECDC4] font-kiona"
-                                        />
+                                <div className="space-y-6">
+                                    <div className="flex items-start gap-4">
+                                        <div className="p-3 bg-[#4ECDC4]/10 rounded-lg">
+                                            <Clock className="w-6 h-6 text-[#4ECDC4]" />
+                                        </div>
+                                        <div>
+                                            <EditableText
+                                                id="operatingHours"
+                                                type="paragraph"
+                                                content={safeContent.operatingHours}
+                                                isEditing={isEditing}
+                                                onUpdate={onUpdate}
+                                                className="text-white/80 font-kiona whitespace-pre-line"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         </motion.div>
 
                         {/* Contact Form */}
