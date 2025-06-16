@@ -105,7 +105,8 @@ export function EditableText({
               minHeight: type === "heading" ? "60px" : "120px",
               fontFamily: "inherit",
               fontSize: "inherit",
-              lineHeight: "inherit"
+              lineHeight: "inherit",
+              whiteSpace: "pre-wrap"
             }}
           />
           <div className="flex justify-center gap-2 mt-2">

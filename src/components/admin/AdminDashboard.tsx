@@ -1,13 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { Pencil, BookOpen, } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Pencil, BookOpen, LogOut } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 import { PDFManager } from "./PDFManager";
 import { LeadsList } from "./LeadsList";
 import { PrivacyPolicyEditor } from "./PrivacyPolicyEditor";
 import { TermsAndConditionsEditor } from "./TermsAndConditionsEditor";
 
 export function AdminDashboard() {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/admin");
+  };
+
   return (
     <div className="min-h-screen bg-[#001618] p-8">
       <div className="max-w-4xl mx-auto mt-12">
@@ -15,6 +24,13 @@ export function AdminDashboard() {
           <h1 className="text-4xl font-bold text-white tracking-wider">
             Admin Dashboard
           </h1>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 px-4 py-2 bg-[#4ECDC4] text-[#001618] font-bold rounded-lg hover:bg-[#4ECDC4]/90 transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Logout</span>
+          </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">

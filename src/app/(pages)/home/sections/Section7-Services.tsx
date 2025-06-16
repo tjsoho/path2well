@@ -3,7 +3,7 @@
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { Search } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import { motion } from "framer-motion";
 
 interface ServicesProps {
@@ -111,15 +111,13 @@ export function ServicesSection({
                             </motion.div>
 
                             <motion.div variants={itemVariants}>
-                                <Button
-                                    icon={Search}
-                                    iconPosition="left"
-                                    className="mt-4"
-                                    // directo to /services
-                                    
+                                <Link
+                                    href="/services"
+                                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-medium transition-all duration-200 ease-in-out bg-white text-brand-teal hover:text-brand-teal border border-brand-teal hover:bg-white/80 shadow-[0_0_5px_#4ECDC4,0_0_10px_#4ECDC4,0_0_40px_#4ECDC4] hover:shadow-[0_0_5px_#4ECDC4,0_0_40px_#4ECDC4,0_0_40px_#4ECDC4]"
                                 >
+                                    <Search size={20} />
                                     Explore our services
-                                </Button>
+                                </Link>
                             </motion.div>
                         </div>
                     </div>

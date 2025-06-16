@@ -48,7 +48,7 @@ const defaultContent: ServicesContent = {
     }
   ],
   ctaText: "Book Your Free Consultation",
-  ctaLink: "/consultation"
+  ctaLink: "/contact"
 };
 
 interface HeroSectionProps {
