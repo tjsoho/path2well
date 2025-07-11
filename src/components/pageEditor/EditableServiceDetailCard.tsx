@@ -275,7 +275,7 @@ export function EditableServiceDetailCard({
 
                         {service.benefits && (
                             <div className="mb-8">
-                                <h4 className="text-white font-medium mb-4">Benefits of {service.title.split(' ').slice(-1)[0]}:</h4>
+                                <h4 className="text-white font-medium mb-4">Benefits:</h4>
                                 <ul className="space-y-3">
                                     {service.benefits.map((benefit, i) => (
                                         <li key={i} className="flex items-start gap-3 text-white/80 text-sm">

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { EditableImage } from "@/components/pageEditor/EditableImage";
 import { motion } from "framer-motion";
@@ -172,11 +173,11 @@ export function SupportSection({
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <Image
-                    src="/images/icon2.png"
+                    src="/images/icon3.png"
                     alt="Genetic Testing Icon"
-                    width={24}
-                    height={24}
-                    className="mt-1 animate-spin-slow animate-scale-random-1"
+                    width={40}
+                    height={40}
+                    className="mt-1"
                   />
                 </div>
                 <div className="space-y-4">
@@ -227,7 +228,7 @@ export function SupportSection({
                     >
                       <div className="flex flex-col items-center gap-2">
                         {uploadingLab ? (
-                          <Loader2 size={24} className="text-gray-400 animate-spin" />
+                          <Loader2 size={24} className="text-gray-400 " />
                         ) : (
                           <Upload size={24} className="text-gray-400" />
                         )}
@@ -238,14 +239,16 @@ export function SupportSection({
                     </div>
                   )}
                   {content["clarity-lab-image"] && content["clarity-lab-image"] !== "" && (
-                    <EditableImage
-                      src={content["clarity-lab-image"]}
-                      alt="Lab Work"
-                      fill
-                      className="w-full h-auto object-cover scale-105 rounded-xl"
-                      isEditing={isEditing}
-                      onUpdate={(newUrl) => onUpdate?.("clarity-lab-image", newUrl)}
-                    />
+                    <Link href="/services#section-header" scroll={true}>
+                      <EditableImage
+                        src={content["clarity-lab-image"]}
+                        alt="Lab Work"
+                        fill
+                        className="w-full h-auto object-cover scale-105 rounded-xl cursor-pointer hover:opacity-80 transition-opacity"
+                        isEditing={isEditing}
+                        onUpdate={(newUrl) => onUpdate?.("clarity-lab-image", newUrl)}
+                      />
+                    </Link>
                   )}
                 </div>
               </div>
@@ -276,7 +279,7 @@ export function SupportSection({
                     >
                       <div className="flex flex-col items-center gap-2">
                         {uploadingBikes ? (
-                          <Loader2 size={24} className="text-gray-400 animate-spin" />
+                          <Loader2 size={24} className="text-gray-400 " />
                         ) : (
                           <Upload size={24} className="text-gray-400" />
                         )}
@@ -287,14 +290,16 @@ export function SupportSection({
                     </div>
                   )}
                   {content["clarity-bikes-image"] && content["clarity-bikes-image"] !== "" && (
-                    <EditableImage
-                      src={content["clarity-bikes-image"]}
-                      alt="Bikes"
-                      fill
-                      className="w-full h-auto object-cover"
-                      isEditing={isEditing}
-                      onUpdate={(newUrl) => onUpdate?.("clarity-bikes-image", newUrl)}
-                    />
+                    <Link href="/services#section-header" scroll={true}>
+                      <EditableImage
+                        src={content["clarity-bikes-image"]}
+                        alt="Bikes"
+                        fill
+                        className="w-full h-auto object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                        isEditing={isEditing}
+                        onUpdate={(newUrl) => onUpdate?.("clarity-bikes-image", newUrl)}
+                      />
+                    </Link>
                   )}
                 </div>
               </div>
@@ -306,11 +311,11 @@ export function SupportSection({
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <Image
-                    src="/images/icon2.png"
+                    src="/images/icon3.png"
                     alt="IV Therapy Icon"
-                    width={24}
-                    height={24}
-                    className="mt-1 animate-spin-slow animate-scale-random-2"
+                    width={40}
+                    height={40}
+                    className="mt-1 "
                   />
                 </div>
                 <div className="space-y-4">
@@ -362,11 +367,11 @@ export function SupportSection({
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
                   <Image
-                    src="/images/icon2.png"
+                    src="/images/icon3.png"
                     alt="Consultation Icon"
-                    width={24}
-                    height={24}
-                    className="mt-1 animate-spin-fast animate-scale-random-3"
+                    width={40}
+                    height={40}
+                    className="mt-1 "
                   />
                 </div>
                 <div className="space-y-4">
@@ -417,7 +422,7 @@ export function SupportSection({
                     >
                       <div className="flex flex-col items-center gap-2">
                         {uploadingDoctor ? (
-                          <Loader2 size={24} className="text-gray-400 animate-spin" />
+                          <Loader2 size={24} className="text-gray-400" />
                         ) : (
                           <Upload size={24} className="text-gray-400" />
                         )}
@@ -428,14 +433,16 @@ export function SupportSection({
                     </div>
                   )}
                   {content["clarity-doctor-image"] && content["clarity-doctor-image"] !== "" && (
-                    <EditableImage
-                      src={content["clarity-doctor-image"]}
-                      alt="Doctor"
-                      fill
-                      className="w-full h-auto object-cover rounded-lg"
-                      isEditing={isEditing}
-                      onUpdate={(newUrl) => onUpdate?.("clarity-doctor-image", newUrl)}
-                    />
+                    <Link href="/contact" scroll={true}>
+                      <EditableImage
+                        src={content["clarity-doctor-image"]}
+                        alt="Doctor"
+                        fill
+                        className="w-full h-auto object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity"
+                        isEditing={isEditing}
+                        onUpdate={(newUrl) => onUpdate?.("clarity-doctor-image", newUrl)}
+                      />
+                    </Link>
                   )}
                 </div>
               </div>
@@ -463,11 +470,11 @@ export function SupportSection({
                 className="inline-block"
               >
                 <Image
-                  src="/images/icon2.png"
+                  src="/images/logo.png"
                   alt="Services Icon"
-                  width={48}
-                  height={48}
-                  className="animate-spin-slow"
+                  width={96}
+                  height={96}
+                  className=""
                 />
               </motion.div>
 

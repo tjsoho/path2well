@@ -190,7 +190,7 @@ export function ServiceDetailsSection({ content = defaultContent, isEditing = fa
 
             <div className="container mx-auto px-4 relative z-10">
                 {/* Section Header */}
-                <div className="mb-16">
+                <div className="mb-16" id="section-header">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="w-12 h-[1px] bg-teal-400"></div>
                         <EditableText

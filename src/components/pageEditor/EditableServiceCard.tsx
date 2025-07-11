@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Check, X, Trash, Pencil } from "lucide-react";
 import { EditableImage } from "./EditableImage";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 export interface ServiceCard {
     image: string;
@@ -157,16 +158,18 @@ export function EditableServiceCard({
             ) : (
                 <>
                     <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white/10">
-                        <EditableImage
-                            src={card.image}
-                            alt={card.title}
-                            fill
-                            className="object-cover"
-                            isEditing={isEditing}
-                            onUpdate={(newImageUrl) => onUpdate?.(index, { ...card, image: newImageUrl })}
-                            width={400}
-                            height={300}
-                        />
+                        <Link href="/services#section-header" scroll={true}>
+                            <EditableImage
+                                src={card.image}
+                                alt={card.title}
+                                fill
+                                className="object-cover cursor-pointer hover:opacity-80 transition-opacity"
+                                isEditing={isEditing}
+                                onUpdate={(newImageUrl) => onUpdate?.(index, { ...card, image: newImageUrl })}
+                                width={400}
+                                height={300}
+                            />
+                        </Link>
                     </div>
                     <div className="mt-4 text-left pl-2">
                         <h3 className="text-lg font-medium mb-1 text-white">{card.title}</h3>
@@ -174,6 +177,12 @@ export function EditableServiceCard({
                         {card.disclaimer && (
                             <p className="text-white/50 text-xs italic mt-2">{card.disclaimer}</p>
                         )}
+                        <a
+                            href="/contact"
+                            className="inline-block mt-4 px-6 py-2 bg-[#4ECDC4] text-[#001618] rounded-lg font-bold hover:bg-[#4ECDC4]/90 transition-colors"
+                        >
+                            Contact Us
+                        </a>
                     </div>
 
                     {/* Delete Button */}
