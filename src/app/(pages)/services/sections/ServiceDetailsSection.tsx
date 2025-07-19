@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useRef, useEffect } from "react";
 
 import { EditableText } from '@/components/pageEditor/EditableText';
 import { EditableServiceDetailCard } from '@/components/pageEditor/EditableServiceDetailCard';
@@ -90,6 +91,7 @@ interface ServiceDetailsSectionProps {
     content?: ServiceDetailsContent;
     isEditing?: boolean;
     onUpdate?: (id: string, value: string) => void;
+    activeDetailIndex?: number | null;
 }
 
 // const listItemVariants = {
@@ -126,7 +128,7 @@ const decorativeCircles = [
     { size: '45px', opacity: '0.1', top: '85%', left: '80%' },
 ];
 
-export function ServiceDetailsSection({ content = defaultContent, isEditing = false, onUpdate }: ServiceDetailsSectionProps) {
+export function ServiceDetailsSection({ content = defaultContent, isEditing = false, onUpdate, activeDetailIndex }: ServiceDetailsSectionProps) {
     const safeContent = { ...defaultContent, ...content };
 
     // Ensure services is always an array
@@ -135,6 +137,18 @@ export function ServiceDetailsSection({ content = defaultContent, isEditing = fa
         : typeof safeContent.services === 'string'
             ? JSON.parse(safeContent.services)
             : [];
+
+    const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+    useEffect(() => {
+        if (activeDetailIndex != null && cardRefs.current[activeDetailIndex]) {
+            setTimeout(() => {
+                cardRefs.current[activeDetailIndex]?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }, 50);
+        }
+    }, [activeDetailIndex]);
 
     const handleDeleteService = (index: number) => {
         if (onUpdate) {
@@ -215,18 +229,20 @@ export function ServiceDetailsSection({ content = defaultContent, isEditing = fa
                 {/* Service Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {services.map((service: ServiceDetail, index: number) => (
-                        <EditableServiceDetailCard
-                            key={index}
-                            service={service}
-                            index={index}
-                            isEditing={isEditing}
-                            onUpdate={(idx, updatedService) => {
-                                const updatedServices = [...services];
-                                updatedServices[idx] = updatedService;
-                                if (onUpdate) onUpdate('services', JSON.stringify(updatedServices));
-                            }}
-                            onDelete={handleDeleteService}
-                        />
+                        <div key={index} ref={el => { cardRefs.current[index] = el; }}>
+                            <EditableServiceDetailCard
+                                service={service}
+                                index={index}
+                                isEditing={isEditing}
+                                isActive={activeDetailIndex === index}
+                                onUpdate={(idx, updatedService) => {
+                                    const updatedServices = [...services];
+                                    updatedServices[idx] = updatedService;
+                                    if (onUpdate) onUpdate('services', JSON.stringify(updatedServices));
+                                }}
+                                onDelete={handleDeleteService}
+                            />
+                        </div>
                     ))}
                     {isEditing && (
                         <motion.div

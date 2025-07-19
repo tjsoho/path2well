@@ -21,6 +21,7 @@ export interface EditableServiceDetailCardProps {
     isEditing?: boolean;
     onUpdate: (index: number, updatedService: ServiceDetail) => void;
     onDelete?: (index: number) => void;
+    isActive?: boolean;
 }
 
 export function EditableServiceDetailCard({
@@ -29,6 +30,7 @@ export function EditableServiceDetailCard({
     isEditing = false,
     onUpdate,
     onDelete,
+    isActive = false,
 }: EditableServiceDetailCardProps) {
     const [isEditingInPlace, setIsEditingInPlace] = useState(false);
     const [editedService, setEditedService] = useState<ServiceDetail>(service);
@@ -109,7 +111,7 @@ export function EditableServiceDetailCard({
 
     return (
         <div
-            className={`group relative ${isEditing ? "hover:bg-brand-teal/5 rounded-lg transition-all duration-300" : ""}`}
+            className={`group relative ${isEditing ? "hover:bg-brand-teal/5 rounded-lg transition-all duration-300" : ""} ${isActive ? "border-2 border-[#4ECDC4] shadow-[0_0_16px_#4ECDC4] rounded-2xl transition-all duration-300" : "transition-all duration-300"}`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             onClick={handleClick}

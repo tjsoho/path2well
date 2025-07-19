@@ -55,9 +55,10 @@ interface HeroSectionProps {
   content?: ServicesContent;
   isEditing?: boolean;
   onUpdate?: (id: string, value: string) => void;
+  onCardClick?: (index: number) => void;
 }
 
-export function HeroSection({ content = defaultContent, isEditing = false, onUpdate }: HeroSectionProps) {
+export function HeroSection({ content = defaultContent, isEditing = false, onUpdate, onCardClick }: HeroSectionProps) {
   const safeContent = { ...defaultContent, ...content };
   const { openImageLibrary } = useImageLibrary();
 
@@ -192,20 +193,36 @@ export function HeroSection({ content = defaultContent, isEditing = false, onUpd
 
           {/* Service Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            {cards.map((card: ServiceCard, index: number) => (
-              <EditableServiceCard
-                key={index}
-                card={card}
-                index={index}
-                isEditing={isEditing}
-                onUpdate={(idx, updatedCard) => {
-                  const updatedCards = [...cards];
-                  updatedCards[idx] = updatedCard;
-                  if (onUpdate) onUpdate('cards', JSON.stringify(updatedCards));
-                }}
-                onDelete={handleDeleteCard}
-              />
-            ))}
+            {cards.map((card: ServiceCard, index: number) =>
+              isEditing ? (
+                <EditableServiceCard
+                  key={index}
+                  card={card}
+                  index={index}
+                  isEditing={isEditing}
+                  onUpdate={(idx, updatedCard) => {
+                    const updatedCards = [...cards];
+                    updatedCards[idx] = updatedCard;
+                    if (onUpdate) onUpdate('cards', JSON.stringify(updatedCards));
+                  }}
+                  onDelete={handleDeleteCard}
+                />
+              ) : (
+                <div key={index} onClick={() => onCardClick?.(index)} style={{ cursor: 'pointer' }}>
+                  <EditableServiceCard
+                    card={card}
+                    index={index}
+                    isEditing={isEditing}
+                    onUpdate={(idx, updatedCard) => {
+                      const updatedCards = [...cards];
+                      updatedCards[idx] = updatedCard;
+                      if (onUpdate) onUpdate('cards', JSON.stringify(updatedCards));
+                    }}
+                    onDelete={handleDeleteCard}
+                  />
+                </div>
+              )
+            )}
             {isEditing && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

@@ -159,16 +159,16 @@ export function EditableServiceCard({
                 <>
                     <div className="relative aspect-[4/3] rounded-3xl overflow-hidden bg-white/10">
                         <Link href="/services#section-header" scroll={true}>
-                            <EditableImage
-                                src={card.image}
-                                alt={card.title}
-                                fill
+                        <EditableImage
+                            src={card.image}
+                            alt={card.title}
+                            fill
                                 className="object-cover cursor-pointer hover:opacity-80 transition-opacity"
-                                isEditing={isEditing}
-                                onUpdate={(newImageUrl) => onUpdate?.(index, { ...card, image: newImageUrl })}
-                                width={400}
-                                height={300}
-                            />
+                            isEditing={isEditing}
+                            onUpdate={(newImageUrl) => onUpdate?.(index, { ...card, image: newImageUrl })}
+                            width={400}
+                            height={300}
+                        />
                         </Link>
                     </div>
                     <div className="mt-4 text-left pl-2">
