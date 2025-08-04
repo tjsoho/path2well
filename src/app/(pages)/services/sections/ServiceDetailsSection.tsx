@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
 import { EditableText } from '@/components/pageEditor/EditableText';
 import { EditableServiceDetailCard } from '@/components/pageEditor/EditableServiceDetailCard';
@@ -139,16 +139,45 @@ export function ServiceDetailsSection({ content = defaultContent, isEditing = fa
             : [];
 
     const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const [hashActiveIndex, setHashActiveIndex] = useState<number | null>(null);
+
+    // Check URL hash on mount and when it changes
     useEffect(() => {
-        if (activeDetailIndex != null && cardRefs.current[activeDetailIndex]) {
+        const handleHashChange = () => {
+            const hash = window.location.hash;
+            if (hash.startsWith('#service-detail-')) {
+                const idx = parseInt(hash.replace('#service-detail-', ''), 10);
+                if (!isNaN(idx)) {
+                    setHashActiveIndex(idx);
+                    setTimeout(() => {
+                        cardRefs.current[idx]?.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 50);
+                }
+            } else {
+                setHashActiveIndex(null);
+            }
+        };
+        handleHashChange();
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
+
+    // Use either the prop activeDetailIndex or the hash-based index
+    const finalActiveIndex = activeDetailIndex !== null ? activeDetailIndex : hashActiveIndex;
+
+    useEffect(() => {
+        if (finalActiveIndex != null && cardRefs.current[finalActiveIndex]) {
             setTimeout(() => {
-                cardRefs.current[activeDetailIndex]?.scrollIntoView({
+                cardRefs.current[finalActiveIndex]?.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
             }, 50);
         }
-    }, [activeDetailIndex]);
+    }, [finalActiveIndex]);
 
     const handleDeleteService = (index: number) => {
         if (onUpdate) {
@@ -234,7 +263,7 @@ export function ServiceDetailsSection({ content = defaultContent, isEditing = fa
                                 service={service}
                                 index={index}
                                 isEditing={isEditing}
-                                isActive={activeDetailIndex === index}
+                                isActive={finalActiveIndex === index}
                                 onUpdate={(idx, updatedService) => {
                                     const updatedServices = [...services];
                                     updatedServices[idx] = updatedService;

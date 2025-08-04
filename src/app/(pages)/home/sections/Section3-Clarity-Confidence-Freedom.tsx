@@ -239,7 +239,7 @@ export function SupportSection({
                     </div>
                   )}
                   {content["clarity-lab-image"] && content["clarity-lab-image"] !== "" && (
-                    <Link href="/services#section-header" scroll={true}>
+                    <Link href="/services#service-detail-2" scroll={true}>
                       <EditableImage
                         src={content["clarity-lab-image"]}
                         alt="Lab Work"
@@ -290,7 +290,7 @@ export function SupportSection({
                     </div>
                   )}
                   {content["clarity-bikes-image"] && content["clarity-bikes-image"] !== "" && (
-                    <Link href="/services#section-header" scroll={true}>
+                    <Link href="/services#service-detail-1" scroll={true}>
                       <EditableImage
                         src={content["clarity-bikes-image"]}
                         alt="Bikes"
@@ -433,7 +433,7 @@ export function SupportSection({
                     </div>
                   )}
                   {content["clarity-doctor-image"] && content["clarity-doctor-image"] !== "" && (
-                    <Link href="/contact" scroll={true}>
+                    <Link href="/services#service-detail-0" scroll={true}>
                       <EditableImage
                         src={content["clarity-doctor-image"]}
                         alt="Doctor"
