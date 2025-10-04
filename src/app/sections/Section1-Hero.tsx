@@ -6,6 +6,7 @@ import { Calendar } from "lucide-react";
 import { EditableText } from "@/components/pageEditor/EditableText";
 import { GlowButton } from "@/components/ui/GlowButton";
 import { EditableImage } from "@/components/pageEditor/EditableImage";
+import { useState, useEffect } from "react";
 
 interface HeroSectionProps {
   isEditing?: boolean;
@@ -18,7 +19,7 @@ export function HeroSection({
   content = {},
   onUpdate,
 }: HeroSectionProps) {
-  console.log("HeroSection rendering with:", { isEditing, content });
+  
 
   // Ensure content has all required fields
   const safeContent = {
@@ -27,36 +28,44 @@ export function HeroSection({
   };
 
   // Star component to avoid repetition
-  const Star = ({ className = "" }) => (
-    <div className={`relative ${className}`}>
-      <div className="absolute w-4 h-4">
-        {/* Create 10 points with random lengths */}
-        {[...Array(10)].map((_, i) => {
-          const angle = i * 36 * (Math.PI / 180); // 360/10 = 36 degrees
-          const length = Math.random() < 0.3 ? "12px" : "8px"; // 30% chance of longer point
-          return (
-            <div
-              key={i}
-              className="absolute w-0.5 bg-[#4ECDC4]"
-              style={{
-                height: length,
-                left: "50%",
-                top: "50%",
-                transformOrigin: "0 0",
-                transform: `rotate(${angle}rad) translateY(-50%)`,
-                boxShadow: "0 0 10px #4ECDC4, 0 0 20px #4ECDC4",
-              }}
-            />
-          );
-        })}
-        {/* Center dot */}
-        <div
-          className="absolute w-2 h-2 bg-[#4ECDC4] rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
-                    shadow-[0_0_15px_#4ECDC4,0_0_30px_#4ECDC4,0_0_45px_#4ECDC4]"
-        />
+  const Star = ({ className = "" }) => {
+    const [lengths, setLengths] = useState(Array(10).fill("8px"));
+
+    useEffect(() => {
+      setLengths(Array(10).fill(0).map(() =>
+        Math.random() < 0.3 ? "12px" : "8px"
+      ));
+    }, []);
+
+    return (
+      <div className={`relative ${className}`}>
+        <div className="absolute w-4 h-4">
+          {[...Array(10)].map((_, i) => {
+            const angle = i * 36 * (Math.PI / 180); // 360/10 = 36 degrees
+            return (
+              <div
+                key={i}
+                className="absolute w-0.5 bg-[#4ECDC4]"
+                style={{
+                  height: lengths[i],
+                  left: "50%",
+                  top: "50%",
+                  transformOrigin: "0 0",
+                  transform: `rotate(${angle}rad) translateY(-50%)`,
+                  boxShadow: "0 0 10px #4ECDC4, 0 0 20px #4ECDC4",
+                }}
+              />
+            );
+          })}
+          {/* Center dot */}
+          <div
+            className="absolute w-2 h-2 bg-[#4ECDC4] rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                      shadow-[0_0_15px_#4ECDC4,0_0_30px_#4ECDC4,0_0_45px_#4ECDC4]"
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <section className="relative min-h-screen w-full">
@@ -146,7 +155,6 @@ export function HeroSection({
                 onUpdate={onUpdate}
                 className="text-xl md:text-2xl text-[#4ECDC4] tracking-widest"
               />
-              
 
               {/* Book Consultation Button */}
               <motion.div

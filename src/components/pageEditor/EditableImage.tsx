@@ -31,34 +31,24 @@ export function EditableImage({
     const { openImageLibrary } = useImageLibrary();
 
     useEffect(() => {
-        console.log('EditableImage mounted/updated:', {
-            src,
-            isEditing,
-            timestamp: new Date().toISOString()
-        });
+    
         setImageError(false);
     }, [src, isEditing]);
 
     const handleImageClick = (e: React.MouseEvent) => {
-        console.log('Image clicked:', {
-            isEditing,
-            timestamp: new Date().toISOString()
-        });
+     
 
         if (!isEditing) {
-            console.log('Click ignored - not in editing mode');
+            
             return;
         }
 
         e.preventDefault();
         e.stopPropagation();
 
-        console.log('Opening image library...');
+        
         openImageLibrary((url) => {
-            console.log('Image selected:', {
-                url,
-                timestamp: new Date().toISOString()
-            });
+          
             if (onUpdate) {
                 onUpdate(url);
             }
@@ -76,13 +66,13 @@ export function EditableImage({
 
     const handleMouseEnter = () => {
         if (isEditing) {
-            console.log('Mouse entered - showing overlay');
+            
             setIsHovered(true);
         }
     };
 
     const handleMouseLeave = () => {
-        console.log('Mouse left - hiding overlay');
+        
         setIsHovered(false);
     };
 

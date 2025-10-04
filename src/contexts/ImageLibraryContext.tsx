@@ -14,18 +14,18 @@ export function ImageLibraryProvider({ children }: { children: ReactNode }) {
     const [onSelectCallback, setOnSelectCallback] = useState<((url: string) => void) | null>(null);
 
     const openImageLibrary = (onSelect: (url: string) => void) => {
-        console.log('Opening image library modal');
+        
         setOnSelectCallback(() => onSelect);
         setIsOpen(true);
     };
 
     const handleClose = () => {
-        console.log('Closing image library modal');
+        
         setIsOpen(false);
     };
 
     const handleSelectImage = (url: string) => {
-        console.log('Selected image:', url);
+        
         if (onSelectCallback) {
             onSelectCallback(url);
         }

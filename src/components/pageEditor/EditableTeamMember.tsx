@@ -26,7 +26,7 @@ export function EditableTeamMember({
     onUpdate,
     onDelete,
 }: EditableTeamMemberProps) {
-    console.log(`EditableTeamMember rendering for index ${index}:`, { member, isEditing });
+    
 
     const [isEditingInPlace, setIsEditingInPlace] = useState(false);
     const [editedMember, setEditedMember] = useState<TeamMember>(member);
@@ -35,7 +35,7 @@ export function EditableTeamMember({
 
     // Update editedMember when member prop changes
     useEffect(() => {
-        console.log(`Member prop changed for index ${index}:`, member);
+        
         setEditedMember(member);
     }, [member, index]);
 
@@ -48,13 +48,13 @@ export function EditableTeamMember({
 
     const handleClick = () => {
         if (isEditing && !isEditingInPlace) {
-            console.log(`Starting edit for team member ${index}`);
+            
             setIsEditingInPlace(true);
         }
     };
 
     const handleSave = () => {
-        console.log('handleSave called with edited member:', editedMember);
+        
 
         if (onUpdate) {
             onUpdate(index, editedMember);
@@ -65,13 +65,13 @@ export function EditableTeamMember({
     };
 
     const handleCancel = () => {
-        console.log(`Canceling edit for team member ${index}`);
+        
         setEditedMember(member);
         setIsEditingInPlace(false);
     };
 
     const handleFieldChange = (field: keyof TeamMember, value: string) => {
-        console.log('handleFieldChange called with:', { field, value });
+        
 
         // Update the local state
         setEditedMember(prev => ({
@@ -81,7 +81,7 @@ export function EditableTeamMember({
     };
 
     const handleImageUpdate = (newImageUrl: string) => {
-        console.log(`Image updating to:`, newImageUrl);
+        
         handleFieldChange('image', newImageUrl);
     };
 
@@ -199,7 +199,7 @@ export function EditableTeamMember({
                             className="object-cover"
                             isEditing={isEditing}
                             onUpdate={(newImageUrl) => {
-                                console.log(`Direct image update for team member ${index}:`, newImageUrl);
+                                
                                 onUpdate?.(index, { ...member, image: newImageUrl });
                             }}
                             width={400}

@@ -44,21 +44,17 @@ export function TeamSection({
     content = {},
     onUpdate
 }: TeamSectionProps) {
-    console.log("TeamSection rendering with content:", content);
-    console.log("Content type:", typeof content);
-    console.log("Content keys:", Object.keys(content));
-    console.log("Team data type:", typeof content.team);
-    console.log("Team data:", content.team);
+
 
     // Parse team data once during initialization
     const parseTeamData = useCallback(() => {
         try {
             // If team is a string, parse it
             if (typeof content.team === 'string') {
-                console.log("Parsing team data from string:", content.team);
+                
                 try {
                     const parsedTeam = JSON.parse(content.team);
-                    console.log("Parsed team data:", parsedTeam);
+                    
                     return parsedTeam;
                 } catch (parseError) {
                     console.error('Error parsing team JSON:', parseError);
@@ -67,11 +63,11 @@ export function TeamSection({
             }
             // If team is already an array, use it
             if (Array.isArray(content.team)) {
-                console.log("Using team data as array:", content.team);
+                
                 return content.team;
             }
             // If team is undefined or null, use default team members
-            console.log("Using default team members");
+            
             return defaultTeamMembers;
         } catch (error) {
             console.error('Error parsing team data:', error);
@@ -84,9 +80,9 @@ export function TeamSection({
 
     // Update team members when content.team changes
     useEffect(() => {
-        console.log("Content team changed:", content.team);
+        
         const newTeamData = parseTeamData();
-        console.log("Setting new team data:", newTeamData);
+        
         setTeamMembers(newTeamData);
     }, [content.team, parseTeamData]);
 
@@ -100,8 +96,7 @@ export function TeamSection({
 
     // Log content updates
     useEffect(() => {
-        console.log("Safe content updated:", safeContent);
-        console.log("Current team members:", teamMembers);
+        
     }, [safeContent, teamMembers]);
 
     // Handle team member field updates
@@ -232,7 +227,7 @@ export function TeamSection({
                     {/* Team Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         {teamMembers.map((member, index) => {
-                            console.log(`Rendering team member ${index}:`, member);
+                            
                             return (
                                 <motion.div
                                     key={`team-member-${index}`}

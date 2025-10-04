@@ -7,13 +7,13 @@ import { toast } from "sonner";
 // Dynamic Section Imports
 const sections = {
     // Home Page Sections
-    "Section1-Hero": dynamic(() => import("@/app/(pages)/home/sections/Section1-Hero").then(mod => mod.HeroSection)),
-    "Section2-Promise": dynamic(() => import("@/app/(pages)/home/sections/Section2-Promise").then(mod => mod.PromiseSection)),
-    "Section3-Clarity-Confidence-Freedom": dynamic(() => import("@/app/(pages)/home/sections/Section3-Clarity-Confidence-Freedom").then(mod => mod.SupportSection)),
-    "Section4-WhatWeDo": dynamic(() => import("@/app/(pages)/home/sections/Section4-about").then(mod => mod.WhatWeDo)),
-    "Section5-WhoWeHelp": dynamic(() => import("@/app/(pages)/home/sections/Section5-WhoWeHelp").then(mod => mod.Testimonials)),
-    "Section6-Download": dynamic(() => import("@/app/(pages)/home/sections/Section6-Download").then(mod => mod.DownloadSection)),
-    "Section7-Services": dynamic(() => import("@/app/(pages)/home/sections/Section7-Services").then(mod => mod.ServicesSection)),
+    "Section1-Hero": dynamic(() => import("@/app/sections/Section1-Hero").then(mod => mod.HeroSection)),
+    "Section2-Promise": dynamic(() => import("@/app/sections/Section2-Promise").then(mod => mod.PromiseSection)),
+    "Section3-Clarity-Confidence-Freedom": dynamic(() => import("@/app/sections/Section3-Clarity-Confidence-Freedom").then(mod => mod.SupportSection)),
+    "Section4-WhatWeDo": dynamic(() => import("@/app/sections/Section4-about").then(mod => mod.WhatWeDo)),
+    "Section5-WhoWeHelp": dynamic(() => import("@/app/sections/Section5-WhoWeHelp").then(mod => mod.Testimonials)),
+    "Section6-Download": dynamic(() => import("@/app/sections/Section6-Download").then(mod => mod.DownloadSection)),
+    "Section7-Services": dynamic(() => import("@/app/sections/Section7-Services").then(mod => mod.ServicesSection)),
 
     // About Page Sections
     "Section1-Hero-About": dynamic(() => import("@/app/(pages)/about/sections/HeroSection").then(mod => mod.HeroSection)),
@@ -89,21 +89,7 @@ export function SectionRenderer({ selectedPage, sectionContents, onTextChange }:
                     })()
                 } : baseContent;
 
-                console.log(`Rendering ${section.id}:`, {
-                    dbContent,
-                    dbContentKeys: Object.keys(dbContent),
-                    dbContentValues: Object.values(dbContent),
-                    defaultContent,
-                    hasValidDbContent,
-                    finalContent: content,
-                    contentCheck: Object.entries(dbContent).map(([key, value]) => ({
-                        key,
-                        value,
-                        isValid: value !== null && value !== undefined && value !== '' &&
-                            (typeof value !== 'string' || value.trim() !== '') &&
-                            (!Array.isArray(value) || value.length > 0)
-                    }))
-                });
+              
 
                 return (
                     <div key={section.id} className="relative">

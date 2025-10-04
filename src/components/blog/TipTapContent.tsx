@@ -28,7 +28,7 @@ export function TipTapContent({ content }: { content: string }) {
     html = generateHTML(jsonContent, extensions);
   } catch {
     // If parsing fails, assume content is already HTML
-    console.log("Content is already HTML");
+    
   }
 
   return (

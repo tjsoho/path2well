@@ -62,17 +62,17 @@ export function PageEditor() {
   // Load content when component mounts or page changes
   useEffect(() => {
     if (selectedPage) {
-      console.log('Loading content for page:', selectedPage);
+      
       extractContent();
     }
   }, [selectedPage, extractContent]);
 
   // Handle text change
   const handleTextChange = async (sectionId: string, field: string, value: string) => {
-    console.log(`Handling text change for section ${sectionId}, field ${field}:`, value);
+    
 
     if (!selectedPage) {
-      console.error('No page selected');
+      
       return;
     }
 
@@ -136,7 +136,7 @@ export function PageEditor() {
         const content = sectionContents[section.id];
         if (!content) continue;
 
-        console.log(`Saving content for ${section.id}:`, content);
+        
 
         const response = await fetch("/api/sections/update", {
           method: "POST",

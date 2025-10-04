@@ -69,7 +69,7 @@ export function ContactContent({ content = defaultContent, isEditing = false, on
             const result = await response.json();
 
             if (result.success) {
-                console.log("Form submitted successfully:", result);
+                
                 setFormData({
                     name: "",
                     email: "",

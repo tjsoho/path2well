@@ -69,7 +69,8 @@ export function EditableText({
     }
   };
 
-  const Component = type === "heading" ? "h2" : "p";
+  // Use div for paragraph type to avoid nesting issues with motion.p
+  const Component = type === "heading" ? "h2" : "div";
 
   const renderTextWithBreaks = (text: string) => {
     return text.split("\n").map((line, i) => (

@@ -1,12 +1,12 @@
-import { HeroSection } from "./sections/Section1-Hero";
-import { PromiseSection } from "./sections/Section2-Promise";
-import { SupportSection } from "./sections/Section3-Clarity-Confidence-Freedom";
-import { WhatWeDo } from "./sections/Section4-about";
-import { Testimonials } from "./sections/Section5-WhoWeHelp";
+import { HeroSection } from "../../sections/Section1-Hero";
+import { PromiseSection } from "../../sections/Section2-Promise";
+import { SupportSection } from "../../sections/Section3-Clarity-Confidence-Freedom";
+import { WhatWeDo } from "../../sections/Section4-about";
+import { Testimonials } from "../../sections/Section5-WhoWeHelp";
 
 import { supabase } from "@/lib/supabase";
-import { DownloadSection } from "./sections/Section6-Download";
-import { ServicesSection } from "./sections/Section7-Services";
+import { DownloadSection } from "../../sections/Section6-Download";
+import { ServicesSection } from "../../sections/Section7-Services";
 import { PointerEffect } from "@/components/ui/PointerEffect";
 
 // Add type for section content
@@ -48,7 +48,7 @@ async function getSectionContent(
     .eq("page_id", "home")
     .eq("section_id", sectionId)
     .single();
-  console.log({ data, error });
+  
   if (error) {
     console.error(`Error fetching content for ${sectionId}:`, error);
     return undefined;

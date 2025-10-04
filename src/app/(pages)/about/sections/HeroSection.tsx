@@ -17,11 +17,6 @@ export function HeroSection({
   content = {},
   onUpdate,
 }: HeroSectionProps) {
-  console.log("About HeroSection rendering with:", { isEditing, content });
-  console.log("Content keys:", Object.keys(content));
-  console.log("Content values:", Object.values(content));
-  console.log("Content heading:", content.heading);
-  console.log("Content subheading:", content.subheading);
 
   // Use content directly from the database without fallback
   const safeContent = {
@@ -30,7 +25,7 @@ export function HeroSection({
     subheading: content.subheading || "Discover the story behind our personalised approach to health\nand wellness.",
   };
 
-  console.log("Safe content:", safeContent);
+  
 
   // Star component with fixed point lengths and angles
   const Star = ({ className = "" }) => {

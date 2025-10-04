@@ -22,13 +22,13 @@ export function PageSectionEditor({
   const loadSection = useCallback(async () => {
     setLoading(true);
     try {
-      console.log("1. Starting to load section...");
+
 
       // Load component first
       const section = await import(
         `@/app/(pages)/${pageId}/sections/${sectionId}.tsx`
       );
-      console.log("2. Loaded section component:", section);
+      
 
       // Fix: Get the HeroSection or PromiseSection component from the module
       if (section.HeroSection) {
@@ -47,10 +47,10 @@ export function PageSectionEditor({
         .eq("section_id", sectionId)
         .single();
 
-      console.log("3. Supabase response:", { data, error });
+      
 
       if (error) {
-        console.log("4a. Creating new content with:", section.defaultContent);
+        
         const { data: newData, error: insertError } = await supabase
           .from("page_content")
           .insert({
@@ -62,10 +62,10 @@ export function PageSectionEditor({
           .single();
 
         if (insertError) throw insertError;
-        console.log("4b. Created new content:", newData);
+        
         setContent(newData.content);
       } else if (data) {
-        console.log("4c. Using existing content:", data.content);
+        
         setContent(data.content);
       }
     } catch (error) {

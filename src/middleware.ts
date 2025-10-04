@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  console.log("Middleware - Session:", session);
+  
 
   // If user is not signed in and trying to access protected routes
   if (!session && req.nextUrl.pathname.startsWith('/admin')) {
@@ -19,7 +19,7 @@ export async function middleware(req: NextRequest) {
       return res;
     }
     
-    console.log("No session, redirecting to login");
+    
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = '/admin';
     return NextResponse.redirect(redirectUrl);
@@ -27,7 +27,7 @@ export async function middleware(req: NextRequest) {
 
   // If user is signed in and on the login page, redirect to dashboard
   if (session && req.nextUrl.pathname === '/admin') {
-    console.log("Has session, redirecting to dashboard");
+    
     const redirectUrl = req.nextUrl.clone();
     redirectUrl.pathname = '/admin/dashboard';
     return NextResponse.redirect(redirectUrl);
