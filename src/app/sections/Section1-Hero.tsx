@@ -19,7 +19,7 @@ export function HeroSection({
   content = {},
   onUpdate,
 }: HeroSectionProps) {
-  
+
 
   // Ensure content has all required fields
   const safeContent = {

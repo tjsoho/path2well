@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Main pages with high priority
   const mainPages = [
     {
-      url: `${baseUrl}/home`,
+      url: `${baseUrl}/`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 1,
