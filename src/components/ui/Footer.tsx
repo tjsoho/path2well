@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Instagram } from "lucide-react";
+import { RiInstagramLine } from "react-icons/ri";
 import { GlowButton2 } from "./GlowButton2";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { RiFacebookBoxLine, RiLinkedinBoxLine } from "react-icons/ri";
 
 const pageLinks = [
   { name: "Home", href: "/" },
@@ -22,7 +23,9 @@ const adminLinks = [
 ];
 
 const socialLinks = [
-  { icon: Instagram, href: "https://www.instagram.com/path_2_well/", label: "Instagram" },
+  { icon: RiInstagramLine, href: "https://www.instagram.com/path_2_well/", label: "Instagram" },
+  { icon: RiLinkedinBoxLine, href: "https://www.linkedin.com/in/dimi-selas-98851a388/", label: "LinkedIn" },
+  { icon: RiFacebookBoxLine, href: "https://www.facebook.com/profile.php?id=61576582598552", label: "Facebook" },
 ];
 
 export function Footer() {

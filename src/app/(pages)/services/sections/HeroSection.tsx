@@ -99,7 +99,7 @@ export function HeroSection({ content = defaultContent, isEditing = false, onUpd
           layout="fill"
           className="object-cover brightness-[0.85]"
         />
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 " />
         {/* Centered Pink Change Background Image Button (editing only) */}
         {isEditing && (
           <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
