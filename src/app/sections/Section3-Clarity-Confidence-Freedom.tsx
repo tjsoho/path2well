@@ -433,7 +433,7 @@ export function SupportSection({
                     </div>
                   )}
                   {content["clarity-doctor-image"] && content["clarity-doctor-image"] !== "" && (
-                    <Link href="/services#service-detail-0" scroll={true}>
+                    <Link href="/services#service-detail-3" scroll={true}>
                       <EditableImage
                         src={content["clarity-doctor-image"]}
                         alt="Doctor"
